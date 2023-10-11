@@ -4,8 +4,7 @@ from typing import Iterable
 class Genotype(ABC):
     ''' Abstract base class representing a genotype in a genetic algorithm.
     Genotypes are used to represent potential solutions to a problem. This
-    class defines the interface for genotypes, including methods for crossover,
-    calculating phenotype, fitness, and mutation.
+    class defines the interface for genotypes.
 
     Args:
         ABC (class): Abstract base class from which Genotype inherits.
@@ -56,4 +55,13 @@ class Genotype(ABC):
 
         Returns:
             None '''
+        pass
+
+
+    def remaining_lifetime(self):
+        ''' Calculate and return the remaining lifetime of
+        the genotype
+
+            Returns:
+                Any: The remaining lifetime of the genotype. '''
         pass
