@@ -47,21 +47,63 @@ class Genotype(ABC):
 
 
     @abstractmethod
-    def mutation(self, funct):
-        ''' Mutate the genotype based on a mutation function.
+    def mutation(self, mutation_rate) -> None:
+        ''' Perform the mutation operation on the current genotype.
 
         Args:
-            funct (callable): The mutation function to apply to the genotype.
+            mutation_rate (float): The mutation rate that controls
+                the probability of mutation. It should be a value in
+                the range [0, 1], where 0 means no mutation, and 1
+                means all genes should mutate.
 
         Returns:
-            None '''
+            None:
+
+        Raises:
+            ValueError: If the mutation rate is not in the
+                valid range [0, 1]. '''
         pass
 
 
+    @classmethod
+    @abstractmethod
+    def generate_population(cls, size: int, problem_instance) -> Iterable:
+        '''
+        Generate an initial population of genotypes tailored to a
+        specific problem.
+
+        Args:
+            cls (class): The class itself.
+            size (int): The desired size of the population.
+            problem_instance: An instance of the specific problem,
+                providing necessary information
+                for generating suitable initial populations.
+
+        Returns:
+            Iterable: An iterable containing the initial
+                population of genotypes. '''
+        pass
+
+
+    @abstractmethod
     def remaining_lifetime(self):
         ''' Calculate and return the remaining lifetime of
         the genotype
 
             Returns:
                 Any: The remaining lifetime of the genotype. '''
+        pass
+
+
+    @abstractmethod
+    def set_lifetime(self, new_lifetime_value) -> None:
+        '''
+         Set the remaining lifetime of a genotype.
+
+        Args:
+            new_lifetime_value: The new remaining lifetime value to be
+            assigned to the genotype.
+
+        Returns:
+            None '''
         pass
