@@ -1,19 +1,18 @@
 from heapq import nsmallest
-from typing import Callable, Iterable, TypeVar
+from typing import Callable, Collection, Tuple
+from . import T
 
-T = TypeVar('T')    # type of the Genotype
-
-def genetic_algorithm(population: Iterable[tuple[float, T]],
-                      crossover: Callable[[Iterable[tuple[float, T]]], Iterable[T]],
-                      mutation: Callable[[Iterable[T]], Iterable[T]],
+def genetic_algorithm(population: Collection[Tuple[float, T]],
+                      crossover: Callable[[Collection[Tuple[float, T]]], Collection[T]],
+                      mutation: Callable[[Collection[T]], Collection[T]],
                       fitness: Callable[[T], float],
-                      selection: Callable[[Iterable[tuple[float, T]], Iterable[tuple[float, T]]], Iterable[tuple[float, T]]],
-                      term_cond: Callable[[int, Iterable[tuple[float, T]]], bool]
-                      ) -> Iterable[Iterable[tuple[float, T]]]:
+                      selection: Callable[[Collection[Tuple[float, T]], Collection[Tuple[float, T]]], Collection[Tuple[float, T]]],
+                      term_cond: Callable[[int, Collection[Tuple[float, T]]], bool]
+                      ) -> Collection[Collection[Tuple[float, T]]]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
     Returns:
-        Iterable[Iterable[tuple[float, T]]]: List of best solutions found in each generation.
+        Collection[Collection[Tuple[float, T]]]: List of best solutions found in each generation.
     '''
 
     current_population = population
