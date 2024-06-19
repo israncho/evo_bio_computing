@@ -1,6 +1,8 @@
 from heapq import nsmallest
 from typing import Callable, Collection, Tuple
-from . import T
+from typing import Any, Collection, TypeVar
+
+T = TypeVar('T', Collection, Any)    # type of the Genotype
 
 def genetic_algorithm(population: Collection[Tuple[float, T]],
                       crossover: Callable[[Collection[Tuple[float, T]]], Collection[T]],
@@ -31,3 +33,4 @@ def genetic_algorithm(population: Collection[Tuple[float, T]],
         current_population = next_gen_population
 
     return best_solutions
+
