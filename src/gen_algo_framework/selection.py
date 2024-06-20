@@ -40,17 +40,15 @@ def roulette_wheel_toss(cumulative_probabilities: List[float]) -> int:
     return bisect_left(cumulative_probabilities, random())
 
 
-def roulette_wheel_selection_two_parents(population: List[Tuple[float, T]]) -> Tuple[int, int]:
+def roulette_wheel_selection_two_parents(cumulative_probabilities: List[float]) -> Tuple[int, int]:
     '''
     Select two distinct parents from the population using roulette wheel selection.
     Args:
-        population (List[Tuple[float, T]]): A list of tuples where each tuple contains
-                                            a fitness value (float)
-                                            and an individual (of generic type T).
+        cumulative_probabilities (List[float]): A list of cumulative
+        probabilities generated from a population.
     Returns:
         Tuple[int, int]: A tuple containing the indices of the two selected parents.
     '''
-    cumulative_probabilities = cumulative_list(population)
     fst_parent_index = snd_parent_index = roulette_wheel_toss(cumulative_probabilities)
     while fst_parent_index == snd_parent_index:
         snd_parent_index = roulette_wheel_toss(cumulative_probabilities)

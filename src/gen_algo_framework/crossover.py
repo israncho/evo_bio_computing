@@ -1,6 +1,8 @@
 from typing import Any, List, Tuple
 from random import randint
 from collections import deque
+from genetic_algorithm import T
+from selection import cumulative_list, roulette_wheel_selection_two_parents
 
 
 def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float, List[Any]]) -> List[Any]:
@@ -54,6 +56,27 @@ def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float
             child[i] = remaining_genes.popleft()
 
     return child
+
+
+def population_crossover_ox1(population: List[Tuple[float, List[Any]]], new_gen_size: int) -> List[T]:
+    '''
+    Generates a new generation of offspring using the Order Crossover 1 (OX1) method.
+
+    Args:
+        population (List[Tuple[float, List[Any]]]): The current population, where each element
+        is a tuple containing the fitness value and the chromosome.
+        new_gen_size (int): The desired size of the new generation.
+
+    Returns:
+        List[T]: A list of new individuals representing the offspring.
+    '''
+    probability_list = cumulative_list(population)
+    new_gen = []
+    while len(new_gen) < new_gen_size:
+        parent1_index, parent2_index = roulette_wheel_selection_two_parents(probability_list)
+        child = parents_crossover_ox1(population[parent1_index], population[parent2_index])
+        new_gen.append(child)
+    return new_gen
 
 
 def __random_subinterval(_range: int, size: int) -> Tuple[int, int]:
