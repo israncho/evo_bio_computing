@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo docker build -t evo_bio_computing .
+sudo docker build -t evo_bio_image .

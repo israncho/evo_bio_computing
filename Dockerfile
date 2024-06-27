@@ -1,9 +1,13 @@
 FROM python:3.10-slim
 
-WORKDIR /evo_bio_computing
+WORKDIR /home/appuser/evo_bio_computing
 
-COPY requirements.txt requirements.txt
+RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN mkdir -p /home/appuser/.cache/pip && chown -R appuser:appgroup /home/appuser/.cache/pip
+
+ENV HOME=/home/appuser
+
+USER appuser
 
 CMD ["bash"]
