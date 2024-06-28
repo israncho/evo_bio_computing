@@ -1,8 +1,8 @@
 from typing import Any, List, Tuple
 from random import randint
 from collections import deque
-from genetic_algorithm import T
-from selection import cumulative_list, roulette_wheel_selection_two_parents
+from src.gen_algo_framework.genetic_algorithm import T
+from src.gen_algo_framework.selection import cumulative_list, roulette_wheel_selection_two_parents
 
 
 def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float, List[Any]]) -> List[Any]:

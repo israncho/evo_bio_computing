@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from genetic_algorithm import T
+from src.gen_algo_framework.genetic_algorithm import T
 from functools import reduce
 from random import random
 from bisect import bisect_left
