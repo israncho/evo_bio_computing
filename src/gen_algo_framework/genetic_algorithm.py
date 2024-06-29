@@ -1,5 +1,6 @@
 from heapq import nsmallest
-from typing import Callable, Collection, Tuple
+from random import sample
+from typing import Callable, Collection, List, Set, Tuple
 from typing import Any, Collection, TypeVar
 
 T = TypeVar('T', Collection, Any)   # type of the Genotype
@@ -36,4 +37,25 @@ def genetic_algorithm(population: Collection[Tuple[float, T]],
         current_population = next_gen_population
 
     return best_solutions
+
+
+def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
+    '''
+    Generates a population of individuals, where each individual is a list
+    representing a chromosome composed of randomly sampled genes from a given set.
+    Args:
+        size (int): The number of individuals (chromosomes) in the population.
+        genes (Set[geneType]): The set of genes to sample from for each individual.
+    Returns:
+        List[List[geneType]]: A list of lists, where each inner list represents
+        an individual (chromosome) in the population. Each individual's chromosome
+        contains genes sampled randomly from the provided set.
+    '''
+    gene_count = len(genes)
+    genes_list = list(genes)
+    _population = []
+    for _ in range(size):
+        individual = sample(genes_list, gene_count)
+        _population.append(individual)
+    return _population
 
