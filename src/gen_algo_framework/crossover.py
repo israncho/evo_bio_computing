@@ -1,16 +1,20 @@
-from typing import Any, List, Tuple
+from typing import Any, Callable, List, Tuple
 from random import randint
 from collections import deque
-from src.gen_algo_framework.genetic_algorithm import T
+from src.gen_algo_framework.genetic_algorithm import T, geneType
 from src.gen_algo_framework.selection import cumulative_list, roulette_wheel_selection_two_parents
 
 
-def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float, List[Any]]) -> List[Any]:
+def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
+                          parent2: Tuple[float, List[geneType]],
+                          comparator: Callable[[float, float], bool]) -> List[geneType]:
     '''
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
     Args:
         parent1 (Tuple[float, List[Any]]): First parent, represented by its fitness and chromosome.
         parent2 (Tuple[float, List[Any]]): Second parent, represented by its fitness and chromosome.
+        comparator (Callable[[float, float], bool]): function to compare fitness, must return true if
+            the first argument is fitter.
     Returns:
         List[Any]: The chromosome of the resulting child.
     '''
@@ -23,14 +27,14 @@ def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float
 
     fitest = None
     lessfit = None
-    if parent1[0] >= parent2[0]:
+    if comparator(parent1[0], parent2[0]):
         fitest = parent1[1]
         lessfit = parent2[1]
     else:
         fitest = parent2[1]
         lessfit = parent1[1]
 
-    child = [None for _ in range(chromosome_size)]
+    child: List[Any] = [None] * chromosome_size
 
     genes_from_fit = chromosome_size // 2
 
@@ -58,7 +62,9 @@ def parents_crossover_ox1(parent1: Tuple[float, List[Any]], parent2: Tuple[float
     return child
 
 
-def population_crossover_ox1(population: List[Tuple[float, List[Any]]], new_gen_size: int) -> List[T]:
+def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
+                             new_gen_size: int,
+                             comparator: Callable[[float, float], bool]) -> List[T]:
     '''
     Generates a new generation of offspring using the Order Crossover 1 (OX1) method.
 
@@ -73,8 +79,10 @@ def population_crossover_ox1(population: List[Tuple[float, List[Any]]], new_gen_
     probability_list = cumulative_list(population)
     new_gen = []
     while len(new_gen) < new_gen_size:
-        parent1_index, parent2_index = roulette_wheel_selection_two_parents(probability_list)
-        child = parents_crossover_ox1(population[parent1_index], population[parent2_index])
+        p1_index, p2_index = roulette_wheel_selection_two_parents(probability_list)
+        child = parents_crossover_ox1(population[p1_index],
+                                      population[p2_index],
+                                      comparator)
         new_gen.append(child)
     return new_gen
 
