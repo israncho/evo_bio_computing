@@ -1,7 +1,7 @@
 from typing import Set, Tuple, List
-from src.gen_algo_framework.crossover import parents_crossover_ox1
+from src.gen_algo_framework.crossover import parents_crossover_ox1, population_crossover_ox1
 from src.gen_algo_framework.genetic_algorithm import population
-from random import sample
+from random import randint, sample
 
 
 def different_random_parents(size: int, range_gene_size: int) -> Tuple[Set[int], List[int], List[int]]:
@@ -29,9 +29,12 @@ def test_parents_crossover_ox1():
 
         assert matches >= 21, 'Child is not similar enough to the fittest parent'
 
+
 def test_population_crossover_ox1():
     for _ in range(1000):
         genes = set(sample(range(100), 10))
         _population = population(50, genes)
-        for individual in _population:
+        _population = list(map(lambda x: (float(randint(0,100)), x), _population))
+        new_gen = population_crossover_ox1(_population, 50, lambda x, y: x <= y)
+        for individual in new_gen:
             assert set(individual) == genes, 'Individual has not the same genes'
