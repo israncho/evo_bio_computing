@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Tuple
+from typing import Any, List, Tuple
 from random import randint
 from collections import deque
 from src.gen_algo_framework.genetic_algorithm import T, geneType
