@@ -8,6 +8,7 @@ from bisect import bisect_left
 def cumulative_list(population: List[Tuple[float, T]]) -> List[float]:
     '''
     Calculate the cumulative probability list for a given population.
+    This function is intended for maximization problems.
     Args:
         population (List[Tuple[float, T]]): A list of tuples where each tuple
                                             contains a fitness value (float)
@@ -43,6 +44,7 @@ def roulette_wheel_toss(cumulative_probabilities: List[float]) -> int:
 def roulette_wheel_selection_two_parents(cumulative_probabilities: List[float]) -> Tuple[int, int]:
     '''
     Select two distinct parents from the population using roulette wheel selection.
+    This function is intended for maximization problems.
     Args:
         cumulative_probabilities (List[float]): A list of cumulative
         probabilities generated from a population.
