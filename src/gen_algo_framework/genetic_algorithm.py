@@ -1,3 +1,4 @@
+from functools import reduce
 from heapq import nsmallest
 from random import sample
 from typing import Callable, Collection, List, Set, Tuple
@@ -59,3 +60,18 @@ def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
         _population.append(individual)
     return _population
 
+
+def transform_to_min(population: Collection[Tuple[float, T]]) -> Collection[Tuple[float, T]]:
+    '''
+    Transforms a population's fitness values from a maximization problem to a minimization problem.
+    This transformation ensures that higher fitness values become lower fitness values,
+    facilitating the use of algorithms designed for minimization.
+    Args:
+        population (Collection[Tuple[float, T]]): A collection of individuals in the population,
+                                                  where each individual is represented as a tuple
+                                                  containing a fitness value and a genotype.
+    Returns:
+        Collection[Tuple[float, T]]: The transformed population with adjusted fitness values.
+    '''
+    max_fit = reduce(lambda _max, x: _max if _max > x[0] else x[0], population, -1)
+    return list(map(lambda x: (max_fit - x[0] + 1e-6, x[1]), population))
