@@ -61,11 +61,11 @@ def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
     return _population
 
 
-def transform_to_min(population: Collection[Tuple[float, T]]) -> Collection[Tuple[float, T]]:
+def transform_to_max(population: Collection[Tuple[float, T]]) -> Collection[Tuple[float, T]]:
     '''
-    Transforms a population's fitness values from a maximization problem to a minimization problem.
+    Transforms a population's fitness values from a minimization problem to a maximization problem.
     This transformation ensures that higher fitness values become lower fitness values,
-    facilitating the use of algorithms designed for minimization.
+    facilitating the use of algorithms designed for maximization.
     Args:
         population (Collection[Tuple[float, T]]): A collection of individuals in the population,
                                                   where each individual is represented as a tuple

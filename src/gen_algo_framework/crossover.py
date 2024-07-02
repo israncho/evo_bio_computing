@@ -6,10 +6,10 @@ from src.gen_algo_framework.selection import cumulative_list, roulette_wheel_sel
 
 
 def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
-                          parent2: Tuple[float, List[geneType]],
-                          comparator: Callable[[float, float], bool]) -> List[geneType]:
+                          parent2: Tuple[float, List[geneType]]) -> List[geneType]:
     '''
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
+    This function is intended for maximization problems.
     Args:
         parent1 (Tuple[float, List[Any]]): First parent, represented by its fitness and chromosome.
         parent2 (Tuple[float, List[Any]]): Second parent, represented by its fitness and chromosome.
@@ -27,7 +27,7 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
 
     fitest = None
     lessfit = None
-    if comparator(parent1[0], parent2[0]):
+    if parent1[0] >= parent2[0]:
         fitest = parent1[1]
         lessfit = parent2[1]
     else:
@@ -63,11 +63,10 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
 
 
 def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
-                             new_gen_size: int,
-                             comparator: Callable[[float, float], bool]) -> List[T]:
+                             new_gen_size: int) -> List[T]:
     '''
     Generates a new generation of offspring using the Order Crossover 1 (OX1) method.
-
+    This function is intended for maximization problems.
     Args:
         population (List[Tuple[float, List[Any]]]): The current population, where each element
         is a tuple containing the fitness value and the chromosome.
@@ -81,8 +80,7 @@ def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
     while len(new_gen) < new_gen_size:
         p1_index, p2_index = roulette_wheel_selection_two_parents(probability_list)
         child = parents_crossover_ox1(population[p1_index],
-                                      population[p2_index],
-                                      comparator)
+                                      population[p2_index])
         new_gen.append(child)
     return new_gen
 

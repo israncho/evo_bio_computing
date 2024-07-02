@@ -18,7 +18,7 @@ def different_random_parents(size: int, range_gene_size: int) -> Tuple[Set[int],
 def test_parents_crossover_ox1():
     for _ in range(2000):
         genes, p1, p2 = different_random_parents(41, 200)
-        child = parents_crossover_ox1((1, p1), (2, p2), lambda x, y: x <= y)
+        child = parents_crossover_ox1((2, p1), (1, p2))
         assert set(child) == genes, 'Child genes do not match parent genes.'
         assert child != p1 or child != p2, 'Child should not be identical to both parents'
 
@@ -35,6 +35,6 @@ def test_population_crossover_ox1():
         genes = set(sample(range(100), 10))
         _population = population(50, genes)
         _population = list(map(lambda x: (float(randint(0,100)), x), _population))
-        new_gen = population_crossover_ox1(_population, 50, lambda x, y: x <= y)
+        new_gen = population_crossover_ox1(_population, 50)
         for individual in new_gen:
             assert set(individual) == genes, 'Individual has not the same genes'
