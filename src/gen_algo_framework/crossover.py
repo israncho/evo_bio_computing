@@ -2,7 +2,7 @@ from typing import Any, List, Tuple
 from random import randint
 from collections import deque
 from src.gen_algo_framework.genetic_algorithm import T, geneType
-from src.gen_algo_framework.selection import cumulative_list, roulette_wheel_selection_two_parents
+from src.gen_algo_framework.selection import roulette_wheel_selection_two_parents
 
 
 def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
@@ -11,12 +11,12 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
     This function is intended for maximization problems.
     Args:
-        parent1 (Tuple[float, List[Any]]): First parent, represented by its fitness and chromosome.
-        parent2 (Tuple[float, List[Any]]): Second parent, represented by its fitness and chromosome.
-        comparator (Callable[[float, float], bool]): function to compare fitness, must return true if
-            the first argument is fitter.
+        parent1 (Tuple[float, List[geneType]]): First parent, represented by its
+            fitness and chromosome.
+        parent2 (Tuple[float, List[geneType]]): Second parent, represented by its
+            fitness and chromosome.
     Returns:
-        List[Any]: The chromosome of the resulting child.
+        List[geneType]: The chromosome of the resulting child.
     '''
 
     p1_size = len(parent1[1])
@@ -63,22 +63,23 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
 
 
 def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
-                             new_gen_size: int) -> List[T]:
+                             new_gen_size: int,
+                             cumulative_fitness_list: List[float],
+                             total_fitness: float) -> List[T]:
     '''
-    Generates a new generation of offspring using the Order Crossover 1 (OX1) method.
+    Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
     Args:
         population (List[Tuple[float, List[Any]]]): The current population, where each element
-        is a tuple containing the fitness value and the chromosome.
+            is a tuple containing the fitness value and the chromosome.
         new_gen_size (int): The desired size of the new generation.
-
     Returns:
         List[T]: A list of new individuals representing the offspring.
     '''
-    probability_list = cumulative_list(population)
     new_gen = []
     while len(new_gen) < new_gen_size:
-        p1_index, p2_index = roulette_wheel_selection_two_parents(probability_list)
+        p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list,
+                                                                  total_fitness)
         child = parents_crossover_ox1(population[p1_index],
                                       population[p2_index])
         new_gen.append(child)

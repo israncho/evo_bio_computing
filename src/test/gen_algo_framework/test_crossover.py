@@ -1,6 +1,7 @@
 from typing import Set, Tuple, List
 from src.gen_algo_framework.crossover import parents_crossover_ox1, population_crossover_ox1
 from src.gen_algo_framework.genetic_algorithm import population
+from src.gen_algo_framework.selection import cumulative_fitness 
 from random import randint, sample
 
 
@@ -35,6 +36,7 @@ def test_population_crossover_ox1():
         genes = set(sample(range(100), 10))
         _population = population(50, genes)
         _population = list(map(lambda x: (float(randint(0,100)), x), _population))
-        new_gen = population_crossover_ox1(_population, 50)
+        cumulative_fitness_list, total_f = cumulative_fitness(_population)
+        new_gen = population_crossover_ox1(_population, 50, cumulative_fitness_list, total_f)
         for individual in new_gen:
             assert set(individual) == genes, 'Individual has not the same genes'
