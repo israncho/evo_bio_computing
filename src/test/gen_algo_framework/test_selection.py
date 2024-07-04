@@ -23,11 +23,11 @@ def test_roulette_wheel_toss():
         assert 0 <= i and i < len(c_list), f'Index out of range: {i}'
 
     index_tosses = {0: 0, 1: 0, 2: 0, 3: 0}
-    fixed_c_list = [0.25, 0.5, 0.75, 1.0]
+    fixed_c_list = [25.0, 50.0, 75.0, 100.0]
     tosses = 20000
 
     for _ in range(tosses):
-        index_selected = roulette_wheel_toss(fixed_c_list, 1.0)
+        index_selected = roulette_wheel_toss(fixed_c_list, 100.0)
         index_tosses[index_selected] += 1
 
     for val in index_tosses.values():
