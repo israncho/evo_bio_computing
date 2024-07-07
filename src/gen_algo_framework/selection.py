@@ -16,7 +16,7 @@ def cumulative_fitness(population: List[Tuple[float, T]]) -> Tuple[List[float], 
     Returns:
         Tuple[List[float], float]:  A list of cumulative fitness, where each value
                                     represents the cumulative sum of fitness up to
-                                    that point in the population, sum of the fitness 
+                                    that point in the population, sum of the fitness
                                     of the entire population.
     '''
     total_fitness = reduce(lambda acc, x: acc + x[0], population, 0)
