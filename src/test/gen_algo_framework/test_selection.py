@@ -1,16 +1,28 @@
 from random import randint
-from src.gen_algo_framework.selection import cumulative_fitness, roulette_wheel_selection_two_parents, roulette_wheel_toss
+from typing import List, Optional
+from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_selection_two_parents, roulette_wheel_toss
 
 
 def __random_c_list():
     _population = [None] * randint(20, 60)
     _population = list(map(lambda x: (float(randint(1 , 1000)), x), _population))
-    return cumulative_fitness(_population)
+    c_list, total_f = cumulative_fitness(_population)
+    return c_list, total_f, _population
 
 
-def test_cumulative_fitness():
-    for _ in range(5000):
-        c_list, _ = __random_c_list()
+def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
+    tests = 5000
+
+    c_list: List[float] = []
+
+    if c_list_to_test != None:
+        tests = 1
+        c_list = c_list_to_test
+
+    for _ in range(tests):
+        if c_list_to_test == None:
+            c_list, _, _ = __random_c_list()
+
         for i in range(1, len(c_list)):
             assert c_list[i - 1] < c_list[i], f'List not strictly increasing at index {i}'
         assert 0 < c_list[0], f'First element out of range: {c_list[0]}'
@@ -18,7 +30,7 @@ def test_cumulative_fitness():
 
 def test_roulette_wheel_toss():
     for _ in range(10000):
-        c_list, total_f = __random_c_list()
+        c_list, total_f, _ = __random_c_list()
         i = roulette_wheel_toss(c_list, total_f)
         assert 0 <= i and i < len(c_list), f'Index out of range: {i}'
 
@@ -37,8 +49,26 @@ def test_roulette_wheel_toss():
 
 def test_roulette_wheel_selection_two_parents():
     for _ in range(5000):
-        c_list, total_f = __random_c_list()
+        c_list, total_f, _ = __random_c_list()
         i, j = roulette_wheel_selection_two_parents(c_list, total_f)
         assert i != j, f'Selected same index for both parents: {i}'
         assert 0 <= i and i < len(c_list), f'Index i out of range: {i}'
         assert 0 <= j and j < len(c_list), f'Index j out of range: {j}'
+
+
+def test_remove_from_fitness_list():
+    for _ in range(1000):
+        c_list, total_f, _popu = __random_c_list()
+
+        for _ in range(randint(0, len(c_list) // 2)):
+            index = randint(0, len(c_list) - 1)
+            individual_fitness = _popu[index][0]
+
+            c_list, total_f = remove_from_fitness_list(index, individual_fitness, c_list, total_f)
+
+            test_cumulative_fitness(c_list)
+
+            _popu.pop(index)
+            recalc_c_list, recalc_f = cumulative_fitness(_popu)
+            assert recalc_c_list == c_list
+            assert recalc_f == total_f

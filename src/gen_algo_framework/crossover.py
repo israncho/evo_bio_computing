@@ -72,7 +72,8 @@ def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
         population (List[Tuple[float, List[Any]]]): The current population, where each element
             is a tuple containing the fitness value and the chromosome.
         new_gen_size (int): The desired size of the new generation.
-        options (Tuple[List[float], float])
+        options (Tuple[List[float], float]): A tuple with the cumulative fitness list
+            and the total fitness of the population
     Returns:
         List[T]: A list of new individuals representing the offspring.
     '''
