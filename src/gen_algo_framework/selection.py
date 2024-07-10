@@ -1,6 +1,5 @@
 from typing import List, Tuple
 from src.gen_algo_framework.genetic_algorithm import T
-from functools import reduce
 from random import uniform
 from bisect import bisect_left
 
@@ -22,13 +21,12 @@ def cumulative_fitness(population: List[Tuple[float, T]],
                                     that point in the population, sum of the fitness
                                     of the entire population.
     '''
-    total_fitness = reduce(lambda acc, x: acc + x[0], population, 0) + extra_fitness
     cumulative_fitness_list = []
-    accumulated = 0
+    accumulated = 0 + extra_fitness
     for fitness_i, _ in population:
         accumulated += fitness_i
         cumulative_fitness_list.append(accumulated)
-    return cumulative_fitness_list, total_fitness
+    return cumulative_fitness_list, accumulated
 
 
 def roulette_wheel_toss(cumulative_fitness_list: List[float],
@@ -92,3 +90,40 @@ def remove_from_fitness_list(index: int,
         cumulative_fitness_list[i] -= individual_fitness
 
     return cumulative_fitness_list, total_fitness - individual_fitness
+
+
+def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
+                                offspring: List[Tuple[float, T]],
+                                next_gen_size: int,
+                                options: Tuple[List[float], float]) -> List[Tuple[float, T]]:
+    '''
+    Performs the next generation selection using a roulette wheel mechanism.
+    This functions modifies the current_population and the options argument.
+    Args:
+        current_population (List[Tuple[float, T]]): The current population, where each individual
+                                                    is a tuple of fitness score and individual.
+        offspring (List[Tuple[float, T]]): The new offspring generated from the current population.
+        next_gen_size (int): The desired size of the next generation.
+        options (Tuple[List[float], float]): A tuple containing the cumulative fitness list and
+                                             the current total fitness value of the current population
+                                             that is given as an argument.
+    Returns:
+        List[Tuple[float, T]]: The selected next generation population.
+    '''
+
+    cumulative_fitness_l, curr_total_f = options
+    current_population.extend(offspring)
+    offspring_c_list, total_fitness = cumulative_fitness(offspring, curr_total_f)
+    cumulative_fitness_l.extend(offspring_c_list)
+
+    next_gen: List[Tuple[float, T]] = []
+    for _ in range(next_gen_size):
+        index = roulette_wheel_toss(cumulative_fitness_l, total_fitness)
+        individual = current_population[index]
+        next_gen.append(individual)
+
+        # remove from pop and cumulative list
+        current_population.pop(index)
+        cumulative_fitness_l, total_fitness = remove_from_fitness_list(index, individual[0], cumulative_fitness_l, total_fitness)
+
+    return next_gen
