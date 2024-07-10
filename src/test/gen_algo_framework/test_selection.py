@@ -1,6 +1,6 @@
-from random import randint
+from random import randint, sample
 from typing import List, Optional
-from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_selection_two_parents, roulette_wheel_toss
+from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_next_gen_selection, roulette_wheel_selection_two_parents, roulette_wheel_toss
 
 
 def __random_c_list():
@@ -14,6 +14,7 @@ def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
     tests = 5000
 
     c_list: List[float] = []
+    total_f = 0
 
     if c_list_to_test != None:
         tests = 1
@@ -21,11 +22,14 @@ def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
 
     for _ in range(tests):
         if c_list_to_test == None:
-            c_list, _, _ = __random_c_list()
+            c_list, total_f, _ = __random_c_list()
 
         for i in range(1, len(c_list)):
             assert c_list[i - 1] < c_list[i], f'List not strictly increasing at index {i}'
         assert 0 < c_list[0], f'First element out of range: {c_list[0]}'
+
+        if c_list_to_test == None:
+            assert c_list[-1] == total_f
 
 
 def test_roulette_wheel_toss():
@@ -72,3 +76,28 @@ def test_remove_from_fitness_list():
             recalc_c_list, recalc_f = cumulative_fitness(_popu)
             assert recalc_c_list == c_list
             assert recalc_f == total_f
+
+
+def test_roulette_next_gen_selection():
+    for _ in range(1000):
+        fittest_individuals = [None] * randint(10, 15)
+        fittest_individuals = list(map(lambda x: (float(randint(10000 , 100000)), x), fittest_individuals))
+
+        unfit_individuals = [None] * randint(35, 60)
+        unfit_individuals = list(map(lambda x: (float(randint(10 , 50)), x), unfit_individuals))
+
+        _population = sample(fittest_individuals + unfit_individuals,
+                             len(fittest_individuals) + len(unfit_individuals))
+
+        curr_population = _population[:len(_population) // 2]
+        offspring = _population[len(_population) // 2:]
+
+        cumulative_f_l, total_f = cumulative_fitness(curr_population)
+        next_gen = roulette_next_gen_selection(curr_population, offspring,
+                                               int(len(fittest_individuals) * 1.25),
+                                               (cumulative_f_l, total_f))
+
+        next_gen_set = set(next_gen)
+        for x in fittest_individuals:
+            assert x in next_gen_set
+
