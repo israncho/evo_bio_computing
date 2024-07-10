@@ -62,9 +62,9 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
     return child
 
 
-def population_crossover_ox1(population: List[Tuple[float, List[Any]]],
-                             new_gen_size: int,
-                             options: Tuple[List[float], float]) -> List[T]:
+def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[Any]]],
+                                  new_gen_size: int,
+                                  options: Tuple[List[float], float]) -> List[T]:
     '''
     Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
