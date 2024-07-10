@@ -11,13 +11,13 @@ Population = Union[Collection[Tuple[float, T]], Collection[T]]
 
 
 def genetic_algorithm(population: Population,
-                      crossover: Callable[[Population, int, Tuple], Tuple[Population, Tuple]],
-                      mutation: Callable[[Population, Tuple], Tuple[Population, Tuple]],
-                      get_fitness: Callable[[Population, Tuple], Tuple[Population, Tuple]],
-                      selection: Callable[[Population, Population, Tuple], Tuple[Population, Tuple]],
+                      crossover: Callable[[Population, int, Tuple], Population],
+                      mutation: Callable[[Population, Tuple], Population],
+                      get_fitness: Callable[[Population, Tuple], Population],
+                      selection: Callable[[Population, Population, int, Tuple], Population],
                       term_cond: Callable[[int, Population], bool],
                       options_handler: Callable[[Population], Tuple],
-                      offspring_expansion_factor: float = 2.0
+                      population_size: Callable[[Population, Collection[Population]], Tuple[int, int]]
                       ) -> Collection[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
@@ -26,15 +26,15 @@ def genetic_algorithm(population: Population,
     '''
 
     current_population = population
-    options = options_handler(current_population)
-    best_solutions = []
+    best_solutions: List[Population] = []
     generation = 0
     while term_cond(generation, best_solutions):
-        offspring_size = int(offspring_expansion_factor * len(current_population))
-        offspring, options = crossover(current_population, offspring_size, options)
-        offspring, options = mutation(offspring, options)   # Apply mutation to the next generation
-        offspring, options = get_fitness(offspring, options)
-        next_gen_population, options = selection(current_population, offspring, options)   # calculate next_population
+        options = options_handler(current_population)
+        offspring_size, next_gen_pop_size = population_size(current_population, best_solutions)
+        offspring = crossover(current_population, offspring_size, options)
+        offspring = mutation(offspring, options)   # Apply mutation to the next generation
+        offspring = get_fitness(offspring, options)
+        next_gen_population = selection(current_population, offspring, next_gen_pop_size, options)   # calculate next_population
 
         best_of_gen = nsmallest(7, next_gen_population)
         best_solutions.extend(best_of_gen)
