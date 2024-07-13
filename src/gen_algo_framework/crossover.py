@@ -1,7 +1,7 @@
 from typing import Any, List, Tuple
 from random import randint
 from collections import deque
-from src.gen_algo_framework.genetic_algorithm import T, geneType
+from src.gen_algo_framework.genetic_algorithm import geneType
 from src.gen_algo_framework.selection import roulette_wheel_selection_two_parents
 
 
@@ -62,9 +62,9 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
     return child
 
 
-def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[Any]]],
+def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]],
                                   new_gen_size: int,
-                                  options: Tuple[Any, ...]) -> List[T]:
+                                  options: dict) -> List[List[geneType]]:
     '''
     Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
@@ -72,12 +72,14 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[Any]]],
         population (List[Tuple[float, List[Any]]]): The current population, where each element
             is a tuple containing the fitness value and the chromosome.
         new_gen_size (int): The desired size of the new generation.
-        options (Tuple[Any, ...]): A tuple with the cumulative fitness list
-            and the total fitness of the population
+        options (dict): A dictionary with the cumulative fitness list
+            with the key \'c_fitness_l\' and the total fitness of the population
+            with the key \'total_f\'.
     Returns:
         List[T]: A list of new individuals representing the offspring.
     '''
-    cumulative_fitness_list, total_fitness, *_ = options
+    cumulative_fitness_list = options['c_fitness_l']
+    total_fitness = options['total_f']
     new_gen = []
     while len(new_gen) < new_gen_size:
         p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list,

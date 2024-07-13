@@ -95,7 +95,7 @@ def remove_from_fitness_list(index: int,
 def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
                                 offspring: List[Tuple[float, T]],
                                 next_gen_size: int,
-                                options: Tuple[Any, ...]) -> List[Tuple[float, T]]:
+                                options: dict) -> List[Tuple[float, T]]:
     '''
     Performs the next generation selection using a roulette wheel mechanism.
     This functions modifies the current_population and the options argument.
@@ -104,14 +104,16 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
                                                     is a tuple of fitness score and individual.
         offspring (List[Tuple[float, T]]): The new offspring generated from the current population.
         next_gen_size (int): The desired size of the next generation.
-        options (Tuple[Any, ...]): A tuple containing the cumulative fitness list and
-                                             the current total fitness value of the current population
-                                             that is given as an argument.
+        options (dict): A dictionary with the cumulative fitness list
+            with the key \'c_fitness_l\' and the total fitness value 
+            with the key \'total_f\', both from the current_population
+            argument.
     Returns:
         List[Tuple[float, T]]: The selected next generation population.
     '''
 
-    cumulative_fitness_l, curr_total_f, *_ = options
+    cumulative_fitness_l = options['c_fitness_l']
+    curr_total_f = options['total_f']
     current_population.extend(offspring)
     offspring_c_list, total_fitness = cumulative_fitness(offspring, curr_total_f)
     cumulative_fitness_l.extend(offspring_c_list)

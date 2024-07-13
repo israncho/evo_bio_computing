@@ -11,12 +11,12 @@ Population = Union[Collection[Tuple[float, T]], Collection[T]]
 
 
 def genetic_algorithm(population: Population,
-                      crossover: Callable[[Population, int, Tuple], Population],
-                      mutation: Callable[[Population, Tuple], Population],
-                      get_fitness: Callable[[Population, Tuple], Population],
-                      selection: Callable[[Population, Population, int, Tuple], Population],
+                      crossover: Callable[[Population, int, dict], Population],
+                      mutation: Callable[[Population, dict], Population],
+                      get_fitness: Callable[[Population, dict], Population],
+                      selection: Callable[[Population, Population, int, dict], Population],
                       term_cond: Callable[[int, Population], bool],
-                      options_handler: Callable[[Population], Tuple],
+                      options_handler: Callable[[Population], dict],
                       population_size: Callable[[Population, Collection[Population]], Tuple[int, int]]
                       ) -> Collection[Population]:
     '''

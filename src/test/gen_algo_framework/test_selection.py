@@ -93,9 +93,10 @@ def test_roulette_next_gen_selection():
         offspring = _population[len(_population) // 2:]
 
         cumulative_f_l, total_f = cumulative_fitness(curr_population)
+        options = {'c_fitness_l': cumulative_f_l, 'total_f': total_f}
         next_gen = roulette_next_gen_selection(curr_population, offspring,
                                                int(len(fittest_individuals) * 1.75),
-                                               (cumulative_f_l, total_f))
+                                               options)
 
         next_gen_set = set(next_gen)
         for x in fittest_individuals:
