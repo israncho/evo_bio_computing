@@ -16,8 +16,8 @@ def genetic_algorithm(population: Population,
                       get_fitness: Callable[[Population, dict], Population],
                       selection: Callable[[Population, Population, int, dict], Population],
                       term_cond: Callable[[int, Population], bool],
-                      options_handler: Callable[[Population], dict],
-                      population_size: Callable[[Population, Collection[Population]], Tuple[int, int]]
+                      options_handler: Callable[[Population, dict], dict],
+                      population_size: Callable[[Population, dict], Tuple[int, int]]
                       ) -> Collection[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
@@ -28,13 +28,17 @@ def genetic_algorithm(population: Population,
     current_population = population
     best_solutions: List[Population] = []
     generation = 0
+    options = dict()
     while term_cond(generation, best_solutions):
-        options = options_handler(current_population)
-        offspring_size, next_gen_pop_size = population_size(current_population, best_solutions)
+        options = options_handler(current_population, options)
+        offspring_size, next_gen_pop_size = population_size(current_population, options)
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
-        next_gen_population = selection(current_population, offspring, next_gen_pop_size, options)   # calculate next_population
+        next_gen_population = selection(current_population,
+                                        offspring,
+                                        next_gen_pop_size,
+                                        options)   # calculate next_population
 
         best_of_gen = nsmallest(7, next_gen_population)
         best_solutions.extend(best_of_gen)
@@ -50,12 +54,17 @@ def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
     Generates a population of individuals, where each individual is a list
     representing a chromosome composed of randomly sampled genes from a given set.
     Args:
-        size (int): The number of individuals (chromosomes) in the population.
-        genes (Set[geneType]): The set of genes to sample from for each individual.
+        size (int):
+            The number of individuals (chromosomes) in the population.
+
+        genes (Set[geneType]):
+            The set of genes to sample from for each individual.
+
     Returns:
-        List[List[geneType]]: A list of lists, where each inner list represents
-        an individual (chromosome) in the population. Each individual's chromosome
-        contains genes sampled randomly from the provided set.
+        List[List[geneType]]:
+            A list of lists, where each inner list represents an individual
+            (chromosome) in the population. Each individual's chromosome
+            contains genes sampled randomly from the provided set.
     '''
     gene_count = len(genes)
     genes_list = list(genes)
