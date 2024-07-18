@@ -11,12 +11,15 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
     This function is intended for maximization problems.
     Args:
-        parent1 (Tuple[float, List[geneType]]): First parent, represented by its
-            fitness and chromosome.
-        parent2 (Tuple[float, List[geneType]]): Second parent, represented by its
-            fitness and chromosome.
+
+        parent1 (Tuple[float, List[geneType]]):
+            First parent, represented by its fitness and chromosome.
+
+        parent2 (Tuple[float, List[geneType]]):
+            Second parent, represented by its fitness and chromosome.
+
     Returns:
-        List[geneType]: The chromosome of the resulting child.
+        List[geneType]: The resulting child (individual).
     '''
 
     p1_size = len(parent1[1])
@@ -69,14 +72,20 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]]
     Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
     Args:
-        population (List[Tuple[float, List[Any]]]): The current population, where each element
-            is a tuple containing the fitness value and the chromosome.
-        new_gen_size (int): The desired size of the new generation.
-        options (dict): A dictionary with the cumulative fitness list
-            with the key \'c_fitness_l\' and the total fitness of the population
+        population (List[Tuple[float, List[geneType]]]):
+            The current population, where each element is a tuple containing
+            the fitness value and the chromosome.
+
+        new_gen_size (int):
+            The desired size of the new generation.
+
+        options (dict):
+            A dictionary with the cumulative fitness list with the key
+            \'c_fitness_l\' and the total fitness of the population
             with the key \'total_f\'.
+
     Returns:
-        List[T]: A list of new individuals representing the offspring.
+        List[List[geneType]]: A list of new individuals representing the offspring.
     '''
     cumulative_fitness_list = options['c_fitness_l']
     total_fitness = options['total_f']
@@ -95,7 +104,9 @@ def __random_subinterval(_range: int, size: int) -> Tuple[int, int]:
     Generates a random subinterval within the interval [0, _range].
     Args:
         _range (int): The maximum range of the interval.
+
         size (int): The size of the subinterval.
+
     Returns:
         Tuple[int, int]: The generated random subinterval.
     '''
@@ -106,13 +117,19 @@ def __random_subinterval(_range: int, size: int) -> Tuple[int, int]:
     return (fst, snd)
 
 
-def __random_snd_subinterval(_range: int, sub_interval: Tuple[int, int], size: int) -> Tuple[int, int]:
+def __random_snd_subinterval(_range: int,
+                             sub_interval: Tuple[int, int],
+                             size: int) -> Tuple[int, int]:
     '''
-    Generates a second random subinterval that does not overlap with the given first subinterval.
+    Generates a second random subinterval that does not overlap with
+    the given first subinterval.
     Args:
         _range (int): The maximum range of the interval.
+
         sub_interval (Tuple[int, int]): The first already generated subinterval.
+
         size (int): The size of the second subinterval.
+
     Returns:
         Tuple[int, int]: The generated second random subinterval.
     '''
@@ -132,13 +149,16 @@ def __random_snd_subinterval(_range: int, sub_interval: Tuple[int, int], size: i
     return (fst, snd)
 
 
-def __two_random_subintervals(_range: int, size: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+def __two_random_subintervals(_range: int,
+                              size: int) -> Tuple[Tuple[int, int], Tuple[int, int]]:
     '''
     Generates two random subintervals within a given range that does not overlap,
     summing to a specific size.
     Args:
         _range (int): The maximum range of the interval.
+
         size (int): The total size of the two combined subintervals.
+
     Returns:
         Tuple[Tuple[int, int], Tuple[int, int]]: The two generated random subintervals.
     '''
