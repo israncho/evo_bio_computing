@@ -68,7 +68,7 @@ def test_remove_from_fitness_list():
             index = randint(0, len(c_list) - 1)
             individual_fitness = _popu[index][0]
 
-            c_list, total_f = remove_from_fitness_list(index, individual_fitness, c_list, total_f)
+            c_list, total_f = remove_from_fitness_list(index, individual_fitness, c_list)
 
             test_cumulative_fitness(c_list)
 
