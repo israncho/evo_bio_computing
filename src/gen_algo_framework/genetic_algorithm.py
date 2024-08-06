@@ -1,5 +1,6 @@
+from collections import defaultdict
 from functools import reduce
-from heapq import nsmallest
+from heapq import nlargest
 from random import sample
 from typing import Callable, Collection, List, Set, Tuple, Union
 from typing import Any, Collection, TypeVar
@@ -16,11 +17,11 @@ def genetic_algorithm(population: Population,
                       get_fitness: Callable[[Population, dict], Population],
                       selection: Callable[[Population, Population, int, dict], Population],
                       term_cond: Callable[[int, Population], bool],
-                      options_handler: Callable[[Population, dict], dict],
-                      population_size: Callable[[Population, dict], Tuple[int, int]]
+                      options_handler: Callable[[Population, dict], dict]
                       ) -> Collection[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
+    This function is intended for maximization problems.
     Returns:
         Collection[Population]: List of best solutions found in each generation.
     '''
@@ -28,10 +29,10 @@ def genetic_algorithm(population: Population,
     current_population = population
     best_solutions: List[Population] = []
     generation = 0
-    options = dict()
+    options = defaultdict(lambda : None)
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)
-        offspring_size, next_gen_pop_size = population_size(current_population, options)
+        offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
@@ -40,7 +41,7 @@ def genetic_algorithm(population: Population,
                                         next_gen_pop_size,
                                         options)   # calculate next_population
 
-        best_of_gen = nsmallest(7, next_gen_population)
+        best_of_gen = nlargest(7, next_gen_population)
         best_solutions.extend(best_of_gen)
 
         generation += 1

@@ -28,5 +28,5 @@ def test_swap_mutation_population():
             if _population[i] != _population_copy[i]:
                 changed_count += 1
 
-        assert 100 <= changed_count and changed_count <= 300
+        assert 125 <= changed_count and changed_count <= 275
 

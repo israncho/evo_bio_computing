@@ -110,6 +110,7 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
     '''
     Performs the next generation selection using a roulette wheel mechanism.
     This functions modifies the current_population and the options argument.
+    This function is intended for maximization problems.
     Args:
         current_population (List[Tuple[float, T]]): The current population, where each individual
                                                     is a tuple of fitness score and individual.
@@ -126,6 +127,8 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
     cumulative_fitness_l = options['c_fitness_l']
     curr_total_f = options['total_f']
     current_population.extend(offspring)
+
+    # calculate offspring cumulative list and total fitness
     offspring_c_list, total_fitness = cumulative_fitness(offspring, curr_total_f)
     cumulative_fitness_l.extend(offspring_c_list)
 
