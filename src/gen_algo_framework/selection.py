@@ -69,7 +69,7 @@ def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float]
 def remove_from_fitness_list(index: int,
                              individual_fitness: float,
                              cumulative_fitness_list: List[float]
-                             ) -> Tuple[List[float], float]:
+                             ) -> List[float]:
     '''
     Remove an individual from the cumulative fitness list based on its index
     and update the total fitness.
@@ -81,17 +81,15 @@ def remove_from_fitness_list(index: int,
         cumulative_fitness_list (List[float]): A list of cumulative fitness values
                                                where each value represents the cumulative
                                                sum of fitness up to that point in the population.
-        total_fitness (float): The total fitness of the entire population before removal.
 
     Returns:
-        Tuple[List[float], float]: A tuple containing the updated cumulative fitness list
-                                   and the new total fitness value after removal.
+        List[float]: the updated cumulative fitness list.
     '''
     cumulative_fitness_list.pop(index)
     for i in range(index, len(cumulative_fitness_list)):
         cumulative_fitness_list[i] -= individual_fitness
 
-    return cumulative_fitness_list, cumulative_fitness_list[-1]
+    return cumulative_fitness_list
 
 
 def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
@@ -130,6 +128,6 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
 
         # remove from pop and cumulative list
         current_population.pop(index)
-        cumulative_fitness_l, total_fitness = remove_from_fitness_list(index, individual[0], cumulative_fitness_l)
+        cumulative_fitness_l = remove_from_fitness_list(index, individual[0], cumulative_fitness_l)
 
     return next_gen

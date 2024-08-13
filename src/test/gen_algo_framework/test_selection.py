@@ -62,13 +62,13 @@ def test_roulette_wheel_selection_two_parents():
 
 def test_remove_from_fitness_list():
     for _ in range(1000):
-        c_list, total_f, _popu = __random_c_list()
+        c_list, _, _popu = __random_c_list()
 
         for _ in range(randint(0, len(c_list) // 2)):
             index = randint(0, len(c_list) - 1)
             individual_fitness = _popu[index][0]
 
-            c_list, total_f = remove_from_fitness_list(index, individual_fitness, c_list)
+            c_list = remove_from_fitness_list(index, individual_fitness, c_list)
 
             test_cumulative_fitness(c_list)
 
@@ -76,7 +76,8 @@ def test_remove_from_fitness_list():
             recalc_c_list = cumulative_fitness(_popu)
             recalc_f = recalc_c_list[-1]
             assert recalc_c_list == c_list
-            assert recalc_f == total_f
+            assert recalc_c_list is not c_list
+            assert recalc_f == c_list[-1] 
 
 
 def test_roulette_next_gen_selection():
