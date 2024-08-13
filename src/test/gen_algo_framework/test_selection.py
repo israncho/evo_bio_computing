@@ -34,8 +34,8 @@ def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
 
 def test_roulette_wheel_toss():
     for _ in range(10000):
-        c_list, total_f, _ = __random_c_list()
-        i = roulette_wheel_toss(c_list, total_f)
+        c_list, _, _ = __random_c_list()
+        i = roulette_wheel_toss(c_list)
         assert 0 <= i and i < len(c_list), f'Index out of range: {i}'
 
     index_tosses = {0: 0, 1: 0, 2: 0, 3: 0}
@@ -43,7 +43,7 @@ def test_roulette_wheel_toss():
     tosses = 20000
 
     for _ in range(tosses):
-        index_selected = roulette_wheel_toss(fixed_c_list, 100.0)
+        index_selected = roulette_wheel_toss(fixed_c_list)
         index_tosses[index_selected] += 1
 
     for val in index_tosses.values():

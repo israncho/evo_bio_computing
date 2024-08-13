@@ -32,8 +32,7 @@ def cumulative_fitness(population: List[Tuple[float, T]],
     return cumulative_fitness_list
 
 
-def roulette_wheel_toss(cumulative_fitness_list: List[float],
-                        total_fitness: float) -> int:
+def roulette_wheel_toss(cumulative_fitness_list: List[float]) -> int:
     '''
     Perform a roulette wheel selection toss to get an index based
     on cumulative probability list.
@@ -48,7 +47,7 @@ def roulette_wheel_toss(cumulative_fitness_list: List[float],
         int: The index selected based on the random toss within the
         cumulative fitness list.
     '''
-    return bisect_left(cumulative_fitness_list, uniform(0, total_fitness))
+    return bisect_left(cumulative_fitness_list, uniform(0, cumulative_fitness_list[-1]))
 
 
 def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float],
@@ -67,11 +66,9 @@ def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float],
         Tuple[int, int]: A tuple containing the indices of the two selected parents.
     '''
     assert len(cumulative_fitness_list) >= 2
-    fst_parent_index = snd_parent_index = roulette_wheel_toss(cumulative_fitness_list,
-                                                              total_fitness)
+    fst_parent_index = snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
     while fst_parent_index == snd_parent_index:
-        snd_parent_index = roulette_wheel_toss(cumulative_fitness_list,
-                                               total_fitness)
+        snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
     return fst_parent_index, snd_parent_index
 
 
@@ -130,12 +127,11 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
 
     # calculate offspring cumulative list and total fitness
     offspring_c_list  = cumulative_fitness(offspring, curr_total_f)
-    total_fitness = offspring_c_list[-1]
     cumulative_fitness_l.extend(offspring_c_list)
 
     next_gen: List[Tuple[float, T]] = []
     for _ in range(next_gen_size):
-        index = roulette_wheel_toss(cumulative_fitness_l, total_fitness)
+        index = roulette_wheel_toss(cumulative_fitness_l)
         individual = current_population[index]
         next_gen.append(individual)
 
