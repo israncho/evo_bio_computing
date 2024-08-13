@@ -53,8 +53,8 @@ def test_roulette_wheel_toss():
 
 def test_roulette_wheel_selection_two_parents():
     for _ in range(5000):
-        c_list, total_f, _ = __random_c_list()
-        i, j = roulette_wheel_selection_two_parents(c_list, total_f)
+        c_list, _, _ = __random_c_list()
+        i, j = roulette_wheel_selection_two_parents(c_list)
         assert i != j, f'Selected same index for both parents: {i}'
         assert 0 <= i and i < len(c_list), f'Index i out of range: {i}'
         assert 0 <= j and j < len(c_list), f'Index j out of range: {j}'

@@ -79,20 +79,17 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]]
         new_gen_size (int):
             The desired size of the new generation.
 
-        options (dict):
-            A dictionary with the cumulative fitness list with the key
-            \'c_fitness_l\' and the total fitness of the population
-            with the key \'total_f\'.
+        options (dict): A dictionary with the cumulative fitness list
+            from the population argument, associated with the 
+            key \'c_fitness_l\' .
 
     Returns:
         List[List[geneType]]: A list of new individuals representing the offspring.
     '''
     cumulative_fitness_list = options['c_fitness_l']
-    total_fitness = options['c_fitness_l'][-1]
     new_gen = []
     while len(new_gen) < new_gen_size:
-        p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list,
-                                                                  total_fitness)
+        p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list)
         child = parents_crossover_ox1(population[p1_index],
                                       population[p2_index])
         new_gen.append(child)

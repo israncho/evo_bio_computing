@@ -19,10 +19,9 @@ def cumulative_fitness(population: List[Tuple[float, T]],
             the population
 
     Returns:
-        Tuple[List[float], float]:
+        List[float]:
             A list of cumulative fitness, where each value represents the
-            cumulative sum of fitness up to that point in the population,
-            sum of the fitness of the entire population.
+            cumulative sum of fitness up to that point in the population.
     '''
     cumulative_fitness_list = []
     accumulated = 0 + extra_fitness
@@ -40,9 +39,6 @@ def roulette_wheel_toss(cumulative_fitness_list: List[float]) -> int:
         cumulative_fitness_list (List[float]):
             A list of cumulative fitness.
 
-        total_fitness (float):
-            Sum of the fitness of the entire population
-
     Returns:
         int: The index selected based on the random toss within the
         cumulative fitness list.
@@ -50,17 +46,14 @@ def roulette_wheel_toss(cumulative_fitness_list: List[float]) -> int:
     return bisect_left(cumulative_fitness_list, uniform(0, cumulative_fitness_list[-1]))
 
 
-def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float],
-                                         total_fitness: float) -> Tuple[int, int]:
+def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float]
+                                         ) -> Tuple[int, int]:
     '''
     Select two distinct parents from the population using roulette wheel selection.
     This function is intended for maximization problems.
     Args:
         cumulative_fitness_list (List[float]):
             A list of cumulative fitness generated from a population.
-
-        total_fitness (float):
-            Sum of the fitness of the entire population
 
     Returns:
         Tuple[int, int]: A tuple containing the indices of the two selected parents.
@@ -69,6 +62,7 @@ def roulette_wheel_selection_two_parents(cumulative_fitness_list: List[float],
     fst_parent_index = snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
     while fst_parent_index == snd_parent_index:
         snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
+
     return fst_parent_index, snd_parent_index
 
 
@@ -114,9 +108,8 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
         offspring (List[Tuple[float, T]]): The new offspring generated from the current population.
         next_gen_size (int): The desired size of the next generation.
         options (dict): A dictionary with the cumulative fitness list
-            with the key \'c_fitness_l\' and the total fitness value
-            with the key \'total_f\', both from the current_population
-            argument.
+            from the current_population argument, associated with the 
+            key \'c_fitness_l\' .
     Returns:
         List[Tuple[float, T]]: The selected next generation population.
     '''
