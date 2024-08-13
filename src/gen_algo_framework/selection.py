@@ -5,7 +5,7 @@ from bisect import bisect_left
 
 
 def cumulative_fitness(population: List[Tuple[float, T]],
-                       extra_fitness: float = 0) -> Tuple[List[float], float]:
+                       extra_fitness: float = 0) -> List[float]:
     '''
     Calculate the cumulative fitness list for a given population.
     This function is intended for maximization problems.
@@ -29,7 +29,7 @@ def cumulative_fitness(population: List[Tuple[float, T]],
     for fitness_i, _ in population:
         accumulated += fitness_i
         cumulative_fitness_list.append(accumulated)
-    return cumulative_fitness_list, accumulated
+    return cumulative_fitness_list
 
 
 def roulette_wheel_toss(cumulative_fitness_list: List[float],
@@ -125,11 +125,12 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
     '''
 
     cumulative_fitness_l = options['c_fitness_l']
-    curr_total_f = options['total_f']
+    curr_total_f = options['c_fitness_l'][-1]
     current_population.extend(offspring)
 
     # calculate offspring cumulative list and total fitness
-    offspring_c_list, total_fitness = cumulative_fitness(offspring, curr_total_f)
+    offspring_c_list  = cumulative_fitness(offspring, curr_total_f)
+    total_fitness = offspring_c_list[-1]
     cumulative_fitness_l.extend(offspring_c_list)
 
     next_gen: List[Tuple[float, T]] = []

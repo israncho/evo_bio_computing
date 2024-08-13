@@ -6,7 +6,8 @@ from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fit
 def __random_c_list():
     _population = [None] * randint(20, 60)
     _population = list(map(lambda x: (float(randint(1 , 1000)), x), _population))
-    c_list, total_f = cumulative_fitness(_population)
+    c_list  = cumulative_fitness(_population)
+    total_f = c_list[-1]
     return c_list, total_f, _population
 
 
@@ -73,7 +74,8 @@ def test_remove_from_fitness_list():
             test_cumulative_fitness(c_list)
 
             _popu.pop(index)
-            recalc_c_list, recalc_f = cumulative_fitness(_popu)
+            recalc_c_list = cumulative_fitness(_popu)
+            recalc_f = recalc_c_list[-1]
             assert recalc_c_list == c_list
             assert recalc_f == total_f
 
@@ -92,8 +94,7 @@ def test_roulette_next_gen_selection():
         curr_population = _population[:len(_population) // 2]
         offspring = _population[len(_population) // 2:]
 
-        cumulative_f_l, total_f = cumulative_fitness(curr_population)
-        options = {'c_fitness_l': cumulative_f_l, 'total_f': total_f}
+        options = {'c_fitness_l': cumulative_fitness(curr_population)}
         next_gen = roulette_next_gen_selection(curr_population, offspring,
                                                int(len(fittest_individuals) * 1.75),
                                                options)

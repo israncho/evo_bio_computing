@@ -36,8 +36,7 @@ def test_pop_crossover_ox1_roulettew_s():
         genes = set(sample(range(100), 10))
         _population = population(50, genes)
         _population = list(map(lambda x: (float(randint(0,100)), x), _population))
-        cumulative_fitness_list, total_f = cumulative_fitness(_population)
-        options = {'c_fitness_l': cumulative_fitness_list, 'total_f': total_f}
+        options = {'c_fitness_l': cumulative_fitness(_population)}
         new_gen = pop_crossover_ox1_roulettew_s(_population, 50, options)
         for individual in new_gen:
             assert set(individual) == genes, 'Individual has not the same genes'

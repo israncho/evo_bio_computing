@@ -88,7 +88,7 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]]
         List[List[geneType]]: A list of new individuals representing the offspring.
     '''
     cumulative_fitness_list = options['c_fitness_l']
-    total_fitness = options['total_f']
+    total_fitness = options['c_fitness_l'][-1]
     new_gen = []
     while len(new_gen) < new_gen_size:
         p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list,
