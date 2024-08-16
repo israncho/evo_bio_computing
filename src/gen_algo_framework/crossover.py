@@ -80,7 +80,7 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]]
             The desired size of the new generation.
 
         options (dict): A dictionary with the cumulative fitness list
-            from the population argument, associated with the 
+            from the population argument, associated with the
             key \'c_fitness_l\' .
 
     Returns:
