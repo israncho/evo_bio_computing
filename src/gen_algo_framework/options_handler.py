@@ -1,6 +1,6 @@
 from typing import List, Tuple
-from gen_algo_framework.genetic_algorithm import T, Population
-from selection import cumulative_fitness
+from src.gen_algo_framework.genetic_algorithm import T, Population
+from src.gen_algo_framework.selection import cumulative_fitness
 
 
 def minimum_options_handler(current_population: Population, options: dict) -> dict:

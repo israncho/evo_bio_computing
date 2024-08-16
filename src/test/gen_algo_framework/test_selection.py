@@ -1,5 +1,5 @@
 from random import randint, sample
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_next_gen_selection, roulette_wheel_selection_two_parents, roulette_wheel_toss
 
 
@@ -15,6 +15,7 @@ def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
     tests = 5000
 
     c_list: List[float] = []
+    _pop : List[Tuple[float, None]] = []
 
     if c_list_to_test != None:
         tests = 1
@@ -77,7 +78,7 @@ def test_remove_from_fitness_list():
             recalc_f = recalc_c_list[-1]
             assert recalc_c_list == c_list
             assert recalc_c_list is not c_list
-            assert recalc_f == c_list[-1] 
+            assert recalc_f == c_list[-1]
 
 
 def test_roulette_next_gen_selection():
