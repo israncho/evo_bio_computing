@@ -1,0 +1,9 @@
+#!/bin/bash
+
+ORIGINAL_PYTHONPATH=$PYTHONPATH
+
+export PYTHONPATH=.
+
+python3 "$@"
+
+export PYTHONPATH=$ORIGINAL_PYTHONPATH
