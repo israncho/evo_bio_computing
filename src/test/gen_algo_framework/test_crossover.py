@@ -1,6 +1,6 @@
 from typing import Set, Tuple, List
 from src.gen_algo_framework.crossover import parents_crossover_ox1, pop_crossover_ox1_roulettew_s
-from src.gen_algo_framework.genetic_algorithm import population
+from src.gen_algo_framework.genetic_algorithm import generate_population
 from src.gen_algo_framework.selection import cumulative_fitness
 from random import randint, sample
 
@@ -34,7 +34,7 @@ def test_parents_crossover_ox1():
 def test_pop_crossover_ox1_roulettew_s():
     for _ in range(1000):
         genes = set(sample(range(100), 10))
-        _population = population(50, genes)
+        _population = generate_population(50, genes)
         _population = list(map(lambda x: (float(randint(0,100)), x), _population))
         options = {'c_fitness_l': cumulative_fitness(_population)}
         new_gen = pop_crossover_ox1_roulettew_s(_population, 50, options)

@@ -1,6 +1,6 @@
 from random import randint, uniform
 from typing import Set
-from src.gen_algo_framework.genetic_algorithm import population, transform_to_max
+from src.gen_algo_framework.genetic_algorithm import generate_population, transform_to_max
 
 
 def test_population_gen_func():
@@ -9,7 +9,7 @@ def test_population_gen_func():
         for _ in range(20):
             gene_set.add(randint(0, 1000))
 
-        rand_population = population(10, gene_set)
+        rand_population = generate_population(10, gene_set)
 
         for individual in rand_population:
             assert set(individual) == gene_set, 'individual does not contain the same gene set.'

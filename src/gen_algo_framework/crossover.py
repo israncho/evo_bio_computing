@@ -1,32 +1,33 @@
+'''Module with functions that implement crossover operators
+for the genetic algorithm.'''
+
 from typing import Any, List, Tuple
 from random import randint
 from collections import deque
-from src.gen_algo_framework.genetic_algorithm import geneType
+from src.gen_algo_framework.genetic_algorithm import GeneType
 from src.gen_algo_framework.selection import roulette_wheel_selection_two_parents
 
 
-def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
-                          parent2: Tuple[float, List[geneType]]) -> List[geneType]:
+def parents_crossover_ox1(parent1: Tuple[float, List[GeneType]],
+                          parent2: Tuple[float, List[GeneType]]) -> List[GeneType]:
     '''
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
     This function is intended for maximization problems.
     Args:
 
-        parent1 (Tuple[float, List[geneType]]):
+        parent1 (Tuple[float, List[GeneType]]):
             First parent, represented by its fitness and chromosome.
 
-        parent2 (Tuple[float, List[geneType]]):
+        parent2 (Tuple[float, List[GeneType]]):
             Second parent, represented by its fitness and chromosome.
 
     Returns:
-        List[geneType]: The resulting child (individual).
+        List[GeneType]: The resulting child (individual).
     '''
 
-    p1_size = len(parent1[1])
-    p2_size = len(parent2[1])
-    assert p1_size == p2_size
+    assert len(parent1[1]) == len(parent2[1])
 
-    chromosome_size = p1_size
+    chromosome_size = len(parent1[1])
 
     fitest = None
     lessfit = None
@@ -59,20 +60,20 @@ def parents_crossover_ox1(parent1: Tuple[float, List[geneType]],
             remaining_genes.append(a)
 
     for i in range(chromosome_size):
-        if child[i] == None:
+        if child[i] is None:
             child[i] = remaining_genes.popleft()
 
     return child
 
 
-def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]],
+def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[GeneType]]],
                                   new_gen_size: int,
-                                  options: dict) -> List[List[geneType]]:
+                                  options: dict) -> List[List[GeneType]]:
     '''
     Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
     Args:
-        population (List[Tuple[float, List[geneType]]]):
+        population (List[Tuple[float, List[GeneType]]]):
             The current population, where each element is a tuple containing
             the fitness value and the chromosome.
 
@@ -84,7 +85,7 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[geneType]]]
             key \'c_fitness_l\' .
 
     Returns:
-        List[List[geneType]]: A list of new individuals representing the offspring.
+        List[List[GeneType]]: A list of new individuals representing the offspring.
     '''
     cumulative_fitness_list = options['c_fitness_l']
     new_gen = []
@@ -165,4 +166,3 @@ def __two_random_subintervals(_range: int,
     interval1 = __random_subinterval(_range, size1)
     interval2 = __random_snd_subinterval(_range, interval1, size2)
     return (interval1, interval2)
-

@@ -1,14 +1,16 @@
+'''Module with functions for the genetic algorithm.'''
+
 from collections import defaultdict
 from functools import reduce
 from heapq import nlargest
 from random import sample
-from typing import Callable, Collection, List, Set, Tuple, Union
+from typing import Callable, List, Set, Tuple
 from typing import Any, Collection, TypeVar
 
 
 T = TypeVar('T', Collection, Any)   # type of the Genotype
-geneType = TypeVar('geneType')      # type of the genes
-Population = Union[Collection[Tuple[float, T]], Collection[T]]
+GeneType = TypeVar('GeneType')      # type of the genes
+Population = Collection[Tuple[float, T]] | Collection[T]
 
 
 def genetic_algorithm(population: Population,
@@ -50,7 +52,7 @@ def genetic_algorithm(population: Population,
     return best_solutions
 
 
-def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
+def generate_population(size: int, genes: Set[GeneType]) -> List[List[GeneType]]:
     '''
     Generates a population of individuals, where each individual is a list
     representing a chromosome composed of randomly sampled genes from a given set.
@@ -58,11 +60,11 @@ def population(size: int, genes: Set[geneType]) -> List[List[geneType]]:
         size (int):
             The number of individuals (chromosomes) in the population.
 
-        genes (Set[geneType]):
+        genes (Set[GeneType]):
             The set of genes to sample from for each individual.
 
     Returns:
-        List[List[geneType]]:
+        List[List[GeneType]]:
             A list of lists, where each inner list represents an individual
             (chromosome) in the population. Each individual's chromosome
             contains genes sampled randomly from the provided set.
