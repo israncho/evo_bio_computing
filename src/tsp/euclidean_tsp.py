@@ -1,27 +1,24 @@
 '''Module to model the euclidean TSP and its functions
 to be used in the genetic algorithm.'''
 
-from typing import List, Set, Tuple
+from typing import List, Tuple
 from math import sqrt
 
 
-VectorRn = Tuple[float | int, ...]
+EucCity = Tuple[float | int, ...]
 '''Type for cities.'''
 
-TSPInstance = Set[VectorRn]
-'''Type for instances.'''
-
-TSPPermutation = List[VectorRn]
+EucTSPPermutation = List[EucCity]
 '''Type for solutions. Does not
 include de first city.'''
 
 
-def euclidean_distance(u: VectorRn, v: VectorRn) -> float:
+def euclidean_distance(u: EucCity, v: EucCity) -> float:
     '''
     Calculate the Euclidean distance between two vectors.
     Args:
-        u (VectorRn): First vector in R^n.
-        v (VectorRn): Second vector in R^n.
+        u (EucCity): First city (vector in R^n).
+        v (EucCity): Second city (vector in R^n).
     Returns:
         float: The Euclidean distance between u and v.
     '''
@@ -33,42 +30,43 @@ def euclidean_distance(u: VectorRn, v: VectorRn) -> float:
     return sqrt(_sum)
 
 
-def tour_distance(fst_v: VectorRn,
-                  rest_of_v: TSPPermutation,
+def tour_distance(fst_city: EucCity,
+                  rest_of_cities: EucTSPPermutation,
                   weights: dict) -> float:
     '''
     Calculate the total distance of a TSP tour.
     Args:
-        solution (TSPSolution): A TSP solution,
-            which is a tuple containing the first city
-            and a list of the remaining cities in the tour.
+        fst_city (EucCity): The first city in the tour.
+        rest_of_cities (EucTSPPermutation): A list of the
+            remaining cities in the tour.
+        weights (dict): A dictionary where keys are tuples
+            of city pairs (u, v) and values are the
+            Euclidean distances between those cities.
     Returns:
-        float: The total distance of the tour, including
-            the distance between the last city and the
-            first city to complete the tour.
+        float: The total distance of the tour.
     '''
-    distance = weights[(fst_v, rest_of_v[0])]
-    distance += weights[(rest_of_v[-1], fst_v)]
+    distance = weights[(fst_city, rest_of_cities[0])]
+    distance += weights[(rest_of_cities[-1], fst_city)]
 
-    for i in range(1, len(rest_of_v)):
-        distance += weights[(rest_of_v[i - 1], rest_of_v[i])]
+    for i in range(1, len(rest_of_cities)):
+        distance += weights[(rest_of_cities[i - 1], rest_of_cities[i])]
 
     return distance
 
 
-def euc_tsp_fitness(population: List[TSPPermutation],
-                    options: dict) -> List[Tuple[float, TSPPermutation]]:
+def euc_tsp_fitness(population: List[EucTSPPermutation],
+                    options: dict) -> List[Tuple[float, EucTSPPermutation]]:
     '''
     Calculate the fitness of each tour in the population for the TSP.
     Args:
-        population (List[TSPPermutation]): A list of TSP tours, where
+        population (List[EucTSPPermutation]): A list of TSP tours, where
             each tour is a permutation of the cities.
         options (dict): A dictionary containing the following keys:
             - 'fst_city': The first city in the tour.
             - 'weights': A dictionary of weights representing distances
                 between cities.
     Returns:
-        List[Tuple[float, TSPPermutation]]: A list of tuples, each
+        List[Tuple[float, EucTSPPermutation]]: A list of tuples, each
             containing the total distance of the tour and the corresponding
             tour itself.
     '''
@@ -83,26 +81,31 @@ def euc_tsp_fitness(population: List[TSPPermutation],
     return pop_with_fitness
 
 
-def build_weight_dict(tsp_instance: TSPInstance) -> dict:
+def build_weight_dict(fst_city: EucCity,
+                      rest_of_cities: EucTSPPermutation) -> dict:
     '''
     Build a dictionary of weights representing the distances between
     each pair of cities in a TSP instance.
     Args:
-        tsp_instance (TSPInstance): A set of vectors representing
-            the coordinates of the cities in the TSP.
+        fst_city (EucCity): The first city in the tour.
+        rest_of_cities (EucTSPPermutation): A list of the
+            remaining cities in the tour.
     Returns:
         dict: A dictionary where each key is a tuple of two cities
             (u, v) and the corresponding value is the Euclidean
             distance between them.
     '''
     weights = {}
-    all_cities = list(tsp_instance)
-    size = len(all_cities)
+
+    rest_of_cities.append(fst_city) # adding fst city
+    size = len(rest_of_cities)
 
     for i in range(size):
         for j in range(i + 1, size):
-            u, v = all_cities[i], all_cities[j]
+            u, v = rest_of_cities[i], rest_of_cities[j]
             weights[(u, v)] = euclidean_distance(u, v)
             weights[(v, u)] = weights[(u, v)]
+
+    rest_of_cities.pop()    # removing fst city
 
     return weights
