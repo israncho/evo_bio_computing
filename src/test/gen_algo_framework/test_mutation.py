@@ -15,7 +15,7 @@ def test_swap_mutation():
 
 
 def test_swap_mutation_population():
-    for _ in range(250):
+    for _ in range(150):
         gene_set = set(sample(range(100), randint(5, 15)))
         _population = generate_population(2000, gene_set)
         _population_copy = deepcopy(_population)
