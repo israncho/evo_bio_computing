@@ -74,7 +74,7 @@ def parse_tsp_data(lines_of_the_file: List[str]) -> dict:
         'rest_of_cities' : []}
 
     reading_vertices = False
-    reading_fst_v = True
+    reading_fst_c = True
 
     for line in lines_of_the_file:
 
@@ -100,8 +100,9 @@ def parse_tsp_data(lines_of_the_file: List[str]) -> dict:
         if reading_vertices:
             vertex = tuple(map(to_number, line_elems[1:]))
             instance_details['ids'][vertex] = int(line_elems[0])
-            if reading_fst_v:
+            if reading_fst_c:
                 instance_details['fst_city'] = vertex
+                reading_fst_c = False
             else:
                 instance_details['rest_of_cities'].append(vertex)
 
