@@ -22,19 +22,19 @@ def minimum_options_handler(current_population: Population,
         dict: The updated dictionary of options with default
             values set for any missing options.
     '''
-    if options['initial_population'] == None:   # first gen/iteration
+    if options['initial_population'] is None:   # first gen/iteration
         options['initial_population'] = len(current_population)
 
-    if options['mutation_proba'] == None:
+    if options['mutation_proba'] is None:
         options['mutation_proba'] = 1 / options['initial_population']
 
-    if options['another_swap_p'] == None:
+    if options['another_swap_p'] is None:
         options['another_swap_p'] = options['mutation_proba']
 
-    if options['offspring_s'] == None:
+    if options['offspring_s'] is None:
         options['offspring_s'] = options['initial_population']
 
-    if options['next_gen_pop_s'] == None:
+    if options['next_gen_pop_s'] is None:
         options['next_gen_pop_s'] = options['initial_population']
 
     return options

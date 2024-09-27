@@ -17,19 +17,19 @@ def test_cumulative_fitness(c_list_to_test: Optional[List[float]] = None):
     c_list: List[float] = []
     _pop : List[Tuple[float, None]] = []
 
-    if c_list_to_test != None:
+    if c_list_to_test is not None:
         tests = 1
         c_list = c_list_to_test
 
     for _ in range(tests):
-        if c_list_to_test == None:
+        if c_list_to_test is None:
             c_list, _, _pop = __random_c_list()
 
         for i in range(1, len(c_list)):
             assert c_list[i - 1] < c_list[i], f'List not strictly increasing at index {i}'
         assert 0 < c_list[0], f'First element out of range: {c_list[0]}'
 
-        if c_list_to_test == None:
+        if c_list_to_test is None:
             assert c_list[-1] == sum(x[0] for x in _pop)
 
 
