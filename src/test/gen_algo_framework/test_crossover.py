@@ -1,8 +1,8 @@
+from random import randint, sample
 from typing import Set, Tuple, List
 from src.gen_algo_framework.crossover import parents_crossover_ox1, pop_crossover_ox1_roulettew_s
 from src.gen_algo_framework.genetic_algorithm import generate_population
 from src.gen_algo_framework.selection import cumulative_fitness
-from random import randint, sample
 
 
 def different_random_parents(size: int, range_gene_size: int) -> Tuple[Set[int], List[int], List[int]]:
@@ -29,6 +29,9 @@ def test_parents_crossover_ox1():
             if child[i] == p1[i]: matches += 1
 
         assert matches >= 21, 'Child is not similar enough to the fittest parent'
+
+        clone = parents_crossover_ox1((2, p1), (2, p1))
+        assert clone == p1
 
 
 def test_pop_crossover_ox1_roulettew_s():
