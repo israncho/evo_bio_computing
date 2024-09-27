@@ -1,6 +1,17 @@
+'''Module with functions that implement replacement operators
+for the genetic algorithm.'''
+
 from typing import List, Tuple
-from src.gen_algo_framework.genetic_algorithm import T
+from src.gen_algo_framework.genetic_algorithm import T, Population
 from src.gen_algo_framework.selection import cumulative_fitness, roulette_wheel_toss, remove_from_fitness_list
+
+
+def full_generational_replacement(current_population: Population,
+                                  offspring: Population,
+                                  next_gen_size: int,
+                                  options: dict) -> Population:
+    return offspring
+
 
 def roulette_gen_replacement(current_population: List[Tuple[float, T]],
                                 offspring: List[Tuple[float, T]],
