@@ -1,7 +1,7 @@
 '''Module with functions for the genetic algorithm.'''
 
+from math import inf
 from collections import defaultdict
-from functools import reduce
 from heapq import nlargest
 from random import sample
 from typing import Callable, List, Set, Tuple
@@ -78,17 +78,26 @@ def generate_population(size: int, genes: Set[GeneType]) -> List[List[GeneType]]
     return _population
 
 
-def transform_to_max(population: Collection[Tuple[float, T]]) -> List[Tuple[float, T]]:
+def transform_to_max(population: List[Tuple[float, T]]) -> List[Tuple[float, T]]:
     '''
-    Transforms a population's fitness values from a minimization problem to a maximization problem.
-    This transformation ensures that lower fitness values become higher fitness values,
-    facilitating the use of algorithms designed for maximization.
+    Transforms a population's fitness values from a minimization
+    problem to a maximization problem. This transformation ensures that
+    lower fitness values become higher fitness values, facilitating the
+    use of algorithms designed for maximization.
     Args:
-        population (Collection[Tuple[float, T]]): A collection of individuals in the population,
-                                                  where each individual is represented as a tuple
-                                                  containing a fitness value and a genotype.
+        population (List[Tuple[float, T]]): A list of
+            individuals in the population, where each individual is
+            represented as a tuple containing a fitness value and a genotype.
     Returns:
-        Collection[Tuple[float, T]]: The transformed population with adjusted fitness values.
+        Collection[Tuple[float, T]]: The transformed population with adjusted
+        fitness values (modifies the population given as argument and returns it).
     '''
-    max_fit = reduce(lambda _max, x: _max if _max > x[0] else x[0], population, -1)
-    return list(map(lambda x: (max_fit - x[0] + 1e-6, x[1]), population))
+    max_fit = -inf
+    for fitness, _ in population:
+        if fitness > max_fit:
+            max_fit = fitness
+
+    for i, (fitness, individual) in enumerate(population):
+        population[i] = (max_fit - fitness + 1e-6, individual)
+
+    return population
