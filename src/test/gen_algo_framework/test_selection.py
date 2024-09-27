@@ -1,3 +1,4 @@
+from math import isclose
 from random import randint
 from typing import List, Optional, Tuple
 from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_toss
@@ -41,7 +42,7 @@ def test_roulette_wheel_toss():
 
     index_tosses = {0: 0, 1: 0, 2: 0, 3: 0}
     fixed_c_list = [25.0, 50.0, 75.0, 100.0]
-    tosses = 20000
+    tosses = 80000
 
     for _ in range(tosses):
         index_selected = roulette_wheel_toss(fixed_c_list)
@@ -49,7 +50,23 @@ def test_roulette_wheel_toss():
 
     for val in index_tosses.values():
         election_rate = val / tosses
-        assert 0.24 < election_rate and election_rate < 0.26, f'Election rate out of range: {election_rate}'
+        assert isclose(election_rate, 0.25, rel_tol=0.02), f'Election rate out of range: {election_rate}'
+
+    index_tosses = {0: 0, 1: 0, 2: 0, 3: 0}
+    fixed_c_list = [50.0, 75.0, 87.5, 100.0]
+
+    for _ in range(tosses):
+        index_selected = roulette_wheel_toss(fixed_c_list)
+        index_tosses[index_selected] += 1
+
+    e_rate_0 = index_tosses[0] / tosses
+    assert isclose(e_rate_0, 0.5, rel_tol=0.02)
+    e_rate_1 = index_tosses[1] / tosses
+    assert isclose(e_rate_1, 0.25, rel_tol=0.02)
+    e_rate_2 = index_tosses[2] / tosses
+    assert isclose(e_rate_2, .125, rel_tol=0.02)
+    e_rate_3 = index_tosses[3] / tosses
+    assert isclose(e_rate_3, .125, rel_tol=0.02)
 
 
 def test_remove_from_fitness_list():
