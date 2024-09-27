@@ -132,6 +132,8 @@ def roulette_next_gen_selection(current_population: List[Tuple[float, T]],
 
         # remove from pop and cumulative list
         current_population.pop(index)
-        cumulative_fitness_l = remove_from_fitness_list(index, individual[0], cumulative_fitness_l)
+        cumulative_fitness_l = remove_from_fitness_list(index,
+                                                        individual[0],
+                                                        cumulative_fitness_l)
 
     return next_gen
