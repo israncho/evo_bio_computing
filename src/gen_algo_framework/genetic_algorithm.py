@@ -17,7 +17,7 @@ def genetic_algorithm(population: Population,
                       crossover: Callable[[Population, int, dict], Population],
                       mutation: Callable[[Population, dict], Population],
                       get_fitness: Callable[[Population, dict], Population],
-                      selection: Callable[[Population, Population, int, dict], Population],
+                      replacement: Callable[[Population, Population, int, dict], Population],
                       term_cond: Callable[[int, Population], bool],
                       options_handler: Callable[[Population, dict], dict]
                       ) -> Collection[Population]:
@@ -38,7 +38,7 @@ def genetic_algorithm(population: Population,
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
-        next_gen_population = selection(current_population,
+        next_gen_population = replacement(current_population,
                                         offspring,
                                         next_gen_pop_size,
                                         options)   # calculate next_population
