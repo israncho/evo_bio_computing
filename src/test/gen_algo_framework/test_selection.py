@@ -1,6 +1,6 @@
 from random import randint
 from typing import List, Optional, Tuple
-from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_selection_two_parents, roulette_wheel_toss
+from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_toss
 
 
 def __random_c_list():
@@ -50,15 +50,6 @@ def test_roulette_wheel_toss():
     for val in index_tosses.values():
         election_rate = val / tosses
         assert 0.24 < election_rate and election_rate < 0.26, f'Election rate out of range: {election_rate}'
-
-
-def test_roulette_wheel_selection_two_parents():
-    for _ in range(5000):
-        c_list, _, _ = __random_c_list()
-        i, j = roulette_wheel_selection_two_parents(c_list)
-        assert i != j, f'Selected same index for both parents: {i}'
-        assert 0 <= i and i < len(c_list), f'Index i out of range: {i}'
-        assert 0 <= j and j < len(c_list), f'Index j out of range: {j}'
 
 
 def test_remove_from_fitness_list():

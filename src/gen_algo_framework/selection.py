@@ -27,7 +27,7 @@ def cumulative_fitness(population: List[Tuple[float, T]],
             point in the population.
     '''
     cumulative_fitness_list = []
-    accumulated = 0 + extra_fitness
+    accumulated = extra_fitness
     for fitness_i, _ in population:
         accumulated += fitness_i
         cumulative_fitness_list.append(accumulated)
@@ -48,26 +48,6 @@ def roulette_wheel_toss(cumulative_fitness_list: List[float]) -> int:
     '''
     return bisect_left(cumulative_fitness_list,
                        uniform(0, cumulative_fitness_list[-1]))
-
-
-def roulette_wheel_selection_two_parents(
-    cumulative_fitness_list: List[float]) -> Tuple[int, int]:
-    '''
-    Select two distinct parents from the population using roulette
-    wheel selection. This function is intended for maximization problems.
-    Args:
-        cumulative_fitness_list (List[float]):
-            A list of cumulative fitness generated from a population.
-    Returns:
-        Tuple[int, int]: A tuple containing the indices of the
-        two selected parents.
-    '''
-    assert len(cumulative_fitness_list) >= 2
-    fst_parent_index = snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
-    while fst_parent_index == snd_parent_index:
-        snd_parent_index = roulette_wheel_toss(cumulative_fitness_list)
-
-    return fst_parent_index, snd_parent_index
 
 
 def remove_from_fitness_list(index: int,

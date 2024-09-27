@@ -5,7 +5,7 @@ from typing import Any, List, Tuple
 from random import randint
 from collections import deque
 from src.gen_algo_framework.genetic_algorithm import GeneType
-from src.gen_algo_framework.selection import roulette_wheel_selection_two_parents
+from src.gen_algo_framework.selection import roulette_wheel_toss
 
 
 def parents_crossover_ox1(parent1: Tuple[float, List[GeneType]],
@@ -90,7 +90,8 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[GeneType]]]
     cumulative_fitness_list = options['c_fitness_l']
     new_gen = []
     while len(new_gen) < new_gen_size:
-        p1_index, p2_index = roulette_wheel_selection_two_parents(cumulative_fitness_list)
+        p1_index = roulette_wheel_toss(cumulative_fitness_list)
+        p2_index = roulette_wheel_toss(cumulative_fitness_list)
         child = parents_crossover_ox1(population[p1_index],
                                       population[p2_index])
         new_gen.append(child)
