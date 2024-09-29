@@ -4,7 +4,8 @@ to be used in the genetic algorithm.'''
 from typing import List, Tuple
 from math import sqrt
 
-from src.gen_algo_framework.genetic_algorithm import transform_to_max
+from src.gen_algo_framework.genetic_algorithm import Population, transform_to_max
+from src.gen_algo_framework.selection import cumulative_fitness
 
 
 EucCity = Tuple[float | int, ...]
@@ -56,7 +57,7 @@ def tour_distance(fst_city: EucCity,
     return distance
 
 
-def euc_tsp_fitness_maximization(population: List[EucTSPPermutation],
+def euc_tsp_fitness_maximization(population: List[EucTSPPermutation | Tuple[float, EucTSPPermutation]],
                     options: dict) -> List[Tuple[float, EucTSPPermutation]]:
     '''
     Evaluate the fitness of a population of TSP solutions in a maximization
@@ -87,19 +88,19 @@ def euc_tsp_fitness_maximization(population: List[EucTSPPermutation],
     fst_c = options['fst_city']
     weights = options['weights']
     population_fitness_sum = 0
-    pop_with_fitness = []
-    for individual in population:
+
+    for i, individual in enumerate(population):
         individual_fitness = tour_distance(fst_c,
-                                           individual,
+                                           individual, # pyright: ignore
                                            weights)
         population_fitness_sum += individual_fitness
-        pop_with_fitness.append((individual_fitness, individual))
+        population[i] = individual_fitness, individual # pyright: ignore
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
 
-    pop_with_fitness = transform_to_max(pop_with_fitness)
+    population = transform_to_max(population) # pyright: ignore
 
-    return pop_with_fitness
+    return population # pyright: ignore
 
 
 def build_weight_dict(fst_city: EucCity,
@@ -130,3 +131,21 @@ def build_weight_dict(fst_city: EucCity,
     rest_of_cities.pop()    # removing fst city
 
     return weights
+
+
+def simple_euc_tsp_options_handler(population: Population,
+                                   options: dict,
+                                   init: bool = False,
+                                   offspring_s: int = 100,
+                                   next_gen_pop_s: int = 100) -> dict:
+    if init:
+        options['population_fit_avgs'] = []
+        options['offspring_s'] = offspring_s
+        options['next_gen_pop_s'] = next_gen_pop_s
+        options['mutation_proba'] = 1 / len(population)
+        options['another_swap_p'] = options['mutation_proba']
+        options['maximizing'] = True
+        population = euc_tsp_fitness_maximization(population, options) # pyright: ignore
+
+    options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore
+    return options
