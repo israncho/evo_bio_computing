@@ -4,6 +4,8 @@ to be used in the genetic algorithm.'''
 from typing import List, Tuple
 from math import sqrt
 
+from src.gen_algo_framework.genetic_algorithm import transform_to_max
+
 
 EucCity = Tuple[float | int, ...]
 '''Type for cities.'''
@@ -54,30 +56,49 @@ def tour_distance(fst_city: EucCity,
     return distance
 
 
-def euc_tsp_fitness(population: List[EucTSPPermutation],
+def euc_tsp_fitness_maximization(population: List[EucTSPPermutation],
                     options: dict) -> List[Tuple[float, EucTSPPermutation]]:
     '''
-    Calculate the fitness of each tour in the population for the TSP.
+    Evaluate the fitness of a population of TSP solutions in a maximization
+    context by transforming the fitness scores.
+
+    This function calculates the fitness (tour distance) of each individual
+    in the population. It then transforms the fitness scores to a maximization
+    problem. The shorter the tour, the higher the fitness.
+
     Args:
-        population (List[EucTSPPermutation]): A list of TSP tours, where
-            each tour is a permutation of the cities.
-        options (dict): A dictionary containing the following keys:
-            - 'fst_city': The first city in the tour.
-            - 'weights': A dictionary of weights representing distances
-                between cities.
+        population (List[EucTSPPermutation]): A list of TSP permutations,
+            where each permutation represents a potential solution (tour).
+        options (dict): A dictionary containing:
+            - 'fst_city' (EucCity): The first city in the TSP tour.
+            - 'weights' (dict): A dictionary with the distances between
+              city pairs, where keys are tuples of two cities (u, v), and
+              values are the Euclidean distances between them.
+            - 'population_fit_avgs' (List[float]): A list where the
+              average fitness of each population over generations is
+              appended.
     Returns:
-        List[Tuple[float, EucTSPPermutation]]: A list of tuples, each
-            containing the total distance of the tour and the corresponding
-            tour itself.
+        List[Tuple[float, EucTSPPermutation]]: A list of tuples where each
+        tuple contains:
+            - The fitness score of the individual after being transformed
+              to a maximization problem (higher score for better fitness).
+            - The corresponding TSP permutation (solution).
     '''
-    fst_v = options['fst_city']
+    fst_c = options['fst_city']
     weights = options['weights']
-    pop_with_fitness = list(
-        map(
-            lambda x: (tour_distance(fst_v, x, weights), x),
-            population
-        )
-    )
+    population_fitness_sum = 0
+    pop_with_fitness = []
+    for individual in population:
+        individual_fitness = tour_distance(fst_c,
+                                           individual,
+                                           weights)
+        population_fitness_sum += individual_fitness
+        pop_with_fitness.append((individual_fitness, individual))
+
+    options['population_fit_avgs'].append(population_fitness_sum / len(population))
+
+    pop_with_fitness = transform_to_max(pop_with_fitness)
+
     return pop_with_fitness
 
 

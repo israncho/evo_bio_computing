@@ -1,7 +1,8 @@
 
 from math import sqrt, isclose
 from random import randint, uniform
-from src.tsp.euclidean_tsp import build_weight_dict, euc_tsp_fitness, euclidean_distance, tour_distance
+from src.gen_algo_framework.genetic_algorithm import generate_population
+from src.tsp.euclidean_tsp import build_weight_dict, euc_tsp_fitness_maximization, euclidean_distance, tour_distance
 from src.utils.input_output import parse_tsp_data, read_file
 
 
@@ -43,20 +44,23 @@ def test_tour_distance():
         assert isclose(tour_distance_f, rectangular_tour_perimeter, rel_tol=1e-7)
 
 
-def test_euc_tsp_fitness():
+def test_euc_tsp_fitness_maximization():
     berlin52 = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
-    population = []
-    for _ in range(randint(25, 50)):
-        population.append(berlin52['rest_of_cities'].copy())
+    berlin52['population_fit_avgs'] = []
 
-    population_w_fitness = euc_tsp_fitness(population, berlin52)
+    for _ in range(100):
+        population = generate_population(20, berlin52['rest_of_cities'])
+        max_f = max(map(lambda x: tour_distance(berlin52['fst_city'], x, berlin52['weights']),
+                        population))
+        population = euc_tsp_fitness_maximization(population, berlin52)
 
+        pop_untransformed_f_sum = 0
+        for fitness, tour in population:
+            untransformed_f = tour_distance(berlin52['fst_city'], tour, berlin52['weights'])
+            pop_untransformed_f_sum += untransformed_f
+            assert fitness == (max_f - untransformed_f + 1e-6)
 
-    for i in range(1, len(population_w_fitness)):
-        curr_f, curr_perm = population_w_fitness[i]
-        prev_f, prev_perm = population_w_fitness[i - 1]
-        assert curr_f == prev_f
-        assert curr_perm == prev_perm
+        assert berlin52['population_fit_avgs'][-1] == pop_untransformed_f_sum / len(population)
 
 
 def test_build_weight_dict():
