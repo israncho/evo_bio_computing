@@ -1,8 +1,6 @@
 '''Module with functions for the genetic algorithm.'''
 
 from math import inf
-from collections import defaultdict
-from heapq import nlargest
 from random import sample
 from typing import Callable, List, Set, Tuple
 from typing import Any, Collection, TypeVar
@@ -19,7 +17,8 @@ def genetic_algorithm(population: Population,
                       get_fitness: Callable[[Population, dict], Population],
                       replacement: Callable[[Population, Population, int, dict], Population],
                       term_cond: Callable[[int, Population], bool],
-                      options_handler: Callable[[Population, dict], dict]
+                      options_handler: Callable[[Population, dict], dict],
+                      options: dict
                       ) -> Collection[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
@@ -29,11 +28,18 @@ def genetic_algorithm(population: Population,
     '''
 
     current_population = population
-    best_solutions: List[Population] = []
+    best_solutions: Population = []
     generation = 0
-    options = defaultdict(lambda : None)
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)
+
+        if options['maximizing']:
+            best_of_gen = max(current_population, key=lambda x: x[0])
+        else:
+            best_of_gen = min(current_population, key=lambda x: x[0])
+
+        best_solutions.append(best_of_gen)
+
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
@@ -43,8 +49,6 @@ def genetic_algorithm(population: Population,
                                         next_gen_pop_size,
                                         options)   # calculate next_population
 
-        best_of_gen = nlargest(7, next_gen_population)
-        best_solutions.extend(best_of_gen)
 
         generation += 1
         current_population = next_gen_population
