@@ -6,10 +6,10 @@ from src.gen_algo_framework.genetic_algorithm import T, Population
 from src.gen_algo_framework.selection import cumulative_fitness, roulette_wheel_toss, remove_from_fitness_list
 
 
-def full_generational_replacement(current_population: Population,
+def full_generational_replacement(_: Population,
                                   offspring: Population,
-                                  next_gen_size: int,
-                                  options: dict) -> Population:
+                                  __: int,
+                                  ___: dict) -> Population:
     return offspring
 
 
