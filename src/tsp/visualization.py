@@ -1,4 +1,7 @@
-from typing import List, Tuple
+''' Module with functions to visualize
+tsp solutions over the GA generations'''
+
+from typing import List
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
@@ -50,7 +53,7 @@ def update_line(frame: int,
                 instance: dict,
                 generation_text):
 
-    current_permutation = permutations[frame]  # current perm 
+    current_permutation = permutations[frame]  # current perm
     x_0, y_0 = instance['fst_city']
 
     x_permuted = [city[0] for city in current_permutation] + [x_0, current_permutation[0][0]]
@@ -62,38 +65,3 @@ def update_line(frame: int,
 
     generation_text.set_text(f'Gen: {frame + 1}\nCost:\n{tour_d}')
     return line,
-
-
-def generate_line_from_data(data: List) -> Tuple[List, List]:
-    x_values = list(range(len(data)))
-    y_values = data
-    return x_values, y_values
-
-
-def plot_tsp_evolution(lines: List[Tuple[List, List]],
-                       instance: dict,
-                       output_file_path: str,
-                       labels: List[str] = None) -> None: # pyright: ignore
-
-    plt.figure(figsize=(10, 6))  # Crear una nueva figura
-
-    # Graficar cada línea
-    for idx, (x_values, y_values) in enumerate(lines):
-        label = labels[idx] if labels else f"Line {idx + 1}"
-        plt.plot(x_values, y_values, marker='.', linestyle='-', label=label)
-
-    # Etiquetas y título del gráfico
-    plt.xlabel('Generation')
-    plt.ylabel('Fitness')
-    plt.title(f"GA exec for the instance '{instance['NAME']}'")
-
-    # Mostrar la leyenda
-    plt.legend()
-
-    # Mostrar la cuadrícula
-    plt.grid(True)
-
-    output_file = f"{output_file_path}_{instance['NAME']}_GA_plot.png"
-
-    print(f"Plot of performance saved as: '{output_file}'")
-    plt.savefig(output_file)

@@ -5,8 +5,9 @@ from src.gen_algo_framework.genetic_algorithm import generate_population
 from src.gen_algo_framework.mutation import swap_mutation_population
 from src.gen_algo_framework.replacement import full_generational_replacement
 from src.tsp.euclidean_tsp import euc_tsp_fitness_maximization, simple_euc_tsp_options_handler, tour_distance
-from src.tsp.visualization import animate_tsp_evolution, generate_line_from_data, plot_tsp_evolution
+from src.tsp.visualization import animate_tsp_evolution
 from src.utils.input_output import parse_tsp_data, read_file
+from src.utils.plot_functions import generate_line_from_data, plot_evolution
 
 if __name__ == "__main__":
     FILE_PATH = argv[1]
@@ -38,7 +39,7 @@ if __name__ == "__main__":
     labels = ['avg_fitness', 'generational_best']
 
     lines = [avg_fitness_line, best_solutions_line]
-    plot_tsp_evolution(lines, instance, OUTPUT_FILE_PATH, labels)
+    plot_evolution(lines, instance, OUTPUT_FILE_PATH, labels)
 
     only_permutations = list(map(lambda x: x[1], best_sol)) # pyright: ignore
     animate_tsp_evolution(instance, only_permutations, OUTPUT_FILE_PATH, 25)
