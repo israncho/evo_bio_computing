@@ -2,7 +2,7 @@
 to be used in the genetic algorithm.'''
 
 from typing import List, Tuple
-from math import sqrt
+from math import sqrt, inf
 
 from src.gen_algo_framework.genetic_algorithm import Population
 from src.gen_algo_framework.population_utils import transform_to_max
@@ -96,6 +96,8 @@ def euc_tsp_fitness_maximization(population: List[EucTSPPermutation | Tuple[floa
                                            weights)
         population_fitness_sum += individual_fitness
         population[i] = individual_fitness, individual # pyright: ignore
+        if individual_fitness < options['current_best'][0]:
+            options['current_best'] = individual_fitness, individual
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
 
@@ -145,7 +147,7 @@ def simple_euc_tsp_options_handler(population: Population,
         options['next_gen_pop_s'] = next_gen_pop_s
         options['mutation_proba'] = 1 / len(population)
         options['another_swap_p'] = options['mutation_proba']
-        options['maximizing'] = True
+        options['current_best'] = inf, None
         population = euc_tsp_fitness_maximization(population, options) # pyright: ignore
 
     options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore

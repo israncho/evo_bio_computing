@@ -13,6 +13,15 @@ def full_generational_replacement(_: Population,
     return offspring
 
 
+def full_gen_replacement_elitist(_: List[Tuple[float, T]],
+                                 offspring: List[Tuple[float, T]],
+                                 __: int,
+                                 options: dict) -> List[Tuple[float, T]]:
+    offspring.pop()
+    offspring.append(options['current_best'])
+    return offspring
+
+
 def roulette_gen_replacement(current_population: List[Tuple[float, T]],
                                 offspring: List[Tuple[float, T]],
                                 next_gen_size: int,

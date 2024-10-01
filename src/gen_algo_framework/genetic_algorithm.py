@@ -31,12 +31,7 @@ def genetic_algorithm(population: Population,
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)
 
-        if options['maximizing']:
-            best_of_gen = max(current_population, key=lambda x: x[0])
-        else:
-            best_of_gen = min(current_population, key=lambda x: x[0])
-
-        best_solutions.append(best_of_gen)
+        best_solutions.append(options['current_best'])
 
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
         offspring = crossover(current_population, offspring_size, options)
