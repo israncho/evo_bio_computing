@@ -1,7 +1,7 @@
 
 from math import sqrt, isclose
 from random import randint, uniform
-from src.gen_algo_framework.genetic_algorithm import generate_population
+from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.tsp.euclidean_tsp import build_weight_dict, euc_tsp_fitness_maximization, euclidean_distance, tour_distance
 from src.utils.input_output import parse_tsp_data, read_file
 
@@ -49,10 +49,10 @@ def test_euc_tsp_fitness_maximization():
     berlin52['population_fit_avgs'] = []
 
     for _ in range(100):
-        population = generate_population(20, berlin52['rest_of_cities'])
+        population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
         max_f = max(map(lambda x: tour_distance(berlin52['fst_city'], x, berlin52['weights']),
                         population))
-        population = euc_tsp_fitness_maximization(population, berlin52)
+        population = euc_tsp_fitness_maximization(population, berlin52) # pyright: ignore
 
         pop_untransformed_f_sum = 0
         for fitness, tour in population:

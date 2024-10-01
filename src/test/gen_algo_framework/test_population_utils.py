@@ -1,15 +1,15 @@
 from random import randint, uniform
 from typing import Set
-from src.gen_algo_framework.genetic_algorithm import generate_population, transform_to_max
+from src.gen_algo_framework.population_utils import generate_population_of_permutations, transform_to_max
 
 
-def test_population_gen_func():
+def test_gen_pop_of_permutations():
     for _ in range(500):
         gene_set: Set[int] = set()
         for _ in range(20):
             gene_set.add(randint(0, 1000))
 
-        rand_population = generate_population(10, gene_set)
+        rand_population = generate_population_of_permutations(10, gene_set)
 
         for individual in rand_population:
             assert set(individual) == gene_set, 'individual does not contain the same gene set.'

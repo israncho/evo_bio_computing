@@ -4,7 +4,8 @@ to be used in the genetic algorithm.'''
 from typing import List, Tuple
 from math import sqrt
 
-from src.gen_algo_framework.genetic_algorithm import Population, transform_to_max
+from src.gen_algo_framework.genetic_algorithm import Population
+from src.gen_algo_framework.population_utils import transform_to_max
 from src.gen_algo_framework.selection import cumulative_fitness
 
 

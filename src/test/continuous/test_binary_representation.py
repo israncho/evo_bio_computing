@@ -44,4 +44,3 @@ def test_generate_random_vector():
 
         for original, decoded in zip(real_val_vec, re_decoded):
             assert isclose(original, decoded, abs_tol=1e-5), f'{original}, {decoded} are not similar'
-

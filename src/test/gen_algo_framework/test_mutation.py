@@ -1,7 +1,7 @@
 
 
 from random import randint, sample
-from src.gen_algo_framework.genetic_algorithm import generate_population
+from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.mutation import swap_mutation, swap_mutation_population
 from copy import deepcopy
 
@@ -17,7 +17,7 @@ def test_swap_mutation():
 def test_swap_mutation_population():
     for _ in range(150):
         gene_set = set(sample(range(100), randint(5, 15)))
-        _population = generate_population(2000, gene_set)
+        _population = generate_population_of_permutations(2000, gene_set)
         _population_copy = deepcopy(_population)
 
         options = {'mutation_proba': 0.1, 'another_swap_p': 0.1}
@@ -29,4 +29,3 @@ def test_swap_mutation_population():
                 changed_count += 1
 
         assert 125 <= changed_count and changed_count <= 275
-
