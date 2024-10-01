@@ -22,4 +22,4 @@ ENV MPLCONFIGDIR=/home/appuser/.config/matplotlib
 
 USER appuser
 
-CMD ["bash"]
+ENTRYPOINT ["bash", "-c", "umask 000 && bash"]
