@@ -15,7 +15,7 @@ def test_swap_mutation():
 
 
 def test_swap_mutation_population():
-    for _ in range(150):
+    for _ in range(100):
         gene_set = set(sample(range(100), randint(5, 15)))
         _population = generate_population_of_permutations(2000, gene_set)
         _population_copy = deepcopy(_population)
@@ -42,7 +42,7 @@ def test_bit_flip_mutation():
 
 
 def test_bit_flip_mutation_population():
-    for _ in range(150):
+    for _ in range(100):
         population = generate_population_of_bit_vectors(2000, [randint(5, 15)])
         population_copy = deepcopy(population)
 

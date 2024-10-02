@@ -42,7 +42,7 @@ def test_roulette_wheel_toss():
 
     index_tosses = {0: 0, 1: 0, 2: 0, 3: 0}
     fixed_c_list = [25.0, 50.0, 75.0, 100.0]
-    tosses = 80000
+    tosses = 100000
 
     for _ in range(tosses):
         index_selected = roulette_wheel_toss(fixed_c_list)
@@ -64,9 +64,9 @@ def test_roulette_wheel_toss():
     e_rate_1 = index_tosses[1] / tosses
     assert isclose(e_rate_1, 0.25, rel_tol=0.02)
     e_rate_2 = index_tosses[2] / tosses
-    assert isclose(e_rate_2, .125, rel_tol=0.02)
+    assert isclose(e_rate_2, .125, rel_tol=0.015)
     e_rate_3 = index_tosses[3] / tosses
-    assert isclose(e_rate_3, .125, rel_tol=0.02)
+    assert isclose(e_rate_3, .125, rel_tol=0.015)
 
 
 def test_remove_from_fitness_list():
