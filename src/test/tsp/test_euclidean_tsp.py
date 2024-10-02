@@ -1,5 +1,5 @@
 
-from math import sqrt, isclose
+from math import inf, sqrt, isclose
 from random import randint, uniform
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.tsp.euclidean_tsp import build_weight_dict, euc_tsp_fitness_maximization, euclidean_distance, tour_distance
@@ -47,6 +47,7 @@ def test_tour_distance():
 def test_euc_tsp_fitness_maximization():
     berlin52 = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
     berlin52['population_fit_avgs'] = []
+    berlin52['current_best'] = inf, None
 
     for _ in range(100):
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
