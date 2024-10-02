@@ -4,6 +4,7 @@ generation and others.'''
 from math import inf
 from random import sample
 from typing import Set, List, Tuple
+from src.continuous.binary_representation import generate_random_bit_vector
 from src.gen_algo_framework.genetic_algorithm import GeneType, T
 
 def generate_population_of_permutations(size: int, genes: Set[GeneType]) -> List[List[GeneType]]:
@@ -30,6 +31,10 @@ def generate_population_of_permutations(size: int, genes: Set[GeneType]) -> List
         individual = sample(genes_list, gene_count)
         _population.append(individual)
     return _population
+
+
+def generate_population_of_bit_vectors(size: int, v_n_bits: List[int]) -> List[List[int]]:
+    return [generate_random_bit_vector(v_n_bits) for _ in range(size)]
 
 
 def transform_to_max(population: List[Tuple[float, T]]) -> List[Tuple[float, T]]:

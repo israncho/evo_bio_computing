@@ -1,7 +1,7 @@
 from random import randint, uniform
 from math import isclose
 
-from src.continuous.binary_representation import decode_vector, encode_vector, generate_random_vector
+from src.continuous.binary_representation import decode_vector, encode_vector, generate_random_bit_vector
 
 
 def test_encode_decode_vector():
@@ -22,12 +22,12 @@ def test_encode_decode_vector():
             assert isclose(original, decoded, abs_tol=1e-5), f'{original}, {decoded} are not similar'
 
 
-def test_generate_random_vector():
+def test_generate_random_bit_vector():
     for _ in range(1000):
         vector_size = randint(5, 20)
         v_n_bits = [27 for _ in range(vector_size)]
         v_intervals = [(-500.0, 500.0) for _ in range(vector_size)]
-        random_vec_bits = generate_random_vector(v_n_bits)
+        random_vec_bits = generate_random_bit_vector(v_n_bits)
 
         for bit in random_vec_bits:
             assert bit in (0, 1)

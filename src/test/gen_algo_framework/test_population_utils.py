@@ -1,6 +1,6 @@
 from random import randint, uniform
 from typing import Set
-from src.gen_algo_framework.population_utils import generate_population_of_permutations, transform_to_max
+from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors, generate_population_of_permutations, transform_to_max
 
 
 def test_gen_pop_of_permutations():
@@ -22,6 +22,25 @@ def test_gen_pop_of_permutations():
                 if curr != rand_population[j]:
                     diff_count += 1
             assert diff_count >= 1, 'The population has at least two identical individuals.'
+
+
+def test_gen_pop_of_bit_vectors():
+    for _ in range(500):
+        pop_size = randint(15, 30)
+        dimension = randint(2, 10)
+        bits_per_entry = randint(10, 20)
+        v_n_bits = [bits_per_entry] * dimension
+
+        population = generate_population_of_bit_vectors(pop_size, v_n_bits)
+
+        bits_counted = 0
+        for vec_of_bits in population:
+            assert type(vec_of_bits) == list
+            for bit in vec_of_bits:
+                bits_counted += 1
+                assert bit in (0, 1)
+
+        assert bits_counted == pop_size * dimension * bits_per_entry
 
 
 def test_transform_to_max():

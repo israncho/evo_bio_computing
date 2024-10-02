@@ -142,7 +142,7 @@ def decode_vector(v: List[int], v_n_bits: List[int],
     return decoded_vector
 
 
-def generate_random_vector(v_n_bits: List[int]) -> List[int]:
+def generate_random_bit_vector(v_n_bits: List[int]) -> List[int]:
     """
     Generate a random vector of bits.
     Args:
@@ -154,4 +154,4 @@ def generate_random_vector(v_n_bits: List[int]) -> List[int]:
             total number of bits equals the sum of the integers
             in `v_n_bits`.
     """
-    return [randint(0,1) for _ in range(sum(v_n_bits))]
+    return [randint(0, 1) for _ in range(sum(v_n_bits))]
