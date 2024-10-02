@@ -1,9 +1,20 @@
 '''Module with functions that implement mutation operators
 for the genetic algorithm.'''
 
-from random import sample, random
-from typing import List
+from random import randint, sample, random
+from typing import Callable, List, TypeVar
 from src.gen_algo_framework.genetic_algorithm import GeneType
+
+A = TypeVar('A')
+
+def mutate_population(mutation_func: Callable[[A], A],
+                      population: List[A],
+                      mutation_proba: float) -> List[A]:
+
+    for i, individual in enumerate(population):
+        if random() < mutation_proba:
+            population[i] = mutation_func(individual)
+    return population
 
 
 def swap_mutation(individual: List[GeneType]) -> List[GeneType]:
@@ -46,11 +57,17 @@ def swap_mutation_population(population: List[List[GeneType]],
             of the individuals.
     '''
     mutation_proba: float = options['mutation_proba']
-    another_swap_proba: float = options['another_swap_p']
+    return mutate_population(swap_mutation, population, mutation_proba)
 
-    for i in range(len(population)):
-        if random() < mutation_proba:
-            population[i] = swap_mutation(population[i])
-            while random() < another_swap_proba:
-                population[i] = swap_mutation(population[i])
-    return population
+
+def bit_flip_mutation(individual: List[int]) -> List[int]:
+    i = randint(0, len(individual) - 1)
+    individual[i] = individual[i] ^ 1
+    return individual
+
+
+def bit_flip_mutation_population(population: List[List[int]],
+                                 options: dict) -> List[List[int]]:
+
+    mutation_proba: float = options['mutation_proba']
+    return mutate_population(bit_flip_mutation, population, mutation_proba)
