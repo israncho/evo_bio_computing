@@ -1,7 +1,12 @@
 '''Module with continuous objective functions.'''
 
-from typing import List
-from math import cos, pi, exp, sqrt, e, sin
+from typing import List, Tuple
+from math import cos, inf, pi, exp, sqrt, e, sin
+
+from src.continuous.binary_representation import decode_vector
+from src.gen_algo_framework.genetic_algorithm import Population
+from src.gen_algo_framework.population_utils import transform_to_max
+from src.gen_algo_framework.selection import cumulative_fitness
 
 
 def rastrigin(x: List[float], a: float = 10) -> float:
@@ -100,3 +105,49 @@ all_funcs = {"rastrigin": rastrigin, "rosenbrock": rosenbrock,
              "sphere": sphere, "hyper_ellipsoid": hyper_ellipsoid,
              "ackley": ackley, "easom": easom,
              "griewank": griewank}
+
+
+def c_f_fitness_maximization(population: List[List[int]],
+                             options: dict) -> List[Tuple[float, List[int]]]:
+
+    f = options['f']
+    v_n_bits = options['v_n_bits']
+    v_intervals = options['v_intervals']
+    population_fitness_sum = 0
+
+    for i, individual in enumerate(population):
+        decoded_individual = decode_vector(individual, v_n_bits, v_intervals)
+        individual_fitness = f(decoded_individual)
+        population[i] = individual_fitness, individual # pyright: ignore
+        population_fitness_sum += individual_fitness
+
+        if individual_fitness < options['current_best'][0]:
+            options['current_best'] = individual_fitness, individual
+
+    options['population_fit_avgs'].append(population_fitness_sum / len(population))
+    population = transform_to_max(population) # pyright: ignore
+
+    return population # pyright: ignore
+
+
+def simple_c_f_options_handler(population: Population,
+                               options: dict,
+                               v_n_bits = [25, 25],
+                               v_intervals = [(-30, 30), (-30, 30)],
+                               f = sphere,
+                               init: bool = False,
+                               offspring_s: int = 100,
+                               next_gen_pop_s: int = 100) -> dict:
+    if init:
+        options['population_fit_avgs'] = []
+        options['offspring_s'] = offspring_s
+        options['v_n_bits'] = v_n_bits
+        options['v_intervals'] = v_intervals
+        options['f'] = f
+        options['next_gen_pop_s'] = next_gen_pop_s
+        options['mutation_proba'] = 1 / len(population)
+        options['current_best'] = inf, None
+        population = c_f_fitness_maximization(population, options) # pyright: ignore
+
+    options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore
+    return options
