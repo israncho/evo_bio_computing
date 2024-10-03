@@ -1,6 +1,6 @@
 from random import randint, sample
 from typing import Set, Tuple, List
-from src.gen_algo_framework.crossover import gen_n_points, n_points_crossover_parents, parents_crossover_ox1, pop_crossover_ox1_roulettew_s
+from src.gen_algo_framework.crossover import gen_n_points, n_points_crossover_parents, parents_crossover_ox1, pop_crossover_ox1_roulettew_s, population_n_points_crossover_roulettew_s
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.selection import cumulative_fitness
 
@@ -86,3 +86,25 @@ def test_n_points_crossover_parents():
             else:
                 assert b_c1 == b_p2
                 assert b_c2 == b_p1
+
+
+def test_population_n_points_crossover_roulettew_s():
+    for _ in range(250):
+        individual_size = randint(5, 10)
+        population = [(1, [randint(0, 1)] * individual_size) for _ in range(1000)]
+        population_size = len(population)
+
+        options = {'c_fitness_l': cumulative_fitness(population),
+                   'n_points': randint(1, individual_size - 1)}
+        offspring = population_n_points_crossover_roulettew_s(population,
+                                                              population_size * 2,
+                                                              options)
+
+
+        mixed_children = 0
+        for child in offspring:
+            if set(child) == {1, 0}:
+                mixed_children += 1
+
+        assert population_size - 200 < mixed_children
+        assert mixed_children < population_size + 200

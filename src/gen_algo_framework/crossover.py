@@ -181,8 +181,8 @@ def gen_n_points(num_points: int, size: int) -> List[int]:
         List[int]: A list of random points generated within
             the range from 1 to 'size-1'.
     '''
-    assert 0 < num_points
-    assert num_points < size
+    assert 0 < num_points, f'{num_points}'
+    assert num_points < size, f'{num_points}, {size}'
     i = 0
     points = []
     points_left = num_points
@@ -237,3 +237,39 @@ def n_points_crossover_parents(parent1: Tuple[float, List],
             child2[i] = bit_p1
 
     return child1, child2
+
+
+def population_n_points_crossover_roulettew_s(population: List[Tuple[float, List[GeneType]]],
+                                  new_gen_size: int,
+                                  options: dict) -> List[List[GeneType]]:
+    '''
+    Applies n-point crossover to generate a new population using roulette
+    wheel selection.
+    Args:
+        population (List[Tuple[float, List[GeneType]]]): The current
+            population, where each individual is represented as a tuple
+            containing its fitness (float) and a list of genes (List[GeneType]).
+        new_gen_size (int): The desired size of the new generation.
+        options (dict): A dictionary containing options for the crossover:
+            - 'c_fitness_l' (List[float]): A cumulative fitness list used
+                for roulette wheel selection.
+            - 'n_points' (int): The number of crossover points to generate
+                during the n-point crossover.
+    Returns:
+        List[List[GeneType]]: A list representing the new generation, where
+        each individual is represented by a list of genes resulting from
+        the crossover operation.
+    '''
+    cumulative_fitness_list = options['c_fitness_l']
+    n_points = options['n_points']
+    new_gen = []
+    while len(new_gen) < new_gen_size:
+        p1_index = roulette_wheel_toss(cumulative_fitness_list)
+        p2_index = roulette_wheel_toss(cumulative_fitness_list)
+        points = gen_n_points(n_points, len(population[p1_index][1]))
+        child1, child2 = n_points_crossover_parents(population[p1_index],
+                                                    population[p2_index],
+                                                    points)
+        new_gen.append(child1)
+        new_gen.append(child2)
+    return new_gen
