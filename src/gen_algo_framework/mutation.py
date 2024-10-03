@@ -49,9 +49,6 @@ def swap_mutation_population(population: List[List[GeneType]],
         options (dict): A dictionary containing mutation-related options:
             - 'mutation_proba': Probability of applying the mutation
                 to an individual.
-            - 'another_swap_p': Probability of applying additional swaps
-                to the same individual.
-
     Returns:
         List[List[GeneType]]: The population with mutations applied to some
             of the individuals.

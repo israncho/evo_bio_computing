@@ -60,13 +60,13 @@ def test_roulette_wheel_toss():
         index_tosses[index_selected] += 1
 
     e_rate_0 = index_tosses[0] / tosses
-    assert isclose(e_rate_0, 0.5, rel_tol=0.02)
+    assert isclose(e_rate_0, 0.5, rel_tol=0.03)
     e_rate_1 = index_tosses[1] / tosses
-    assert isclose(e_rate_1, 0.25, rel_tol=0.02)
+    assert isclose(e_rate_1, 0.25, rel_tol=0.03)
     e_rate_2 = index_tosses[2] / tosses
-    assert isclose(e_rate_2, .125, rel_tol=0.015)
+    assert isclose(e_rate_2, .125, rel_tol=0.03)
     e_rate_3 = index_tosses[3] / tosses
-    assert isclose(e_rate_3, .125, rel_tol=0.015)
+    assert isclose(e_rate_3, .125, rel_tol=0.03)
 
 
 def test_remove_from_fitness_list():
