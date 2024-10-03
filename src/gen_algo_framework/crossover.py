@@ -167,3 +167,73 @@ def __two_random_subintervals(_range: int,
     interval1 = __random_subinterval(_range, size1)
     interval2 = __random_snd_subinterval(_range, interval1, size2)
     return (interval1, interval2)
+
+
+def gen_n_points(num_points: int, size: int) -> List[int]:
+    '''
+    Generates a list of random points within a given range.
+    Args:
+        num_points (int): The number of points to generate.
+        size (int): The size of the range in which the
+            points will be generated.
+
+    Returns:
+        List[int]: A list of random points generated within
+            the range from 1 to 'size-1'.
+    '''
+    assert 0 < num_points
+    assert num_points < size
+    i = 0
+    points = []
+    points_left = num_points
+    while points_left > 0:
+        new_point = randint(i + 1, size - points_left)
+        i = new_point
+        points.append(new_point)
+        points_left -= 1
+    return points
+
+
+def n_points_crossover_parents(parent1: Tuple[float, List],
+                               parent2: Tuple[float, List],
+                               points: List[int]) -> Tuple[List, List]:
+    '''
+    Performs an n-point crossover between two parents,
+    swapping segments of the parents chromosomes
+    at the specified points to generate two children.
+
+    Args:
+        parent1 (Tuple[float, List]): The first parent,
+            where the first element is the fitness and
+            the second element is the chromosome (list of genes).
+        parent2 (Tuple[float, List]): The second parent,
+            in the same format as 'parent1'.
+        points (List[int]): A list of crossover points
+            where segments will be swapped between the parents.
+    Returns:
+        Tuple[List, List]: Two children generated from
+            the crossover operation, each represented
+            as a list of genes.
+    '''
+    size = len(parent1[1])
+    assert size == len(parent2[1])
+
+    child1 = [None] * size
+    child2 = [None] * size
+    index_p = 0
+    c1_inherits_p1 = True
+
+    for i, (bit_p1, bit_p2) in enumerate(zip(parent1[1], parent2[1])):
+
+        if index_p < len(points) and i == points[index_p]:
+            c1_inherits_p1 ^= True
+            index_p += 1
+
+        if c1_inherits_p1:
+            child1[i] = bit_p1
+            child2[i] = bit_p2
+        else:
+            child1[i] = bit_p2
+            child2[i] = bit_p1
+
+    return child1, child2

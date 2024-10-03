@@ -1,6 +1,6 @@
 from random import randint, sample
 from typing import Set, Tuple, List
-from src.gen_algo_framework.crossover import parents_crossover_ox1, pop_crossover_ox1_roulettew_s
+from src.gen_algo_framework.crossover import gen_n_points, n_points_crossover_parents, parents_crossover_ox1, pop_crossover_ox1_roulettew_s
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.selection import cumulative_fitness
 
@@ -43,3 +43,46 @@ def test_pop_crossover_ox1_roulettew_s():
         new_gen = pop_crossover_ox1_roulettew_s(_population, 50, options)
         for individual in new_gen:
             assert set(individual) == genes, 'Individual has not the same genes'
+
+
+def test_gen_n_points():
+    for _ in range(10000):
+        size = randint(11, 30)
+
+        points = gen_n_points(randint(1, 10), size)
+
+        set_points = set(points)
+        assert len(points) == len(set_points)
+
+        assert 0 not in set_points
+
+        for e in points:
+            assert e < size
+
+
+def test_n_points_crossover_parents():
+    for _ in range(10000):
+        parents_size = randint(10, 20)
+        p1 = [randint(0, 1) for _ in range(parents_size)]
+        p2 = [randint(0, 1) for _ in range(parents_size)]
+
+        n_points = randint(1, parents_size - 1)
+
+        points = gen_n_points(n_points, parents_size)
+
+        c1, c2 = n_points_crossover_parents((None, p1), (None, p2), points) # pyright: ignore
+
+        c1_inherits_p1 = True
+        index_p = 0
+
+        for i, (b_c1, b_c2, b_p1, b_p2) in enumerate(zip(c1, c2, p1, p2)):
+            if index_p < len(points) and i == points[index_p]:
+                c1_inherits_p1 ^= True
+                index_p += 1
+
+            if c1_inherits_p1:
+                assert b_c1 == b_p1
+                assert b_c2 == b_p2
+            else:
+                assert b_c1 == b_p2
+                assert b_c2 == b_p1
