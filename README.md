@@ -92,9 +92,16 @@ For example to add the prefix `test`.
 appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/test
 ```
 
+```bash
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_cont_ga_exec.py results/ "{'f': 'ackley', 'pop_size': 100, 'gens': 70, 'dim': 2, 'n_bits': 20, 'interval': (-30.0, 30.0), 'crossover_n_p': 5}"
+```
+
 
 ### Examples
 
 ![Example of route evolution GIF](results/output_sample_berlin52.gif)
 
 ![Performance plot](results/output_sample_berlin52_GA_plot.png)
+
+
+

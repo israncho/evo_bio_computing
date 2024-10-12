@@ -132,21 +132,27 @@ def c_f_fitness_maximization(population: List[List[int]],
 
 def simple_c_f_options_handler(population: Population,
                                options: dict,
-                               v_n_bits = [25, 25],
-                               v_intervals = [(-30, 30), (-30, 30)],
-                               f = sphere,
                                init: bool = False,
                                offspring_s: int = 100,
-                               next_gen_pop_s: int = 100) -> dict:
+                               next_gen_pop_s: int = 100,
+                               f = sphere,
+                               n_crossover_points: int = 1,
+                               v_n_bits = None,
+                               v_intervals = None
+                               ) -> dict:
     if init:
         options['population_fit_avgs'] = []
         options['offspring_s'] = offspring_s
-        options['v_n_bits'] = v_n_bits
-        options['v_intervals'] = v_intervals
-        options['f'] = f
         options['next_gen_pop_s'] = next_gen_pop_s
         options['mutation_proba'] = 1 / len(population)
         options['current_best'] = inf, None
+        options['f'] = f
+        options['n_points'] = n_crossover_points
+        if v_n_bits is None:
+            v_n_bits = [20, 20]
+            v_intervals = [(-15.0, 15.0), (-15.0, 15.0)]
+        options['v_n_bits'] = v_n_bits
+        options['v_intervals'] = v_intervals
         population = c_f_fitness_maximization(population, options) # pyright: ignore
 
     options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore

@@ -1,7 +1,10 @@
 '''
+
 '''
 
+
 from sys import argv
+from ast import literal_eval
 from src.continuous.binary_representation import decode_vector
 from src.continuous.functions import c_f_fitness_maximization, simple_c_f_options_handler
 from src.gen_algo_framework.crossover import population_n_points_crossover_roulettew_s
@@ -13,40 +16,43 @@ from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.continuous.functions import all_funcs
 
 if __name__ == "__main__":
-    FUNC_NAME = argv[1]
-    print(FUNC_NAME)
-    OUTPUT_FILE_PATH = argv[2]
+    OUTPUT_FILE_PATH: str = argv[1]
+    PARAMS: dict = literal_eval(argv[2])
+    print(PARAMS)
+    FUNC_NAME: str = PARAMS['f']
+    POP_SIZE: int = PARAMS['pop_size']
+    GENS: int = PARAMS['gens']
+    DIMENSION: int = PARAMS['dim']
+    N_BITS_P_ENTRY: int = PARAMS['n_bits']
+    INTERVAL: tuple = PARAMS['interval']
+    CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
 
 
-    DIMENSION = 5
-
-    v_n_bits = [25] * DIMENSION
-    v_intervals = [(-30.0, 30.0)] * DIMENSION
-    NUM_POINTS = 7
+    v_n_bits = [N_BITS_P_ENTRY] * DIMENSION
+    v_intervals = [INTERVAL] * DIMENSION
 
     f = all_funcs[FUNC_NAME]
 
-    POP_SIZE = 1000
-
     initial_population = generate_population_of_bit_vectors(POP_SIZE, v_n_bits)
 
-    instance = {'NAME': FUNC_NAME, 'n_points': NUM_POINTS}
+    instance = {'NAME': FUNC_NAME}
 
     instance = simple_c_f_options_handler(initial_population,
                                           instance,
-                                          v_n_bits,
-                                          v_intervals,
-                                          f,
                                           True,
                                           POP_SIZE,
-                                          POP_SIZE)
+                                          POP_SIZE,
+                                          f,
+                                          CROSSOVER_NUM_POINTS,
+                                          v_n_bits,
+                                          v_intervals)
 
     best_sol = genetic_algorithm(initial_population,
                       population_n_points_crossover_roulettew_s, # pyright: ignore
                       bit_flip_mutation_population, # pyright: ignore
                       c_f_fitness_maximization, # pyright: ignore
                       full_gen_replacement_elitist, # pyright: ignore
-                      lambda gen_count, _ : gen_count < 200,
+                      lambda gen_count, _ : gen_count < GENS,
                       simple_c_f_options_handler,
                       instance)
 
