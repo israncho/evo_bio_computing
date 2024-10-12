@@ -1,12 +1,12 @@
 '''Module with functions for the genetic algorithm.'''
 
-from typing import Callable, Tuple
-from typing import Any, Collection, TypeVar
+from typing import Callable, MutableSequence, MutableSet, Tuple
+from typing import TypeVar, List
 
 
-T = TypeVar('T', Collection, Any)   # type of the Genotype
+T = TypeVar('T', MutableSequence, MutableSet)   # type of the Genotype
 GeneType = TypeVar('GeneType')      # type of the genes
-Population = Collection[Tuple[float, T]] | Collection[T]
+Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
 
 
 def genetic_algorithm(population: Population,
@@ -17,7 +17,7 @@ def genetic_algorithm(population: Population,
                       term_cond: Callable[[int, Population], bool],
                       options_handler: Callable[[Population, dict], dict],
                       options: dict
-                      ) -> Collection[Population]:
+                      ) -> List[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
     This function is intended for maximization problems.
