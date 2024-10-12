@@ -135,6 +135,7 @@ def simple_c_f_options_handler(population: Population,
                                init: bool = False,
                                offspring_s: int = 100,
                                next_gen_pop_s: int = 100,
+                               mutation_proba = 0.01,
                                f = sphere,
                                n_crossover_points: int = 1,
                                v_n_bits = None,
@@ -144,7 +145,7 @@ def simple_c_f_options_handler(population: Population,
         options['population_fit_avgs'] = []
         options['offspring_s'] = offspring_s
         options['next_gen_pop_s'] = next_gen_pop_s
-        options['mutation_proba'] = 1 / len(population)
+        options['mutation_proba'] = mutation_proba
         options['current_best'] = inf, None
         options['f'] = f
         options['n_points'] = n_crossover_points

@@ -26,6 +26,7 @@ if __name__ == "__main__":
     N_BITS_P_ENTRY: int = PARAMS['n_bits']
     INTERVAL: tuple = PARAMS['interval']
     CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
+    MUTATION_P: float = PARAMS['mutation_p']
 
 
     v_n_bits = [N_BITS_P_ENTRY] * DIMENSION
@@ -42,6 +43,7 @@ if __name__ == "__main__":
                                           True,
                                           POP_SIZE,
                                           POP_SIZE,
+                                          MUTATION_P,
                                           f,
                                           CROSSOVER_NUM_POINTS,
                                           v_n_bits,

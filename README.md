@@ -93,7 +93,7 @@ appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_t
 ```
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_cont_ga_exec.py results/ "{'f': 'ackley', 'pop_size': 100, 'gens': 70, 'dim': 2, 'n_bits': 20, 'interval': (-30.0, 30.0), 'crossover_n_p': 5}"
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_cont_ga_exec.py results/ "{'f': 'ackley', 'pop_size': 100, 'gens': 70, 'mutation_p': 0.05, 'dim': 2, 'n_bits': 20, 'interval': (-30.0, 30.0), 'crossover_n_p': 5}"
 ```
 
 
