@@ -99,9 +99,12 @@ appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_co
 
 ### Examples
 
+#### Full generational replacement
 ![Example of route evolution GIF](results/output_sample_berlin52.gif)
 
 ![Performance plot](results/output_sample_berlin52_GA_plot.png)
 
+#### Full generational replacement with elitism
+![Another example of route evolution GIF](results/output_sample2_berlin52.gif)
 
-
+![Performance plot](results/output_sample2_berlin52_GA_plot.png)

@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     instance = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
 
-    POP_SIZE = 150
+    POP_SIZE = 200
 
     initial_population = generate_population_of_permutations(POP_SIZE, instance['rest_of_cities'])
 
@@ -27,7 +27,7 @@ if __name__ == "__main__":
                       swap_mutation_population, # pyright: ignore
                       euc_tsp_fitness_maximization, # pyright: ignore
                       full_gen_replacement_elitist, # pyright: ignore
-                      lambda gen_count, _ : gen_count < 800,
+                      lambda gen_count, _ : gen_count < 1000,
                       simple_euc_tsp_options_handler,
                       instance)
     print('avg of the fitness of last generation:', instance['population_fit_avgs'][-1])
@@ -44,4 +44,4 @@ if __name__ == "__main__":
     plot_evolution(lines, instance, OUTPUT_FILE_PATH, labels)
 
     only_permutations = list(map(lambda x: x[1], best_sol)) # pyright: ignore
-    animate_tsp_evolution(instance, only_permutations, OUTPUT_FILE_PATH, 25)
+    animate_tsp_evolution(instance, only_permutations, OUTPUT_FILE_PATH, 30)
