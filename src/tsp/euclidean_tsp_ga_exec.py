@@ -53,8 +53,7 @@ if __name__ == "__main__":
 
 
     best_solutions_line = generate_line_from_data(list(map(
-        lambda x: tour_distance(instance['fst_city'], x[1], instance['weights']),# pyright: ignore
-        list_best_solutions_per_gen)))
+        lambda x: x[0], list_best_solutions_per_gen))) # pyright: ignore
     avg_fitness_line = generate_line_from_data(instance['population_fit_avgs'])
     labels = ['avg_fitness', 'best_found']
 

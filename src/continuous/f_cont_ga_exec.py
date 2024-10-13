@@ -68,7 +68,7 @@ if __name__ == "__main__":
     print('used seed:', SEED)
 
     best_solutions_line = generate_line_from_data(list(map(
-        lambda x: f(decode_vector(x[1], v_n_bits, v_intervals)), list_best_solutions_per_gen))) # pyright: ignore
+        lambda x: x[0], list_best_solutions_per_gen))) # pyright: ignore
     avg_fitness_line = generate_line_from_data(instance['population_fit_avgs'])
     labels = ['avg_fitness', 'best_found']
 
