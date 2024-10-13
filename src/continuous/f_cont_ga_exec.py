@@ -1,5 +1,6 @@
 '''
-
+Module to execute the GA for continuous
+optimization functions.
 '''
 
 
@@ -51,7 +52,7 @@ if __name__ == "__main__":
                                           v_n_bits,
                                           v_intervals)
 
-    best_sol = genetic_algorithm(initial_population,
+    list_best_solutions_per_gen = genetic_algorithm(initial_population,
                       population_n_points_crossover_roulettew_s, # pyright: ignore
                       bit_flip_mutation_population, # pyright: ignore
                       c_f_fitness_maximization, # pyright: ignore
@@ -63,11 +64,11 @@ if __name__ == "__main__":
     print('avg of the fitness of last generation:', instance['population_fit_avgs'][-1])
     print('fitness of best solution found:\n', instance['current_best'][0])
     print('best solution found:',
-          decode_vector(best_sol[-1][1], v_n_bits, v_intervals)) # pyright: ignore
+          decode_vector(list_best_solutions_per_gen[-1][1], v_n_bits, v_intervals)) # pyright: ignore
     print('used seed:', SEED)
 
     best_solutions_line = generate_line_from_data(list(map(
-        lambda x: f(decode_vector(x[1], v_n_bits, v_intervals)), best_sol))) # pyright: ignore
+        lambda x: f(decode_vector(x[1], v_n_bits, v_intervals)), list_best_solutions_per_gen))) # pyright: ignore
     avg_fitness_line = generate_line_from_data(instance['population_fit_avgs'])
     labels = ['avg_fitness', 'best_found']
 
