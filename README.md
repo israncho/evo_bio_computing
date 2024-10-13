@@ -78,7 +78,7 @@ To execute the genetic algorithm and generate a GIF of the routes and a
 performance plot, you can use the following command:
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/ "{'pop_size': 150, 'n_generations': 500}"
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/ "{'pop_size': 150, 'n_generations': 500, 'seed': 12345}"
 ```
 
 Where `./python_script.sh` is used to run any script of this project, followed by the 
@@ -89,11 +89,11 @@ to the output files adding the prefix after the last directory in the route.
 For example to add the prefix `test`.
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/test "{'pop_size': 150, 'n_generations': 500}"
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/test "{'pop_size': 150, 'n_generations': 500, 'seed': None}"
 ```
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_cont_ga_exec.py results/ "{'f': 'ackley', 'pop_size': 100, 'gens': 70, 'mutation_p': 0.05, 'dim': 2, 'n_bits': 20, 'interval': (-30.0, 30.0), 'crossover_n_p': 5}"
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/continuous/f_cont_ga_exec.py results/ "{'f': 'ackley', 'pop_size': 100, 'gens': 70, 'mutation_p': 0.05, 'dim': 2, 'n_bits': 20, 'interval': (-30.0, 30.0), 'crossover_n_p': 5, 'seed': 9876}"
 ```
 
 

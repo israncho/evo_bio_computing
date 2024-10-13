@@ -9,6 +9,7 @@ from src.tsp.euclidean_tsp import euc_tsp_fitness_maximization, simple_euc_tsp_o
 from src.tsp.visualization import animate_tsp_evolution
 from src.utils.input_output import parse_tsp_data, read_file
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
+from src.utils.others import seed_in_use
 
 if __name__ == "__main__":
     FILE_PATH = argv[1]
@@ -20,6 +21,8 @@ if __name__ == "__main__":
 
     POP_SIZE = PARAMS['pop_size'] 
     GENS = PARAMS['n_generations'] 
+    SEED = seed_in_use(PARAMS['seed'])
+    
 
     initial_population = generate_population_of_permutations(POP_SIZE, instance['rest_of_cities'])
 
@@ -35,6 +38,7 @@ if __name__ == "__main__":
                       instance)
     print('avg of the fitness of last generation:', instance['population_fit_avgs'][-1])
     print('fitness of best solution found:\n', instance['current_best'][0])
+    print('used seed:', SEED)
 
 
 

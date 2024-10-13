@@ -13,6 +13,7 @@ from src.gen_algo_framework.population_utils import generate_population_of_bit_v
 from src.gen_algo_framework.mutation import bit_flip_mutation_population
 from src.gen_algo_framework.replacement import full_gen_replacement_elitist
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
+from src.utils.others import seed_in_use
 from src.continuous.functions import all_funcs
 
 if __name__ == "__main__":
@@ -27,6 +28,7 @@ if __name__ == "__main__":
     INTERVAL: tuple = PARAMS['interval']
     CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
     MUTATION_P: float = PARAMS['mutation_p']
+    SEED = seed_in_use(PARAMS['seed'])
 
 
     v_n_bits = [N_BITS_P_ENTRY] * DIMENSION
@@ -62,7 +64,7 @@ if __name__ == "__main__":
     print('fitness of best solution found:\n', instance['current_best'][0])
     print('best solution found:',
           decode_vector(best_sol[-1][1], v_n_bits, v_intervals)) # pyright: ignore
-
+    print('used seed:', SEED)
 
     best_solutions_line = generate_line_from_data(list(map(
         lambda x: f(decode_vector(x[1], v_n_bits, v_intervals)), best_sol))) # pyright: ignore
