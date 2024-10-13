@@ -78,7 +78,7 @@ To execute the genetic algorithm and generate a GIF of the routes and a
 performance plot, you can use the following command:
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/ "{'pop_size': 150, 'n_generations': 500}"
 ```
 
 Where `./python_script.sh` is used to run any script of this project, followed by the 
@@ -89,7 +89,7 @@ to the output files adding the prefix after the last directory in the route.
 For example to add the prefix `test`.
 
 ```bash
-appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/test
+appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/test "{'pop_size': 150, 'n_generations': 500}"
 ```
 
 ```bash

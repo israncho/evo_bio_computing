@@ -1,4 +1,5 @@
 from sys import argv
+from ast import literal_eval
 from src.gen_algo_framework.crossover import pop_crossover_ox1_roulettew_s
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
@@ -13,10 +14,12 @@ if __name__ == "__main__":
     FILE_PATH = argv[1]
     print(FILE_PATH)
     OUTPUT_FILE_PATH = argv[2]
+    PARAMS = literal_eval(argv[3])
 
     instance = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
 
-    POP_SIZE = 200
+    POP_SIZE = PARAMS['pop_size'] 
+    GENS = PARAMS['n_generations'] 
 
     initial_population = generate_population_of_permutations(POP_SIZE, instance['rest_of_cities'])
 
@@ -27,7 +30,7 @@ if __name__ == "__main__":
                       swap_mutation_population, # pyright: ignore
                       euc_tsp_fitness_maximization, # pyright: ignore
                       full_gen_replacement_elitist, # pyright: ignore
-                      lambda gen_count, _ : gen_count < 1000,
+                      lambda gen_count, _ : gen_count < GENS,
                       simple_euc_tsp_options_handler,
                       instance)
     print('avg of the fitness of last generation:', instance['population_fit_avgs'][-1])
