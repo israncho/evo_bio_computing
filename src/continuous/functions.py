@@ -115,16 +115,22 @@ def c_f_fitness_maximization(population: List[List[int]],
     v_intervals = options['v_intervals']
     population_fitness_sum = 0
 
+    gen_best_fitness = inf
+
     for i, individual in enumerate(population):
         decoded_individual = decode_vector(individual, v_n_bits, v_intervals)
         individual_fitness = f(decoded_individual)
         population[i] = individual_fitness, individual # pyright: ignore
         population_fitness_sum += individual_fitness
 
+        if individual_fitness < gen_best_fitness:
+            gen_best_fitness = individual_fitness
+
         if individual_fitness < options['current_best'][0]:
             options['current_best'] = individual_fitness, individual
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
+    options['gen_best'].append(gen_best_fitness)
     population = transform_to_max(population) # pyright: ignore
 
     return population # pyright: ignore
@@ -147,6 +153,7 @@ def simple_c_f_options_handler(population: Population,
         options['next_gen_pop_s'] = next_gen_pop_s
         options['mutation_proba'] = mutation_proba
         options['current_best'] = inf, None
+        options['gen_best'] = []
         options['f'] = f
         options['n_points'] = n_crossover_points
         if v_n_bits is None:

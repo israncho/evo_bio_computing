@@ -17,8 +17,13 @@ def full_gen_replacement_elitist(_: List[Tuple[float, T]],
                                  offspring: List[Tuple[float, T]],
                                  __: int,
                                  options: dict) -> List[Tuple[float, T]]:
-    offspring.pop()
-    offspring.append(options['current_best'])
+
+    if options['current_best'][0] != options['gen_best']:
+        offspring.pop()
+        offspring.append(options['current_best'])
+        options['gen_best'].pop()
+        options['gen_best'].append(options['current_best'][0])
+
     return offspring
 
 

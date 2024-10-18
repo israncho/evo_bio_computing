@@ -45,5 +45,7 @@ def genetic_algorithm(population: Population,
 
         generation += 1
         current_population = next_gen_population
+    
+    best_solutions.append(options['current_best'])
 
     return best_solutions

@@ -12,7 +12,7 @@ from src.gen_algo_framework.crossover import population_n_points_crossover_roule
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors
 from src.gen_algo_framework.mutation import bit_flip_mutation_population
-from src.gen_algo_framework.replacement import full_gen_replacement_elitist
+from src.gen_algo_framework.replacement import all_replacement_funcs
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.utils.others import seed_in_use
 from src.continuous.functions import all_funcs
@@ -30,7 +30,10 @@ if __name__ == "__main__":
     CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
     MUTATION_P: float = PARAMS['mutation_p']
     SEED = seed_in_use(PARAMS['seed'])
+    REPLACEMENT_F_NAME: str = PARAMS['replacement']
 
+
+    replacement = all_replacement_funcs[REPLACEMENT_F_NAME]
 
     v_n_bits = [N_BITS_P_ENTRY] * DIMENSION
     v_intervals = [INTERVAL] * DIMENSION
@@ -56,7 +59,7 @@ if __name__ == "__main__":
                       population_n_points_crossover_roulettew_s, # pyright: ignore
                       bit_flip_mutation_population, # pyright: ignore
                       c_f_fitness_maximization, # pyright: ignore
-                      full_gen_replacement_elitist, # pyright: ignore
+                      replacement, # pyright: ignore
                       lambda gen_count, _ : gen_count < GENS,
                       simple_c_f_options_handler,
                       instance)
@@ -70,7 +73,8 @@ if __name__ == "__main__":
     best_solutions_line = generate_line_from_data(list(map(
         lambda x: x[0], list_best_solutions_per_gen))) # pyright: ignore
     avg_fitness_line = generate_line_from_data(instance['population_fit_avgs'])
-    labels = ['avg_fitness', 'best_found']
+    gen_best_line = generate_line_from_data(instance['gen_best'])
+    labels = ['avg_fitness', 'gen_best', 'best_found']
 
-    lines = [avg_fitness_line, best_solutions_line]
+    lines = [avg_fitness_line, gen_best_line, best_solutions_line]
     plot_evolution(lines, instance, OUTPUT_FILE_PATH, labels)
