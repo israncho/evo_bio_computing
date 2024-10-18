@@ -64,3 +64,6 @@ def roulette_gen_replacement(current_population: List[Tuple[float, T]],
                                                         cumulative_fitness_l)
 
     return next_gen
+
+all_replacement_funcs = {'full_generational_replacement': full_generational_replacement,
+                         'full_gen_replacement_elitist': full_gen_replacement_elitist}
