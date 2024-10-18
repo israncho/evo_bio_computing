@@ -2,9 +2,8 @@
 Module for various auxiliar and utils functions.
 '''
 
-from typing import Any
+from os import urandom
 from random import seed
-from time import time
 
 def seed_in_use(seed_to_use: int |
                 float | str |
@@ -24,6 +23,6 @@ def seed_in_use(seed_to_use: int |
     '''
 
     if seed_to_use is None:
-        seed_to_use = int(time() * 1000) % 2**32
+        seed_to_use = int.from_bytes(urandom(4), 'big')
     seed(seed_to_use)
     return seed_to_use
