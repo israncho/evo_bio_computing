@@ -1,6 +1,6 @@
 '''Module with functions for reading and writing files'''
 
-from typing import Callable, List
+from typing import Callable, List, Tuple
 from traceback import print_exc
 
 from src.tsp.euclidean_tsp import EucCity, EucTSPPermutation, build_weight_dict
@@ -29,11 +29,11 @@ def read_file(file_path: str) -> List[str]:
     return list_of_lines
 
 
-def write_file(file_path: str, lines_of_the_file: List[str]) -> None:
+def write_file(file_path: str, lines_of_the_file: List[str], mode: str = 'w') -> None:
     '''Writes a list of lines to a file.'''
 
     try:
-        with open(file_path, 'w', encoding='utf-8') as file:
+        with open(file_path, mode, encoding='utf-8') as file:
             for line in lines_of_the_file:
                 file.write(line)
 
@@ -137,3 +137,22 @@ def tsp_solution_to_lines(fst_city: EucCity,
         list_of_lines.append(f'{vertex_id[(u, v)]} {u} {v}\n')
 
     return list_of_lines
+
+
+def list_to_line(_list: List[Tuple]) -> str:
+    '''
+    Converts a list of elements into a single string,
+    with elements separated by spaces.
+    Args:
+        _list (List): The input list.
+
+    Returns:
+        str: A string representation of the list.
+    '''
+    list_of_strs = []
+    for _tuple in _list:
+        elems_as_strs = []
+        for elem in _tuple:
+            elems_as_strs.append(str(elem))
+        list_of_strs.append(','.join(elems_as_strs))
+    return ' '.join(list_of_strs)
