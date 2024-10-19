@@ -30,6 +30,7 @@ if __name__ == "__main__":
     CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
     MUTATION_P: float = PARAMS['mutation_p']
     SEED = seed_in_use(PARAMS['seed'])
+    PARAMS['seed'] = SEED
     REPLACEMENT_F_NAME: str = PARAMS['replacement']
 
 
@@ -42,7 +43,8 @@ if __name__ == "__main__":
 
     initial_population = generate_population_of_bit_vectors(POP_SIZE, v_n_bits)
 
-    instance = {'NAME': FUNC_NAME}
+    PARAMS['NAME'] = FUNC_NAME
+    instance = {}
 
     instance = simple_c_f_options_handler(initial_population,
                                           instance,
@@ -77,4 +79,4 @@ if __name__ == "__main__":
     labels = ['avg_fitness', 'gen_fittest_fitness', 'best_found']
 
     lines = [avg_fitness_line, gen_best_line, best_solutions_line]
-    plot_evolution(lines, instance, OUTPUT_FILE_PATH, labels)
+    plot_evolution(lines, PARAMS, OUTPUT_FILE_PATH, labels)

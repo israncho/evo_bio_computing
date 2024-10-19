@@ -33,6 +33,7 @@ if __name__ == "__main__":
     PARAMS['seed'] = SEED
     REPS: int = PARAMS['reps']
     REPLACEMENT_F_NAME: str = PARAMS['replacement']
+    PARAMS['NAME'] = FUNC_NAME
 
     print('\n', PARAMS)
 

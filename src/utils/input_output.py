@@ -159,6 +159,7 @@ def list_to_line(_list: List[Tuple]) -> str:
         list_of_strs.append(','.join(elems_as_strs))
     return ' '.join(list_of_strs)
 
+
 def parse_multiple_ga_executions_data(lines_of_the_file: List[str]) -> Tuple[dict, List[List[Tuple]]]:
     info_parameters: dict = literal_eval(lines_of_the_file[0])
     data = []
