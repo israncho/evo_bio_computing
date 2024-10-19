@@ -1,5 +1,7 @@
 '''Module with functions for reading and writing files'''
 
+from ast import literal_eval
+from itertools import islice
 from typing import Callable, List, Tuple
 from traceback import print_exc
 
@@ -156,3 +158,23 @@ def list_to_line(_list: List[Tuple]) -> str:
             elems_as_strs.append(str(elem))
         list_of_strs.append(','.join(elems_as_strs))
     return ' '.join(list_of_strs)
+
+def parse_multiple_ga_executions_data(lines_of_the_file: List[str]) -> Tuple[dict, List[List[Tuple]]]:
+    info_parameters: dict = literal_eval(lines_of_the_file[0])
+    data = []
+
+    for line in islice(lines_of_the_file, 1, None):
+        one_exec_data = []
+        segments = line.split() # columns
+
+        for part in segments:
+            fields_as_str = part.split(',') # each column has multiple data
+            fields = [] 
+
+            for field_str in fields_as_str:
+                fields.append(to_number(field_str))
+        
+            one_exec_data.append(tuple(fields))
+        data.append(one_exec_data)
+    
+    return info_parameters, data
