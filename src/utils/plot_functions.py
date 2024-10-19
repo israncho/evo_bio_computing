@@ -10,10 +10,10 @@ def generate_line_from_data(data: List) -> Tuple[List, List]:
     return x_values, y_values
 
 
-def plot_evolution(lines: List[Tuple[List, List]],
-                       instance: dict,
-                       output_file_path: str,
-                       labels: List[str] = None) -> None: # pyright: ignore
+def plot_evolution(lines: List[Tuple[List, ...]],
+                   instance: dict,
+                   output_file_path: str,
+                   labels: List[str] = None) -> None: # pyright: ignore
 
     plt.figure(figsize=(10, 6))  # Crear una nueva figura
 

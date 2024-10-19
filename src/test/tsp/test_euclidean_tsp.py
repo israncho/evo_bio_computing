@@ -48,18 +48,17 @@ def test_euc_tsp_fitness_maximization():
     berlin52 = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
     berlin52['population_fit_avgs'] = []
     berlin52['current_best'] = inf, None
+    berlin52['gen_fittest_fitness'] = []
 
     for _ in range(100):
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
-        max_f = max(map(lambda x: tour_distance(berlin52['fst_city'], x, berlin52['weights']),
-                        population))
         population = euc_tsp_fitness_maximization(population, berlin52) # pyright: ignore
 
         pop_untransformed_f_sum = 0
         for fitness, tour in population:
-            untransformed_f = tour_distance(berlin52['fst_city'], tour, berlin52['weights'])
-            pop_untransformed_f_sum += untransformed_f
-            assert fitness == (max_f - untransformed_f + 1e-6)
+            recalc_f = tour_distance(berlin52['fst_city'], tour, berlin52['weights'])
+            pop_untransformed_f_sum += recalc_f
+            assert fitness == recalc_f
 
         assert berlin52['population_fit_avgs'][-1] == pop_untransformed_f_sum / len(population)
 
