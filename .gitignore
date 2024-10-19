@@ -161,6 +161,8 @@ cython_debug/
 
 *.gif
 *.png
+*.txt
 
 !output_sample*.gif
 !output_sample*.png
+!output_sample*.txt
