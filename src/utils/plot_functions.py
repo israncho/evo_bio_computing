@@ -10,10 +10,11 @@ def generate_line_from_data(data: List) -> Tuple[List, List]:
     return x_values, y_values
 
 
-def plot_evolution(lines: List[Tuple[List, ...]],
+def plot_evolution(lines: List[Tuple[List, List]],
                    instance: dict,
                    output_file_path: str,
-                   labels: List[str] = None) -> None: # pyright: ignore
+                   labels: List[str] = None,
+                   y_label: str = 'Fitness') -> None: # pyright: ignore
 
     plt.figure(figsize=(10, 6))  # Crear una nueva figura
 
@@ -24,8 +25,11 @@ def plot_evolution(lines: List[Tuple[List, ...]],
 
     # Etiquetas y título del gráfico
     plt.xlabel('Generation')
-    plt.ylabel('Fitness')
-    plt.title(f"GA exec for the instance '{instance['NAME']}'")
+    plt.ylabel(y_label)
+    plt.title(f"GA - '{instance['NAME']}' - {instance['replacement']} - population size: {instance['pop_size']}")
+
+    plt.figtext(0.5, 0.008, f"\n\n{str(instance)}", wrap=True, 
+            horizontalalignment='center', fontsize=6)
 
     # Mostrar la leyenda
     plt.legend()
