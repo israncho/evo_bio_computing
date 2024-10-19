@@ -90,18 +90,23 @@ def euc_tsp_fitness_maximization(population: List[EucTSPPermutation],
     weights = options['weights']
     population_fitness_sum = 0
 
+    gen_best_fitness = inf
+
     for i, individual in enumerate(population):
         individual_fitness = tour_distance(fst_c,
                                            individual,
                                            weights)
         population_fitness_sum += individual_fitness
         population[i] = individual_fitness, individual # pyright: ignore
+
+        if individual_fitness < gen_best_fitness:
+            gen_best_fitness = individual_fitness
+
         if individual_fitness < options['current_best'][0]:
             options['current_best'] = individual_fitness, individual
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
-
-    population = transform_to_max(population) # pyright: ignore
+    options['gen_fittest_fitness'].append(gen_best_fitness)
 
     return population # pyright: ignore
 
@@ -140,14 +145,19 @@ def simple_euc_tsp_options_handler(population: Population,
                                    options: dict,
                                    init: bool = False,
                                    offspring_s: int = 100,
-                                   next_gen_pop_s: int = 100) -> dict:
+                                   next_gen_pop_s: int = 100,
+                                   mutation_proba: float = 0.1) -> dict:
     if init:
         options['population_fit_avgs'] = []
         options['offspring_s'] = offspring_s
         options['next_gen_pop_s'] = next_gen_pop_s
-        options['mutation_proba'] = 1 / len(population)
+        options['mutation_proba'] = mutation_proba 
         options['current_best'] = inf, None
+        options['gen_fittest_fitness'] = []
+        options['minimization'] = True
         population = euc_tsp_fitness_maximization(population, options) # pyright: ignore
 
-    options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore
+    pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
+    pop_only_fitness_values = transform_to_max(pop_only_fitness_values)
+    options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore
     return options
