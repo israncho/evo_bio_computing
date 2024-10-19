@@ -6,7 +6,7 @@
 from sys import argv
 from ast import literal_eval
 from src.continuous.binary_representation import decode_vector
-from src.continuous.functions import c_f_fitness_maximization, simple_c_f_options_handler
+from src.continuous.functions import compute_vectors_fitness, simple_c_f_options_handler
 from src.gen_algo_framework.crossover import population_n_points_crossover_roulettew_s
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors
@@ -68,7 +68,7 @@ if __name__ == "__main__":
             initial_population,
             population_n_points_crossover_roulettew_s, # pyright: ignore
             bit_flip_mutation_population, # pyright: ignore
-            c_f_fitness_maximization, # pyright: ignore
+            compute_vectors_fitness, # pyright: ignore
             replacement, # pyright: ignore
             lambda gen_count, _ : gen_count < GENS,
             simple_c_f_options_handler,

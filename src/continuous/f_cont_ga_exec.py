@@ -7,7 +7,7 @@ optimization functions.
 from sys import argv
 from ast import literal_eval
 from src.continuous.binary_representation import decode_vector
-from src.continuous.functions import c_f_fitness_maximization, simple_c_f_options_handler
+from src.continuous.functions import compute_vectors_fitness, simple_c_f_options_handler
 from src.gen_algo_framework.crossover import population_n_points_crossover_roulettew_s
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     list_best_solutions_per_gen = genetic_algorithm(initial_population,
                       population_n_points_crossover_roulettew_s, # pyright: ignore
                       bit_flip_mutation_population, # pyright: ignore
-                      c_f_fitness_maximization, # pyright: ignore
+                      compute_vectors_fitness, # pyright: ignore
                       replacement, # pyright: ignore
                       lambda gen_count, _ : gen_count < GENS,
                       simple_c_f_options_handler,
@@ -73,8 +73,8 @@ if __name__ == "__main__":
     best_solutions_line = generate_line_from_data(list(map(
         lambda x: x[0], list_best_solutions_per_gen))) # pyright: ignore
     avg_fitness_line = generate_line_from_data(instance['population_fit_avgs'])
-    gen_best_line = generate_line_from_data(instance['gen_best'])
-    labels = ['avg_fitness', 'gen_best', 'best_found']
+    gen_best_line = generate_line_from_data(instance['gen_fittest_fitness'])
+    labels = ['avg_fitness', 'gen_fittest_fitness', 'best_found']
 
     lines = [avg_fitness_line, gen_best_line, best_solutions_line]
     plot_evolution(lines, instance, OUTPUT_FILE_PATH, labels)

@@ -18,11 +18,12 @@ def full_gen_replacement_elitist(_: List[Tuple[float, T]],
                                  __: int,
                                  options: dict) -> List[Tuple[float, T]]:
 
-    if options['current_best'][0] != options['gen_best']:
+    # ensure best is in the population
+    if options['current_best'][0] < options['gen_fittest_fitness'][-1]:
         offspring.pop()
         offspring.append(options['current_best'])
-        options['gen_best'].pop()
-        options['gen_best'].append(options['current_best'][0])
+        options['gen_fittest_fitness'].pop()
+        options['gen_fittest_fitness'].append(options['current_best'][0])
 
     return offspring
 

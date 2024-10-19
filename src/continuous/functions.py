@@ -107,7 +107,7 @@ all_funcs = {"rastrigin": rastrigin, "rosenbrock": rosenbrock,
              "griewank": griewank}
 
 
-def c_f_fitness_maximization(population: List[List[int]],
+def compute_vectors_fitness(population: List[List[int]],
                              options: dict) -> List[Tuple[float, List[int]]]:
 
     f = options['f']
@@ -130,8 +130,7 @@ def c_f_fitness_maximization(population: List[List[int]],
             options['current_best'] = individual_fitness, individual
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
-    options['gen_best'].append(gen_best_fitness)
-    population = transform_to_max(population) # pyright: ignore
+    options['gen_fittest_fitness'].append(gen_best_fitness)
 
     return population # pyright: ignore
 
@@ -153,7 +152,7 @@ def simple_c_f_options_handler(population: Population,
         options['next_gen_pop_s'] = next_gen_pop_s
         options['mutation_proba'] = mutation_proba
         options['current_best'] = inf, None
-        options['gen_best'] = []
+        options['gen_fittest_fitness'] = []
         options['f'] = f
         options['n_points'] = n_crossover_points
         if v_n_bits is None:
@@ -161,7 +160,9 @@ def simple_c_f_options_handler(population: Population,
             v_intervals = [(-15.0, 15.0), (-15.0, 15.0)]
         options['v_n_bits'] = v_n_bits
         options['v_intervals'] = v_intervals
-        population = c_f_fitness_maximization(population, options) # pyright: ignore
-
-    options['c_fitness_l'] = cumulative_fitness(population) # pyright: ignore
+        population = compute_vectors_fitness(population, options) # pyright: ignore
+    
+    pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
+    pop_only_fitness_values = transform_to_max(pop_only_fitness_values)
+    options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore
     return options
