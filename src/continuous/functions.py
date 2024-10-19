@@ -144,7 +144,8 @@ def simple_c_f_options_handler(population: Population,
                                f = sphere,
                                n_crossover_points: int = 1,
                                v_n_bits = None,
-                               v_intervals = None
+                               v_intervals = None,
+                               minimization = True
                                ) -> dict:
     if init:
         options['population_fit_avgs'] = []
@@ -160,6 +161,7 @@ def simple_c_f_options_handler(population: Population,
             v_intervals = [(-15.0, 15.0), (-15.0, 15.0)]
         options['v_n_bits'] = v_n_bits
         options['v_intervals'] = v_intervals
+        options['minimization'] = minimization
         population = compute_vectors_fitness(population, options) # pyright: ignore
     
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))

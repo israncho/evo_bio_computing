@@ -2,6 +2,7 @@
 for the genetic algorithm.'''
 
 from typing import List, Tuple
+from heapq import nsmallest, nlargest
 from src.gen_algo_framework.genetic_algorithm import T, Population
 from src.gen_algo_framework.selection import cumulative_fitness, roulette_wheel_toss, remove_from_fitness_list
 
@@ -26,6 +27,28 @@ def full_gen_replacement_elitist(_: List[Tuple[float, T]],
         options['gen_fittest_fitness'].append(options['current_best'][0])
 
     return offspring
+
+
+def replacement_of_the_worst(current_pop: List[Tuple[float, T]],
+                             offspring: List[Tuple[float, T]],
+                             new_pop_size: int,
+                             options: dict) -> List[Tuple[float, T]]:
+
+    assert new_pop_size < len(current_pop) + len(offspring)
+
+    current_pop.extend(offspring)
+
+    options['gen_fittest_fitness'].pop()
+    options['gen_fittest_fitness'].append(options['current_best'][0])
+
+    next_gen: List = None
+
+    if options['minimization']:
+        next_gen = nsmallest(new_pop_size, current_pop)
+    else:
+        next_gen = nlargest(new_pop_size, current_pop)
+
+    return next_gen 
 
 
 def roulette_gen_replacement(current_population: List[Tuple[float, T]],
@@ -72,4 +95,5 @@ def roulette_gen_replacement(current_population: List[Tuple[float, T]],
     return next_gen
 
 all_replacement_funcs = {'full_generational_replacement': full_generational_replacement,
-                         'full_gen_replacement_elitist': full_gen_replacement_elitist}
+                         'full_gen_replacement_elitist': full_gen_replacement_elitist,
+                         'replacement_of_the_worst': replacement_of_the_worst}

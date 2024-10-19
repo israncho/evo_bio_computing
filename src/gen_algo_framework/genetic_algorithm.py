@@ -20,7 +20,6 @@ def genetic_algorithm(population: Population,
                       ) -> List[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
-    This function is intended for maximization problems.
     Returns:
         Collection[Population]: List of best solutions found in each generation.
     '''
