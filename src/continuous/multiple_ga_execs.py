@@ -17,51 +17,49 @@ from src.utils.others import seed_in_use
 from src.utils.input_output import write_file, list_to_line
 from src.continuous.functions import all_funcs
 
-if __name__ == "__main__":
-    OUTPUT_FILE_PATH: str = argv[1]
-    PARAMS: dict = literal_eval(argv[2])
+def multiple_ga_execs(params: dict, output_file_path: str):
 
-    FUNC_NAME: str = PARAMS['f']
-    POP_SIZE: int = PARAMS['pop_size']
-    GENS: int = PARAMS['gens']
-    DIMENSION: int = PARAMS['dim']
-    N_BITS_P_ENTRY: int = PARAMS['n_bits']
-    INTERVAL: tuple = PARAMS['interval']
-    CROSSOVER_NUM_POINTS: int = PARAMS['crossover_n_p']
-    MUTATION_P: float = PARAMS['mutation_p']
-    SEED = seed_in_use(PARAMS['seed'])
-    PARAMS['seed'] = SEED
-    REPS: int = PARAMS['reps']
-    REPLACEMENT_F_NAME: str = PARAMS['replacement']
-    PARAMS['NAME'] = FUNC_NAME
+    func_name: str = params['f']
+    pop_size: int = params['pop_size']
+    gens: int = params['gens']
+    dimension: int = params['dim']
+    n_bits_p_entry: int = params['n_bits']
+    interval: tuple = params['interval']
+    crossover_n_points: int = params['crossover_n_p']
+    mutation_p: float = params['mutation_p']
+    seed = seed_in_use(params['seed'])
+    params['seed'] = seed
+    reps: int = params['reps']
+    replacement_f_name: str = params['replacement']
+    params['NAME'] = func_name
 
-    print('\n', PARAMS)
+    print('\n', params)
 
-    v_n_bits = [N_BITS_P_ENTRY] * DIMENSION
-    v_intervals = [INTERVAL] * DIMENSION
+    v_n_bits = [n_bits_p_entry] * dimension
+    v_intervals = [interval] * dimension
 
-    f = all_funcs[FUNC_NAME]
+    f = all_funcs[func_name]
 
-    replacement = all_replacement_funcs[REPLACEMENT_F_NAME]
+    replacement = all_replacement_funcs[replacement_f_name]
 
-    write_file(OUTPUT_FILE_PATH,[str(PARAMS) + '\n'])
+    write_file(output_file_path,[str(params) + '\n'])
 
-    for i in range(REPS):
+    for i in range(reps):
         print('\nRep:', i + 1)
 
-        instance = {'NAME': FUNC_NAME, 'SEED': SEED}
+        instance = {'NAME': func_name, 'seed': seed}
 
-        initial_population = generate_population_of_bit_vectors(POP_SIZE, v_n_bits)
+        initial_population = generate_population_of_bit_vectors(pop_size, v_n_bits)
 
         instance = simple_c_f_options_handler(
             initial_population,
             instance,
             True,
-            POP_SIZE,
-            POP_SIZE,
-            MUTATION_P,
+            pop_size,
+            pop_size,
+            mutation_p,
             f,
-            CROSSOVER_NUM_POINTS,
+            crossover_n_points,
             v_n_bits,
             v_intervals)
 
@@ -71,7 +69,7 @@ if __name__ == "__main__":
             bit_flip_mutation_population, # pyright: ignore
             compute_vectors_fitness, # pyright: ignore
             replacement, # pyright: ignore
-            lambda gen_count, _ : gen_count < GENS,
+            lambda gen_count, _ : gen_count < gens,
             simple_c_f_options_handler,
             instance)
 
@@ -85,7 +83,7 @@ if __name__ == "__main__":
         list_fitness_best_sols_per_gen = list(map(lambda x: x[0], list_best_solutions_per_gen))
         gen_results = list_to_line(list(zip(list_fitness_best_sols_per_gen,
                                             instance['population_fit_avgs'])) + ['\n']) # pyright: ignore
-        write_file(OUTPUT_FILE_PATH, [gen_results], mode='a')
+        write_file(output_file_path, [gen_results], mode='a')
 
         '''
         best_solutions_line = generate_line_from_data(list(map(
@@ -94,5 +92,13 @@ if __name__ == "__main__":
         labels = ['avg_fitness', 'best_found']
 
         lines = [avg_fitness_line, best_solutions_line]
-        plot_evolution(lines, instance, OUTPUT_FILE_PATH + str(i), labels)
+        plot_evolution(lines, instance, output_file_path + str(i), labels)
         '''
+    
+
+if __name__ == "__main__":
+    output_file_path: str = argv[1]
+    params: dict = literal_eval(argv[2])
+
+    multiple_ga_execs(params, output_file_path)
+   
