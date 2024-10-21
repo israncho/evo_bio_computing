@@ -13,6 +13,7 @@ from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors
 from src.gen_algo_framework.mutation import bit_flip_mutation_population
 from src.gen_algo_framework.replacement import all_replacement_funcs
+from src.gen_algo_framework.diversity import all_distance_measures  
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.utils.others import seed_in_use
 from src.continuous.functions import all_funcs
@@ -32,7 +33,9 @@ if __name__ == "__main__":
     SEED = seed_in_use(PARAMS['seed'])
     PARAMS['seed'] = SEED
     REPLACEMENT_F_NAME: str = PARAMS['replacement']
-
+    
+    CALC_ENTROPY = PARAMS['entropy']
+    DISTANCE_MEASURE_NAME = PARAMS['distance_m']
 
     replacement = all_replacement_funcs[REPLACEMENT_F_NAME]
 
@@ -40,6 +43,11 @@ if __name__ == "__main__":
     v_intervals = [INTERVAL] * DIMENSION
 
     f = all_funcs[FUNC_NAME]
+
+    if DISTANCE_MEASURE_NAME is None:
+        distance_measure = None
+    else:
+        distance_measure = all_distance_measures[DISTANCE_MEASURE_NAME]
 
     initial_population = generate_population_of_bit_vectors(POP_SIZE, v_n_bits)
 
@@ -55,7 +63,10 @@ if __name__ == "__main__":
                                           f,
                                           CROSSOVER_NUM_POINTS,
                                           v_n_bits,
-                                          v_intervals)
+                                          v_intervals,
+                                          True,
+                                          CALC_ENTROPY,  
+                                          distance_measure)
 
     list_best_solutions_per_gen = genetic_algorithm(initial_population,
                       population_n_points_crossover_roulettew_s, # pyright: ignore
@@ -80,3 +91,11 @@ if __name__ == "__main__":
 
     lines = [avg_fitness_line, gen_best_line, best_solutions_line]
     plot_evolution(lines, PARAMS, OUTPUT_FILE_PATH, labels)
+
+    if instance['pop_entropy'] is not None:
+        entropy_line = generate_line_from_data(instance['pop_entropy'])
+        plot_evolution([entropy_line], PARAMS, OUTPUT_FILE_PATH + 'entropy', ['population_entropy'], 'population_entropy')
+
+    if instance['pop_diversity'] is not None:
+        diversity_line = generate_line_from_data(instance['pop_diversity'])
+        plot_evolution([diversity_line], PARAMS, OUTPUT_FILE_PATH + 'diversity', ['population_diversity'], 'population_diversity')

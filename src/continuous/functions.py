@@ -7,6 +7,7 @@ from src.continuous.binary_representation import decode_vector
 from src.gen_algo_framework.genetic_algorithm import Population
 from src.gen_algo_framework.population_utils import transform_to_max
 from src.gen_algo_framework.selection import cumulative_fitness
+from src.gen_algo_framework.diversity import diversity_avg_distance_bit_seq, entropy_bit_seq_population
 
 
 def rastrigin(x: List[float], a: float = 10) -> float:
@@ -145,7 +146,9 @@ def simple_c_f_options_handler(population: Population,
                                n_crossover_points: int = 1,
                                v_n_bits = None,
                                v_intervals = None,
-                               minimization = True
+                               minimization = True,
+                               calc_generational_entropy = False,
+                               distance_measure = None
                                ) -> dict:
     if init:
         options['population_fit_avgs'] = []
@@ -163,7 +166,27 @@ def simple_c_f_options_handler(population: Population,
         options['v_intervals'] = v_intervals
         options['minimization'] = minimization
         population = compute_vectors_fitness(population, options) # pyright: ignore
+
+        if calc_generational_entropy:
+            options['pop_entropy'] = []
+        else:
+            options['pop_entropy'] = None 
+
+        if distance_measure is not None:
+            options['pop_diversity'] = []
+            options['distance_measure'] = distance_measure
+        else:
+            options['pop_diversity'] = None
+
     
+    if options['pop_diversity'] is not None:
+        options['pop_diversity'].append(
+            diversity_avg_distance_bit_seq(population,
+                                           options['distance_measure']))
+
+    if options['pop_entropy'] is not None:
+        options['pop_entropy'].append(entropy_bit_seq_population(population))
+         
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values)
     options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore
