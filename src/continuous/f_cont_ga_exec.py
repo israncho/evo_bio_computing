@@ -21,7 +21,6 @@ from src.continuous.functions import all_funcs
 if __name__ == "__main__":
     OUTPUT_FILE_PATH: str = argv[1]
     PARAMS: dict = literal_eval(argv[2])
-    print(PARAMS)
     FUNC_NAME: str = PARAMS['f']
     POP_SIZE: int = PARAMS['pop_size']
     GENS: int = PARAMS['gens']
@@ -36,6 +35,7 @@ if __name__ == "__main__":
     
     CALC_ENTROPY = PARAMS['entropy']
     DISTANCE_MEASURE_NAME = PARAMS['distance_m']
+    print(PARAMS)
 
     replacement = all_replacement_funcs[REPLACEMENT_F_NAME]
 
