@@ -3,6 +3,7 @@ Module with functions to measure the diversity of a
 population.
 '''
 
+from math import log
 from itertools import islice
 from typing import List, Callable
 from src.gen_algo_framework.genetic_algorithm import Population
@@ -80,14 +81,40 @@ def diversity_avg_distance_bit_seq(population: Population,
         float: The average distance between all unique pairs of individuals 
             in the population, indicating the diversity of the population.
     '''
+    # Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
+
     n = len(population)
     if n <= 1:
         return 0
 
     total_distance = 0
-    for i, bit_seq_i in enumerate(population):
-        for bit_seq_j in islice(population, i + 1, None):
+    for i, (_, bit_seq_i) in enumerate(population):
+        for (_, bit_seq_j) in islice(population, i + 1, None):
             total_distance += distance(bit_seq_i, bit_seq_j)
 
     total_distance /= (n *(n - 1)) * 0.5
     return total_distance
+
+
+def entropy_bit_seq_population(population: Population) -> float:
+
+    # Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
+    n = len(population)
+
+    assert n >= 2
+
+    n_genes = len(population[0][1])
+    frequencies_ones = [0] * n_genes
+    for _, bit_seq in population:
+        for i, bit in enumerate(bit_seq):
+            frequencies_ones[i] += bit
+
+    entropy_of_gene = [0] * n_genes
+
+    for i in range(n_genes):
+        p_1 = frequencies_ones[i] / n
+        p_0 = 1 - p_1
+        if p_1 != 0 and p_1 != 1:
+            entropy_of_gene[i] = -(p_1 * log(p_1) + p_0 * log(p_0))
+    
+    return sum(entropy_of_gene) / n_genes
