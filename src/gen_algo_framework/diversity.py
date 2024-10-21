@@ -118,3 +118,6 @@ def entropy_bit_seq_population(population: Population) -> float:
             entropy_of_gene[i] = -(p_1 * log(p_1) + p_0 * log(p_0))
     
     return sum(entropy_of_gene) / n_genes
+
+all_distance_measures = {'hamming_distance': hamming_distance,
+                          'jaccard_distance': jaccard_distance}
