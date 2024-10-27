@@ -179,3 +179,25 @@ def parse_multiple_ga_executions_data(lines_of_the_file: List[str]) -> Tuple[dic
         data.append(one_exec_data)
     
     return info_parameters, data
+
+
+def parse_multiple_ga_execs_results(lines_of_the_file: List[str]) -> Tuple[dict, List[Tuple]]:
+    info_parameters: dict = literal_eval(lines_of_the_file[0])
+    data = []
+    for line in islice(lines_of_the_file, 1, None):
+        i = len(line) - 1
+        if line[i] == ' ':
+            i -= 1
+        while line[i] != ' ':
+            i -= 1
+        
+        last_gen_data_str: List[str] = line[i:].strip().split(',')
+        
+        fields = []
+
+        for field_str in last_gen_data_str:
+            fields.append(to_number(field_str))
+        
+        data.append(tuple(fields))
+
+    return info_parameters, data

@@ -42,3 +42,15 @@ def plot_evolution(lines: List[Tuple[List, List]],
     print(f"Plot of performance saved as: '{output_file}'")
     plt.savefig(output_file)
     plt.close()
+
+
+def box_plot(data: List[List[float]],
+             labels: List[str],
+             output_file: str) -> None:
+    plt.boxplot(data)
+    plt.xticks(ticks=list(range(1, len(labels) + 1)), labels=labels, fontsize=7)  # Asignar nombres a las categorías
+    plt.xlabel('Techniques')
+    plt.ylabel('Fitness')
+    plt.title(output_file)
+    plt.savefig(output_file)
+    plt.close()
