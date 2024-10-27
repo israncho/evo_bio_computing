@@ -4,20 +4,21 @@ from src.utils.others import compute_generational_avgs
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.gen_algo_framework.replacement import all_replacement_funcs
 
+
 if __name__ == "__main__":
     DATA_DIRECTORY_PATH: str = argv[1]
     if DATA_DIRECTORY_PATH[-1] != '/':
-        DATA_DIRECTORY_PATH: str = DATA_DIRECTORY_PATH + '/' 
+        DATA_DIRECTORY_PATH: str = DATA_DIRECTORY_PATH + '/'
 
-    lines_all_avgs = []
-    labels_all_avgs = []
-    const = '_avg_avg_pop_fitness'
+    all_lines_of_avg_of_best_found = []
+    all_labels_of_best_f = []
+    const = '_avg_best_fitness_found'
 
     for replacement in all_replacement_funcs.keys():
         DATA_FILE_PATH: str = DATA_DIRECTORY_PATH + replacement + '.txt'
-        multiple_ga_execs_data = read_file(DATA_FILE_PATH)
+        multiple_ga_execs_lines = read_file(DATA_FILE_PATH)
 
-        details, data = parse_multiple_ga_executions_data(multiple_ga_execs_data) 
+        details, data = parse_multiple_ga_executions_data(multiple_ga_execs_lines)
 
         gen_avgs = compute_generational_avgs(data)
 
@@ -28,8 +29,8 @@ if __name__ == "__main__":
         lines = [avg_best_f_line, avg_avg_f_line]
         plot_evolution(lines, details, DATA_DIRECTORY_PATH + replacement, labels)
 
-        lines_all_avgs.append(avg_avg_f_line)
-        labels_all_avgs.append(replacement + const)
+        all_lines_of_avg_of_best_found.append(avg_best_f_line)
+        all_labels_of_best_f.append(replacement + const)
 
-    details['replacement'] = None 
-    plot_evolution(lines_all_avgs, details, DATA_DIRECTORY_PATH + 'comparison', labels_all_avgs)
+    details['replacement'] = None
+    plot_evolution(all_lines_of_avg_of_best_found, details, DATA_DIRECTORY_PATH + 'comparison', all_labels_of_best_f)
