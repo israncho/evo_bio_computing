@@ -124,7 +124,7 @@ def tsp_solution_to_lines(fst_city: EucCity,
                           instance: dict) -> List[str]:
     '''Converts a solution to a list of strings, each representing
     a line in a file.'''
-    vertex_id = instance['vertex_to_id']
+    vertex_id = instance['ids']
 
     list_of_lines = ['SOLUTION\n']
     list_of_lines.append(f"NAME: {instance['NAME']}\n")
@@ -170,14 +170,14 @@ def parse_multiple_ga_executions_data(lines_of_the_file: List[str]) -> Tuple[dic
 
         for part in segments:
             fields_as_str = part.split(',') # each column has multiple data
-            fields = [] 
+            fields = []
 
             for field_str in fields_as_str:
                 fields.append(to_number(field_str))
-        
+
             one_exec_data.append(tuple(fields))
         data.append(one_exec_data)
-    
+
     return info_parameters, data
 
 
@@ -190,14 +190,14 @@ def parse_multiple_ga_execs_results(lines_of_the_file: List[str]) -> Tuple[dict,
             i -= 1
         while line[i] != ' ':
             i -= 1
-        
+
         last_gen_data_str: List[str] = line[i:].strip().split(',')
-        
+
         fields = []
 
         for field_str in last_gen_data_str:
             fields.append(to_number(field_str))
-        
+
         data.append(tuple(fields))
 
     return info_parameters, data
