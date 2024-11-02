@@ -151,13 +151,13 @@ def simple_euc_tsp_options_handler(population: Population,
         options['population_fit_avgs'] = []
         options['offspring_s'] = offspring_s
         options['next_gen_pop_s'] = next_gen_pop_s
-        options['mutation_proba'] = mutation_proba 
+        options['mutation_proba'] = mutation_proba
         options['current_best'] = inf, None
         options['gen_fittest_fitness'] = []
         options['minimization'] = True
         population = euc_tsp_fitness_maximization(population, options) # pyright: ignore
 
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
-    pop_only_fitness_values = transform_to_max(pop_only_fitness_values)
+    pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore
     options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore
     return options

@@ -7,22 +7,23 @@ from typing import Set, List, Tuple
 from src.continuous.binary_representation import generate_random_bit_vector
 from src.gen_algo_framework.genetic_algorithm import GeneType, T
 
-def generate_population_of_permutations(size: int, genes: Set[GeneType]) -> List[List[GeneType]]:
+def generate_population_of_permutations(size: int,
+                                        genes: Set[GeneType]) -> List[List[GeneType]]:
     '''
-    Generates a population of individuals, where each individual is a list
-    representing a chromosome composed of randomly sampled genes from a given set.
+    Generates a population of individuals, where each individual
+    is a listrepresenting a chromosome composed of randomly
+    sampled genes from a given set.
     Args:
         size (int):
             The number of individuals (chromosomes) in the population.
-
         genes (Set[GeneType]):
             The set of genes to sample from for each individual.
-
     Returns:
         List[List[GeneType]]:
-            A list of lists, where each inner list represents an individual
-            (chromosome) in the population. Each individual's chromosome
-            contains genes sampled randomly from the provided set.
+            A list of lists, where each inner list represents an
+            individual (chromosome) in the population. Each
+            individual's chromosome contains genes sampled randomly
+            from the provided set.
     '''
     gene_count = len(genes)
     genes_list = list(genes)
@@ -33,7 +34,8 @@ def generate_population_of_permutations(size: int, genes: Set[GeneType]) -> List
     return _population
 
 
-def generate_population_of_bit_vectors(size: int, v_n_bits: List[int]) -> List[List[int]]:
+def generate_population_of_bit_vectors(size: int,
+                                       v_n_bits: List[int]) -> List[List[int]]:
     return [generate_random_bit_vector(v_n_bits) for _ in range(size)]
 
 

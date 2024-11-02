@@ -5,7 +5,7 @@ from typing import TypeVar, List
 
 
 T = TypeVar('T', MutableSequence, MutableSet)   # type of the Genotype
-GeneType = TypeVar('GeneType')      # type of the genes
+GeneType = TypeVar('GeneType')      # pyright: ignore
 Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
 
 
@@ -20,8 +20,9 @@ def genetic_algorithm(population: Population,
                       ) -> List[Population]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
+    Very likely to add or change items of the options dictionary.
     Returns:
-        Collection[Population]: List of best solutions found in each generation.
+        List[Population]: List of best solutions found in each generation.
     '''
 
     current_population = population
@@ -44,7 +45,7 @@ def genetic_algorithm(population: Population,
 
         generation += 1
         current_population = next_gen_population
-    
+
     best_solutions.append(options['current_best'])
 
     return best_solutions

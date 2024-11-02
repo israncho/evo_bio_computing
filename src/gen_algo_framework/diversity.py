@@ -37,7 +37,7 @@ def hamming_distance(bit_seq1: List[int],
 def jaccard_distance(bit_seq1: List[int],
                      bit_seq2: List[int]) -> float:
     '''
-    Computes the Jaccard distance between two binary sequences 
+    Computes the Jaccard distance between two binary sequences
     of equal length.
     Args:
         bit_seq1 (List[int]): The first binary sequence.
@@ -61,7 +61,7 @@ def jaccard_distance(bit_seq1: List[int],
             set_a.add(i)
         if bit_s_2 == 1:
             set_b.add(i)
-            
+
     a_union_b = set_a.union(set_b)
     a_intersect_b = set_a.intersection(set_b)
     return (len(a_union_b) - len(a_intersect_b)) / len(a_union_b)
@@ -70,16 +70,18 @@ def jaccard_distance(bit_seq1: List[int],
 def diversity_avg_distance_bit_seq(population: Population,
                                    distance: Callable) -> float:
     '''
-    Computes the diversity by calculating the average distance between individuals 
-    in a population.
+    Computes the diversity by calculating the average distance
+    between individuals in a population.
     Args:
-        population (Population): A collection of binary sequences representing 
-            the individuals in the population.
-        distance (Callable): A function that takes two binary sequences and 
-            returns a numerical distance measure between them.
+        population (Population): A collection of binary sequences
+            representing the individuals in the population.
+        distance (Callable): A function that takes two binary
+            sequences and returns a numerical distance measure
+            between them.
     Returns:
-        float: The average distance between all unique pairs of individuals 
-            in the population, indicating the diversity of the population.
+        float: The average distance between all unique pairs of
+            individuals in the population, indicating the diversity
+            of the population.
     '''
     # Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
 
@@ -97,7 +99,15 @@ def diversity_avg_distance_bit_seq(population: Population,
 
 
 def entropy_bit_seq_population(population: Population) -> float:
-
+    '''
+    Calculate the average entropy of each gene in a population
+    of binary sequences.
+    Args:
+        population (Population): A sequence of tuples, where
+            each tuple contains a fitness value and a binary sequence.
+    Returns:
+        float: The average entropy across all genes in the population.
+    '''
     # Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
     n = len(population)
 
@@ -109,14 +119,14 @@ def entropy_bit_seq_population(population: Population) -> float:
         for i, bit in enumerate(bit_seq):
             frequencies_ones[i] += bit
 
-    entropy_of_gene = [0] * n_genes
+    entropy_of_gene = [0.0] * n_genes
 
     for i in range(n_genes):
         p_1 = frequencies_ones[i] / n
         p_0 = 1 - p_1
-        if p_1 != 0 and p_1 != 1:
+        if p_1 not in (0, 1): # checking p_1 is not 1 nor 0
             entropy_of_gene[i] = -(p_1 * log(p_1) + p_0 * log(p_0))
-    
+
     return sum(entropy_of_gene) / n_genes
 
 all_distance_measures = {'hamming_distance': hamming_distance,

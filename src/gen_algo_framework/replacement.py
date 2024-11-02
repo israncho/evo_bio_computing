@@ -4,8 +4,8 @@ for the genetic algorithm.'''
 from typing import List, Tuple
 from heapq import nsmallest, nlargest
 from src.gen_algo_framework.genetic_algorithm import T, Population
-from src.gen_algo_framework.selection import cumulative_fitness, roulette_wheel_toss, remove_from_fitness_list
-
+from src.gen_algo_framework.selection import roulette_wheel_toss, remove_from_fitness_list
+from src.gen_algo_framework.selection import cumulative_fitness
 
 def full_generational_replacement(_: Population,
                                   offspring: Population,
@@ -41,14 +41,14 @@ def replacement_of_the_worst(current_pop: List[Tuple[float, T]],
     options['gen_fittest_fitness'].pop()
     options['gen_fittest_fitness'].append(options['current_best'][0])
 
-    next_gen: List = None
+    next_gen: List = None # pyright: ignore
 
     if options['minimization']:
         next_gen = nsmallest(new_pop_size, current_pop)
     else:
         next_gen = nlargest(new_pop_size, current_pop)
 
-    return next_gen 
+    return next_gen
 
 
 def roulette_gen_replacement(current_population: List[Tuple[float, T]],
