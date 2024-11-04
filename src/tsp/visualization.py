@@ -61,7 +61,7 @@ def update_line(frame: int,
 
     line.set_data(x_permuted, y_permuted)
 
-    tour_d = tour_distance((x_0, y_0),current_permutation, instance['weights'])
+    tour_d = tour_distance(current_permutation, instance)
 
     generation_text.set_text(f'Gen: {frame + 1}\nCost:\n{tour_d}')
     return line,

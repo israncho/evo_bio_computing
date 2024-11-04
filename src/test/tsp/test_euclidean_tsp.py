@@ -39,7 +39,7 @@ def test_tour_distance():
         fst_city = tour.pop(0)
 
         weights = build_weight_dict(fst_city, tour)
-        tour_distance_f = tour_distance(fst_city, tour, weights)
+        tour_distance_f = tour_distance(tour, {'fst_city': fst_city, 'weights': weights})
         rectangular_tour_perimeter = 2 * height + 2 * base
         assert isclose(tour_distance_f, rectangular_tour_perimeter, rel_tol=1e-7)
 
@@ -56,7 +56,7 @@ def test_euc_tsp_fitness():
 
         pop_untransformed_f_sum = 0
         for fitness, tour in population:
-            recalc_f = tour_distance(berlin52['fst_city'], tour, berlin52['weights'])
+            recalc_f = tour_distance(tour, berlin52)
             pop_untransformed_f_sum += recalc_f
             assert fitness == recalc_f
 

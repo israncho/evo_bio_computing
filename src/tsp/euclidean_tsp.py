@@ -34,26 +34,30 @@ def euclidean_distance(u: EucCity, v: EucCity) -> float:
     return sqrt(_sum)
 
 
-def tour_distance(fst_city: EucCity,
-                  rest_of_cities: EucTSPPermutation,
-                  weights: dict) -> float:
+def tour_distance(seq_of_cities: EucTSPPermutation,
+                  options: dict) -> float:
     '''
     Calculate the total distance of a TSP tour.
     Args:
-        fst_city (EucCity): The first city in the tour.
-        rest_of_cities (EucTSPPermutation): A list of the
-            remaining cities in the tour.
-        weights (dict): A dictionary where keys are tuples
-            of city pairs (u, v) and values are the
-            Euclidean distances between those cities.
+        seq_of_cities (EucTSPPermutation): A sequence representing
+        the order of cities in the tour, excluding the starting city.
+        options (dict): A dictionary containing the following keys:
+            - 'fst_city' (EucCity): The first city in the tour.
+            - 'weights' (dict): A dictionary where keys are tuples of
+                city pairs (u, v) and values are the Euclidean
+                distances between those cities.
     Returns:
-        float: The total distance of the tour.
+        float: The total distance of the tour, including the return to
+        the starting city.
     '''
-    distance = weights[(fst_city, rest_of_cities[0])]
-    distance += weights[(rest_of_cities[-1], fst_city)]
+    fst_city = options['fst_city']
+    weights = options['weights']
 
-    for i in range(1, len(rest_of_cities)):
-        distance += weights[(rest_of_cities[i - 1], rest_of_cities[i])]
+    distance = weights[(fst_city, seq_of_cities[0])]
+    distance += weights[(seq_of_cities[-1], fst_city)]
+
+    for i in range(1, len(seq_of_cities)):
+        distance += weights[(seq_of_cities[i - 1], seq_of_cities[i])]
 
     return distance
 
@@ -86,16 +90,13 @@ def euc_tsp_fitness(population: List[EucTSPPermutation],
               to a maximization problem (higher score for better fitness).
             - The corresponding TSP permutation (solution).
     '''
-    fst_c = options['fst_city']
-    weights = options['weights']
     population_fitness_sum = 0
 
     gen_best_fitness = inf
 
     for i, individual in enumerate(population):
-        individual_fitness = tour_distance(fst_c,
-                                           individual,
-                                           weights)
+        individual_fitness = tour_distance(individual,
+                                           options)
         population_fitness_sum += individual_fitness
         population[i] = individual_fitness, individual # pyright: ignore
 
