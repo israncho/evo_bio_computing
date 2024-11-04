@@ -18,9 +18,14 @@ from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.utils.others import seed_in_use
 
 
-def ga_exec_for_euctsp(file_path: str,
+def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                        output_file_path: str,
                        params: dict):
+    '''
+    Genetic algoirthm execution for eucTSP. Computes
+    and Generates the performance plot, animates the
+    best individuals and saves the best solution found
+    '''
     print(file_path)
     instance = parse_tsp_data(read_file(file_path))
     print(f'Output files path: {output_file_path}')
