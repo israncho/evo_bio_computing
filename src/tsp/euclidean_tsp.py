@@ -58,7 +58,7 @@ def tour_distance(fst_city: EucCity,
     return distance
 
 
-def euc_tsp_fitness_maximization(population: List[EucTSPPermutation],
+def euc_tsp_fitness(population: List[EucTSPPermutation],
                     options: dict) -> List[Tuple[float, EucTSPPermutation]]:
     '''
     Evaluate the fitness of a population of TSP solutions in a maximization
@@ -155,7 +155,7 @@ def simple_euc_tsp_options_handler(population: Population,
         options['current_best'] = inf, None
         options['gen_fittest_fitness'] = []
         options['minimization'] = True
-        population = euc_tsp_fitness_maximization(population, options) # pyright: ignore
+        population = euc_tsp_fitness(population, options) # pyright: ignore
 
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore

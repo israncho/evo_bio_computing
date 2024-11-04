@@ -10,7 +10,7 @@ from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.mutation import swap_mutation_population
 from src.gen_algo_framework.replacement import all_replacement_funcs
-from src.tsp.euclidean_tsp import euc_tsp_fitness_maximization
+from src.tsp.euclidean_tsp import euc_tsp_fitness
 from src.tsp.euclidean_tsp import simple_euc_tsp_options_handler
 from src.tsp.visualization import animate_tsp_evolution
 from src.utils.input_output import parse_tsp_data, read_file, tsp_solution_to_lines, write_file
@@ -55,7 +55,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     best_sols_per_gen = genetic_algorithm(initial_population,
                                           pop_crossover_ox1_roulettew_s, # pyright: ignore
                                           swap_mutation_population, # pyright: ignore
-                                          euc_tsp_fitness_maximization, # pyright: ignore
+                                          euc_tsp_fitness, # pyright: ignore
                                           replacement_f, # pyright: ignore
                                           lambda gen_count, _ : gen_count < generations,
                                           simple_euc_tsp_options_handler,
