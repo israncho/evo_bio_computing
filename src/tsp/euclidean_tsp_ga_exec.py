@@ -11,7 +11,7 @@ from src.gen_algo_framework.population_utils import generate_population_of_permu
 from src.gen_algo_framework.mutation import swap_mutation_population
 from src.gen_algo_framework.replacement import all_replacement_funcs
 from src.tsp.euclidean_tsp import simple_euc_tsp_options_handler
-from src.tsp.visualization import animate_tsp_evolution
+from src.tsp.visualization import animate_tsp_evolution, plot_tsp_solution
 from src.utils.input_output import parse_tsp_data, read_file, tsp_solution_to_lines, write_file
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.utils.others import seed_in_use
@@ -38,6 +38,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     replacement_f_name: str = params['replacement']
 
     replacement_f = all_replacement_funcs[replacement_f_name]
+    local_search_iters = params['local_s_iters']
 
     print(params)
 
@@ -49,7 +50,8 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                                               init=True,
                                               offspring_s=population_size,
                                               next_gen_pop_s=population_size,
-                                              mutation_proba=mutation_p)
+                                              mutation_proba=mutation_p,
+                                              local_s_iters=local_search_iters)
 
     best_sols_per_gen = genetic_algorithm(initial_population,
                                           pop_crossover_ox1_roulettew_s, # pyright: ignore
@@ -62,6 +64,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
 
     print('best found value for f(x) =', best_sols_per_gen[-1][0])
     print('last generation avg value of f(x) =', instance['population_fit_avgs'][-1])
+    print(instance['f_execs'])
 
     # plotting performance
     best_solutions_line = generate_line_from_data(list(map(
@@ -77,10 +80,11 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                tsp_solution_to_lines(instance['fst_city'],
                                      best_sols_per_gen[-1][1], # pyright: ignore
                                      instance))
+    plot_tsp_solution(instance, best_sols_per_gen[-1][1], output_file_path)
 
     # animating best solution progress
     only_permutations = list(map(lambda x: x[1], best_sols_per_gen)) # pyright: ignore
-    animate_tsp_evolution(instance, only_permutations, output_file_path, 10) # pyright: ignore
+    animate_tsp_evolution(instance, only_permutations, output_file_path, 2) # pyright: ignore
 
 
 if __name__ == "__main__":
