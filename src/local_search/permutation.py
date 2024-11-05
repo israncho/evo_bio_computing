@@ -1,7 +1,7 @@
 '''Module with functions for local search
 with permutations'''
 
-from typing import Callable, List, MutableSequence, Tuple
+from typing import List, MutableSequence, Tuple
 
 
 def in_place_reverse_segment(sequence: MutableSequence,
@@ -48,27 +48,23 @@ def generate_2_opt_cut_points(sequence_len: int):
 
 
 def local_search_2_opt(initial_solution: MutableSequence,
-                       f: Callable[[MutableSequence, dict], float],
-                       iterations: int,
-                       options: dict,
-                       first_improvement = True) -> Tuple[float, MutableSequence]:
+                       options: dict) -> float:
     '''
-    Performs local search using the 2-opt neighborhood.
+    Performs local search using the 2-opt neighborhood for TSP.
     Args:
-        initial_solution (MutableSequence): The starting solution
-            to optimize.
-        f (Callable[[MutableSequence, dict], float]): The objective
-            function to evaluate the quality of a solution.
-        iterations (int): The maximum number of iterations to perform.
-        options (dict): Additional options to pass to the objective
-            function.
-        first_improvement (bool, optional): If True, stops at the
-            first improvement found (each iteration). Defaults to True.
+        initial_solution (MutableSequence): The initial solution or tour
+            (sequence of cities) to improve using the local search.
+        options (dict): A dictionary containing the following keys:
+            - 'target_f' (Callable[[MutableSequence, dict], float]): The objective
+              function that computes the quality (distance) of a tour.
+            - 'local_s_iters' (int): The maximum number of iterations to perform
+              in the local search.
 
     Returns:
-        Tuple[float, MutableSequence]: The best found objective value
-            and the corresponding solution.
+        float: The fitness of the best tour found during the local search.
     '''
+    f = options['target_f']
+    iterations = options['local_s_iters']
 
     x = initial_solution
     best_f_x = f(x, options)
@@ -84,12 +80,10 @@ def local_search_2_opt(initial_solution: MutableSequence,
 
             if f_neighbor_x < best_f_x:
                 best_f_x = f_neighbor_x
-                if first_improvement:
-                    break
             else: # not better neighbor
                 in_place_reverse_segment(x, i, j) # recompute x
 
         if iter_best_f_x == best_f_x: # local optima
             break
 
-    return best_f_x, x
+    return best_f_x
