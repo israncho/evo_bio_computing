@@ -4,7 +4,7 @@ to be used in the genetic algorithm.'''
 from typing import List, Tuple
 from math import sqrt, inf
 
-from src.gen_algo_framework.genetic_algorithm import Population
+from src.gen_algo_framework.genetic_algorithm import Population, standard_fitness_computing
 from src.gen_algo_framework.population_utils import transform_to_max
 from src.gen_algo_framework.selection import cumulative_fitness
 
@@ -62,56 +62,6 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
     return distance
 
 
-def euc_tsp_fitness(population: List[EucTSPPermutation],
-                    options: dict) -> List[Tuple[float, EucTSPPermutation]]:
-    '''
-    Evaluate the fitness of a population of TSP solutions in a maximization
-    context by transforming the fitness scores.
-
-    This function calculates the fitness (tour distance) of each individual
-    in the population. It then transforms the fitness scores to a maximization
-    problem. The shorter the tour, the higher the fitness.
-
-    Args:
-        population (List[EucTSPPermutation]): A list of TSP permutations,
-            where each permutation represents a potential solution (tour).
-        options (dict): A dictionary containing:
-            - 'fst_city' (EucCity): The first city in the TSP tour.
-            - 'weights' (dict): A dictionary with the distances between
-              city pairs, where keys are tuples of two cities (u, v), and
-              values are the Euclidean distances between them.
-            - 'population_fit_avgs' (List[float]): A list where the
-              average fitness of each population over generations is
-              appended.
-    Returns:
-        List[Tuple[float, EucTSPPermutation]]: A list of tuples where each
-        tuple contains:
-            - The fitness score of the individual after being transformed
-              to a maximization problem (higher score for better fitness).
-            - The corresponding TSP permutation (solution).
-    '''
-    population_fitness_sum = 0
-
-    gen_best_fitness = inf
-
-    for i, individual in enumerate(population):
-        individual_fitness = tour_distance(individual,
-                                           options)
-        population_fitness_sum += individual_fitness
-        population[i] = individual_fitness, individual # pyright: ignore
-
-        if individual_fitness < gen_best_fitness:
-            gen_best_fitness = individual_fitness
-
-        if individual_fitness < options['current_best'][0]:
-            options['current_best'] = individual_fitness, individual
-
-    options['population_fit_avgs'].append(population_fitness_sum / len(population))
-    options['gen_fittest_fitness'].append(gen_best_fitness)
-
-    return population # pyright: ignore
-
-
 def build_weight_dict(fst_city: EucCity,
                       rest_of_cities: EucTSPPermutation) -> dict:
     '''
@@ -156,7 +106,8 @@ def simple_euc_tsp_options_handler(population: Population,
         options['current_best'] = inf, None
         options['gen_fittest_fitness'] = []
         options['minimization'] = True
-        population = euc_tsp_fitness(population, options) # pyright: ignore
+        options['f'] = tour_distance
+        population = standard_fitness_computing(population, options) # pyright: ignore
 
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore

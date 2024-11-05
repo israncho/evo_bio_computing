@@ -1,5 +1,6 @@
 '''Module with functions for the genetic algorithm.'''
 
+from math import inf
 from typing import Callable, MutableSequence, MutableSet, Tuple
 from typing import TypeVar, List
 
@@ -49,3 +50,43 @@ def genetic_algorithm(population: Population,
     best_solutions.append(options['current_best'])
 
     return best_solutions
+
+
+def standard_fitness_computing(population: Population[T],
+                               options: dict) -> Population[T]:
+    '''
+    Computes the fitness of each individual in the population.
+    Args:
+        population (Population[T]): The current population.
+        options (dict): A dictionary containing the following keys:
+            - 'f' (Callable[[T, dict], float]): The fitness function
+                to evaluate each individual in the population.
+            - 'current_best' (Tuple[float, T]): A tuple representing
+                the best fitness and individual seen so far.
+            - 'population_fit_avgs' (list[float]): A list that will store
+                the average population fitness for each generation.
+            - 'gen_fittest_fitness' (list[float]): A list that will store
+                the best fitness in each generation.
+    Returns:
+        Population[T]: The population where each individual is now
+        paired with its corresponding fitness value.
+    '''
+
+    population_fitness_sum = 0
+    f: Callable[[T, dict], float] = options['f']
+    gen_best_fitness = inf
+
+    for i, individual in enumerate(population):
+        individuals_fitness = f(individual, options) # pyright: ignore
+        population_fitness_sum += individuals_fitness
+        population[i] = individuals_fitness, individual # pyright: ignore
+
+        if individuals_fitness < gen_best_fitness:
+            gen_best_fitness = individuals_fitness
+
+        if individuals_fitness < options['current_best'][0]:
+            options['current_best'] = individuals_fitness, individual
+
+    options['population_fit_avgs'].append(population_fitness_sum / len(population))
+    options['gen_fittest_fitness'].append(gen_best_fitness)
+    return population
