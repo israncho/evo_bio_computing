@@ -5,6 +5,7 @@ instances.
 
 from sys import argv
 from ast import literal_eval
+from time import time
 from src.gen_algo_framework.crossover import pop_crossover_ox1_roulettew_s
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, standard_fitness_computing
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
@@ -19,7 +20,12 @@ from src.utils.others import seed_in_use
 
 def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                        output_file_path: str,
-                       params: dict):
+                       params: dict,
+                       write_solution: bool = False,
+                       plot_generational_evo: bool = False,
+                       plot_detailed_evo: bool = False,
+                       plot_final_solution: bool = False,
+                       animate_evo: bool = False):
     '''
     Genetic algoirthm execution for eucTSP. Computes
     and Generates the performance plot, animates the
@@ -53,6 +59,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                                               mutation_proba=mutation_p,
                                               local_s_iters=local_search_iters)
 
+    start = time()
     best_sols_per_gen = genetic_algorithm(initial_population,
                                           pop_crossover_ox1_roulettew_s, # pyright: ignore
                                           swap_mutation_population, # pyright: ignore
@@ -61,10 +68,12 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                                           lambda gen_count, _ : gen_count < generations,
                                           simple_euc_tsp_options_handler,
                                           instance)
+    end = time()
 
-    print('best found value for f(x) =', best_sols_per_gen[-1][0])
+    print('\nbest found value for f(x) =', best_sols_per_gen[-1][0])
     print('last generation avg value of f(x) =', instance['population_fit_avgs'][-1])
-    print(instance['f_execs'])
+    print('target function executions:', instance['f_execs'])
+    print('execution time:', end - start, 'secs\n')
 
     # plotting performance
     best_solutions_line = generate_line_from_data(list(map(
@@ -75,11 +84,13 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     lines = [avg_fitness_line, gen_best_line, best_solutions_line]
 
     # generational evolution
-    plot_evolution(lines, params, output_file_path, labels)
+    if plot_generational_evo:
+        plot_evolution(lines, params, output_file_path, labels)
 
-    detailed_best_solutions_line = generate_line_from_data(instance['best_fitness_found_history'])
     # detailed evolution
-    plot_evolution([detailed_best_solutions_line],
+    if plot_detailed_evo:
+        detailed_best_solutions_line = generate_line_from_data(instance['best_fitness_found_history'])
+        plot_evolution([detailed_best_solutions_line],
                    params,
                    output_file_path + '_detailed',
                    ['best_found'],
@@ -88,15 +99,18 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
 
 
     # writing best solution
-    write_file(output_file_path + f'_{instance['NAME']}.txt',
+    if write_solution:
+        write_file(output_file_path + f'_solution_{instance['NAME']}.txt',
                tsp_solution_to_lines(instance['fst_city'],
                                      best_sols_per_gen[-1][1], # pyright: ignore
                                      instance))
-    plot_tsp_solution(instance, best_sols_per_gen[-1][1], output_file_path)
+    if plot_final_solution:
+        plot_tsp_solution(instance, best_sols_per_gen[-1][1], output_file_path) # pyright: ignore
 
     # animating best solution progress
-    only_permutations = list(map(lambda x: x[1], best_sols_per_gen)) # pyright: ignore
-    animate_tsp_evolution(instance, only_permutations, output_file_path, 2) # pyright: ignore
+    if animate_evo:
+        only_permutations = list(map(lambda x: x[1], best_sols_per_gen)) # pyright: ignore
+        animate_tsp_evolution(instance, only_permutations, output_file_path, 2) # pyright: ignore
 
 
 if __name__ == "__main__":
@@ -104,4 +118,11 @@ if __name__ == "__main__":
     OUTPUT_FILE_PATH = argv[2]
     PARAMS = literal_eval(argv[3])
 
-    ga_exec_for_euctsp(FILE_PATH, OUTPUT_FILE_PATH, PARAMS)
+    ga_exec_for_euctsp(FILE_PATH,
+                       OUTPUT_FILE_PATH,
+                       PARAMS,
+                       True,
+                       True,
+                       True,
+                       True,
+                       True)
