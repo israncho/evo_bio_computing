@@ -71,7 +71,7 @@ def local_search_2_opt(initial_solution: MutableSequence,
     cut_points = generate_2_opt_cut_points(len(x))
 
     for _ in range(iterations):
-        iter_best_f_x = best_f_x
+        #iter_best_f_x = best_f_x
 
         for i, j in cut_points: # iterating through neighborhood
 
@@ -83,7 +83,7 @@ def local_search_2_opt(initial_solution: MutableSequence,
             else: # not better neighbor
                 in_place_reverse_segment(x, i, j) # recompute x
 
-        if iter_best_f_x == best_f_x: # local optima
-            break
+        #if iter_best_f_x == best_f_x: # local optima
+        #    break
 
     return best_f_x
