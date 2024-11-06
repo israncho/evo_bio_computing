@@ -2,8 +2,9 @@
 
 from ast import literal_eval
 from itertools import islice
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, Generator
 from traceback import print_exc
+from csv import writer, reader
 
 from src.tsp.euclidean_tsp import EucCity, EucTSPPermutation, build_weight_dict
 
@@ -201,3 +202,47 @@ def parse_multiple_ga_execs_results(lines_of_the_file: List[str]) -> Tuple[dict,
         data.append(tuple(fields))
 
     return info_parameters, data
+
+
+def write_line_to_csv_file(file_path: str, line: List, mode: str = 'a') -> None:
+    '''
+    Writes a single line to a CSV file.
+    Args:
+        file_path (str): Path to the CSV file.
+        line (List[str]): A list containing the line of data to write.
+        mode (str): The mode in which to open the file (default 'a' for append).
+    '''
+    try:
+        with open(file_path, mode, encoding='utf-8', newline='') as file:
+            file_writer = writer(file)
+            file_writer.writerow(line)
+
+    except PermissionError as e:
+        print(f"You do not have permission to open this file:\n{e}")
+    except Exception as e: # pylint: disable=broad-exception-caught
+        print(f"An error occurred: {e}")
+        print_exc()
+
+
+def read_lines_from_csv_file(file_path: str) -> Generator[List, None, None]:
+    '''
+    Reads lines from a CSV file lazily.
+    Args:
+        file_path (str): Path to the CSV file.
+    Yields:
+        List[str]: Each line of the CSV file as a list of strings.
+    '''
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            file_reader = reader(file)
+            for line in file_reader:
+                yield line
+
+        print(f"Successful reading of file '{file_path}'")
+    except FileNotFoundError as e:
+        print(f"The file '{file_path}' was not found:\n{e}")
+    except PermissionError as e:
+        print(f"You do not have permission to open this file:\n{e}")
+    except Exception as e: # pylint: disable=broad-exception-caught
+        print(f"An error occurred: {e}")
+        print_exc()
