@@ -14,7 +14,10 @@ def plot_evolution(lines: List[Tuple[List, List]],
                    instance: dict,
                    output_file_path: str,
                    labels: List[str] = None,
-                   y_label: str = 'Fitness') -> None: # pyright: ignore
+                   y_label: str = 'Fitness',
+                   x_label: str = 'Generation',
+                   y_logscale: bool = False,
+                   x_logscale: bool = False) -> None: # pyright: ignore
 
     plt.figure(figsize=(10, 6))  # Crear una nueva figura
 
@@ -24,7 +27,7 @@ def plot_evolution(lines: List[Tuple[List, List]],
         plt.plot(x_values, y_values, marker='.', linestyle='-', label=label)
 
     # Etiquetas y título del gráfico
-    plt.xlabel('Generation')
+    plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(f"GA - '{instance['NAME']}' - {instance['replacement']} - population size: {instance['pop_size']}")
 
@@ -33,6 +36,11 @@ def plot_evolution(lines: List[Tuple[List, List]],
 
     # Mostrar la leyenda
     plt.legend()
+
+    if y_logscale:
+        plt.yscale('log')
+    if x_logscale:
+        plt.xscale('log')
 
     # Mostrar la cuadrícula
     plt.grid(True)

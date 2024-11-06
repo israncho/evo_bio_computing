@@ -73,7 +73,19 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     gen_best_line = generate_line_from_data(instance['gen_fittest_fitness'])
     labels = ['avg_fitness', 'gen_fittest_fitness', 'best_found']
     lines = [avg_fitness_line, gen_best_line, best_solutions_line]
+
+    # generational evolution
     plot_evolution(lines, params, output_file_path, labels)
+
+    detailed_best_solutions_line = generate_line_from_data(instance['best_fitness_found_history'])
+    # detailed evolution
+    plot_evolution([detailed_best_solutions_line],
+                   params,
+                   output_file_path + '_detailed',
+                   ['best_found'],
+                   x_label='target_function_execs',
+                   x_logscale=True)
+
 
     # writing best solution
     write_file(output_file_path + f'_{instance['NAME']}.txt',

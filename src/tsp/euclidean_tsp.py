@@ -61,6 +61,11 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
     for i in range(1, len(seq_of_cities)):
         distance += weights[(seq_of_cities[i - 1], seq_of_cities[i])]
 
+    if distance < options['current_best'][0]:
+        options['current_best'] = distance, seq_of_cities
+
+    options['best_fitness_found_history'].append(options['current_best'][0])
+
     return distance
 
 
@@ -109,6 +114,7 @@ def simple_euc_tsp_options_handler(population: Population,
         options['current_best'] = inf, None
         options['f_execs'] = 0
         options['gen_fittest_fitness'] = []
+        options['best_fitness_found_history'] = []
         options['minimization'] = True
         options['f'] = tour_distance
         population = standard_fitness_computing(population, options) # pyright: ignore

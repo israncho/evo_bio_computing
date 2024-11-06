@@ -84,9 +84,6 @@ def standard_fitness_computing(population: Population[T],
         if individuals_fitness < gen_best_fitness:
             gen_best_fitness = individuals_fitness
 
-        if individuals_fitness < options['current_best'][0]:
-            options['current_best'] = individuals_fitness, individual
-
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
     options['gen_fittest_fitness'].append(gen_best_fitness)
     return population
