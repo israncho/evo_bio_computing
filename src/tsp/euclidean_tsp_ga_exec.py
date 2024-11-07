@@ -32,7 +32,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     and Generates the performance plot, animates the
     best individuals and saves the best solution found
     '''
-    print(file_path)
+    print('\n', file_path)
     instance = parse_tsp_data(read_file(file_path))
     print(f'Output files path: {output_file_path}')
     params['NAME'] = instance['NAME']
