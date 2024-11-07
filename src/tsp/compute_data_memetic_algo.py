@@ -42,4 +42,5 @@ for instance in all_instances:
                                curr_output_path,
                                default_params,
                                write_detailed_evo=True)
-        write_line_to_csv_file(curr_output_path + '_seeds.csv', seeds, mode='w')
+
+    write_line_to_csv_file(general_output_path + instance + '/memetic_seeds.csv', seeds, mode='w')
