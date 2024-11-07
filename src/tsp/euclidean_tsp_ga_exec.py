@@ -13,7 +13,7 @@ from src.gen_algo_framework.mutation import swap_mutation_population
 from src.gen_algo_framework.replacement import all_replacement_funcs
 from src.tsp.euclidean_tsp import simple_euc_tsp_options_handler
 from src.tsp.visualization import animate_tsp_evolution, plot_tsp_solution
-from src.utils.input_output import parse_tsp_data, read_file, tsp_solution_to_lines, write_file
+from src.utils.input_output import parse_tsp_data, read_file, tsp_solution_to_lines, write_file, write_line_to_csv_file
 from src.utils.plot_functions import generate_line_from_data, plot_evolution
 from src.utils.others import seed_in_use
 
@@ -22,6 +22,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                        output_file_path: str,
                        params: dict,
                        write_solution: bool = False,
+                       write_detailed_evo: bool = False,
                        plot_generational_evo: bool = False,
                        plot_detailed_evo: bool = False,
                        plot_final_solution: bool = False,
@@ -104,6 +105,12 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                tsp_solution_to_lines(instance['fst_city'],
                                      best_sols_per_gen[-1][1], # pyright: ignore
                                      instance))
+
+    if write_detailed_evo:
+        csv_file_path = output_file_path + f'_{instance['NAME']}_data.csv'
+        write_line_to_csv_file(csv_file_path, instance['best_fitness_found_history'])
+        print(f"Written execution data in: '{csv_file_path}'")
+
     if plot_final_solution:
         plot_tsp_solution(instance, best_sols_per_gen[-1][1], output_file_path) # pyright: ignore
 
