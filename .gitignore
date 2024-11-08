@@ -162,6 +162,7 @@ cython_debug/
 *.gif
 *.png
 *.txt
+*.csv
 
 !output_sample*.gif
 !output_sample*.png

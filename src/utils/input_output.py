@@ -5,6 +5,7 @@ from itertools import islice
 from typing import Callable, List, Tuple, Generator
 from traceback import print_exc
 from csv import writer, reader
+from numpy import array, ndarray
 
 from src.tsp.euclidean_tsp import EucCity, EucTSPPermutation, build_weight_dict
 
@@ -224,7 +225,7 @@ def write_line_to_csv_file(file_path: str, line: List, mode: str = 'a') -> None:
         print_exc()
 
 
-def read_lines_from_csv_file(file_path: str) -> Generator[List, None, None]:
+def read_lines_from_csv_file(file_path: str) -> Generator[ndarray, None, None]:
     '''
     Reads lines from a CSV file lazily.
     Args:
@@ -236,7 +237,7 @@ def read_lines_from_csv_file(file_path: str) -> Generator[List, None, None]:
         with open(file_path, 'r', encoding='utf-8') as file:
             file_reader = reader(file)
             for line in file_reader:
-                yield line
+                yield array(line, dtype=float)
 
         print(f"Successful reading of file '{file_path}'")
     except FileNotFoundError as e:
