@@ -9,9 +9,9 @@ all_instances = ['berlin52', 'ch130', 'eil51', 'kroA100', 'pr152']
 
 default_params = {'replacement': 'full_gen_replacement_elitist',
                   'seed': None,
-                  'pop_size': 20,
-                  'gens': 20,
-                  'mut_p': 0.1,
+                  'pop_size': 15,
+                  'gens': 15,
+                  'mut_p': 0.01,
                   'local_s_iters': 3}
 
 general_output_path = 'results/tsp/'
@@ -36,11 +36,13 @@ for instance in all_instances:
                                plot_generational_evo=False,
                                plot_detailed_evo=True,
                                plot_final_solution=True,
-                               animate_evo=False)
+                               animate_evo=False,
+                               write_execution_time=True)
         else:
             ga_exec_for_euctsp(curr_instance_path,
                                curr_output_path,
                                default_params,
-                               write_detailed_evo=True)
+                               write_detailed_evo=True,
+                               write_execution_time=True)
 
     write_line_to_csv_file(general_output_path + instance + '/memetic_seeds.csv', seeds, mode='w')

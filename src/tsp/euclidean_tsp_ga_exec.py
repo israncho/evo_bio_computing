@@ -26,7 +26,8 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
                        plot_generational_evo: bool = False,
                        plot_detailed_evo: bool = False,
                        plot_final_solution: bool = False,
-                       animate_evo: bool = False):
+                       animate_evo: bool = False,
+                       write_execution_time: bool = False):
     '''
     Genetic algoirthm execution for eucTSP. Computes
     and Generates the performance plot, animates the
@@ -75,6 +76,11 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     print('last generation avg value of f(x) =', instance['population_fit_avgs'][-1])
     print('target function executions:', instance['f_execs'])
     print('execution time:', end - start, 'secs\n')
+
+    if write_execution_time:
+        csv_file_path = output_file_path + f'_{instance['NAME']}_execution_time.csv'
+        write_line_to_csv_file(csv_file_path, [end - start])
+        print(f"Written execution time in: '{csv_file_path}'")
 
     # plotting performance
     best_solutions_line = generate_line_from_data(list(map(
