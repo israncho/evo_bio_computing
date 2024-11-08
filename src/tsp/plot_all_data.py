@@ -31,6 +31,6 @@ for instance in all_instances:
     plot_evolution([line],
                    default_params,
                    general_data_path + instance + '/comparison',
-                   ['avg_fitness_memetic_algo'],
+                   ['avg_best_fitness_found_memetic_algo'],
                    x_label='target_function_executions',
                    x_logscale=True)
