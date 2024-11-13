@@ -54,11 +54,15 @@ def plot_evolution(lines: List[Tuple[List, List]],
 
 def box_plot(data: List[List[float]],
              labels: List[str],
-             output_file: str) -> None:
+             output_file: str,
+             y_logscale: bool = False,
+             y_label: str = 'Fitness') -> None:
+    if y_logscale:
+        plt.yscale('log')
     plt.boxplot(data)
     plt.xticks(ticks=list(range(1, len(labels) + 1)), labels=labels, fontsize=7)  # Asignar nombres a las categorías
     plt.xlabel('Techniques')
-    plt.ylabel('Fitness')
+    plt.ylabel(y_label)
     plt.title(output_file)
     plt.savefig(output_file)
     plt.close()
