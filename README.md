@@ -17,7 +17,7 @@ installed on your system:
 
 - **Docker** version `27` Docker is necessary to build and run the
     container, ensuring a consistent execution environment. You can install
-    Docker by following the instructions on the 
+    Docker by following the instructions on the
     [official Docker page](https://docs.docker.com/get-docker/).
 
 To verify that Docker is correctly installed, use the following
@@ -81,7 +81,7 @@ performance plot, you can use the following command:
 appuser@my_container:~/evo_bio_computing$ ./python_script.sh src/tsp/euclidean_tsp_ga_exec.py instances/euc_TSP/berlin52.tsp results/ "{'pop_size': 150, 'n_generations': 500, 'seed': 12345}"
 ```
 
-Where `./python_script.sh` is used to run any script of this project, followed by the 
+Where `./python_script.sh` is used to run any script of this project, followed by the
 route of the script and in this case the last argument is the route of the output files,
 it is recommended always use the `results` directory. It is also posible to add a prefix of
 to the output files adding the prefix after the last directory in the route.
