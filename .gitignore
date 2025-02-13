@@ -167,3 +167,6 @@ cython_debug/
 !output_sample*.gif
 !output_sample*.png
 !output_sample*.txt
+!requirements.txt
+
+evo_bio_comp_venv/
