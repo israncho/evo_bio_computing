@@ -3,7 +3,7 @@ from math import inf, sqrt, isclose
 from random import randint, uniform
 from src.gen_algo_framework.genetic_algorithm import standard_fitness_computing
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
-from src.tsp.euclidean_tsp import build_weight_dict, euclidean_distance, tour_distance
+from src.tsp.euclidean_tsp import build_weight_dict, euclidean_distance, tour_distance, simple_euc_tsp_options_handler
 from src.utils.input_output import parse_tsp_data, read_file
 
 
@@ -40,17 +40,16 @@ def test_tour_distance():
         fst_city = tour.pop(0)
 
         weights = build_weight_dict(fst_city, tour)
-        tour_distance_f = tour_distance(tour, {'fst_city': fst_city, 'weights': weights})
+        options = {'fst_city': fst_city, 'weights': weights}
+        options = simple_euc_tsp_options_handler([tour], options, init=True)
+        tour_distance_f = tour_distance(tour, options)
         rectangular_tour_perimeter = 2 * height + 2 * base
         assert isclose(tour_distance_f, rectangular_tour_perimeter, rel_tol=1e-7)
 
 
 def test_standard_fitness_computing_for_euc_tsp():
     berlin52 = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
-    berlin52['population_fit_avgs'] = []
-    berlin52['current_best'] = inf, None
-    berlin52['gen_fittest_fitness'] = []
-    berlin52['f'] = tour_distance
+    berlin52 = simple_euc_tsp_options_handler([berlin52['rest_of_cities']], berlin52, init=True)
 
     for _ in range(100):
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
