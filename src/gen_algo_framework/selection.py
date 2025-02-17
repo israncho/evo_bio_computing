@@ -4,10 +4,10 @@ for the genetic algorithm.'''
 from random import uniform
 from bisect import bisect_left
 from typing import List, Tuple
-from src.gen_algo_framework.genetic_algorithm import T
+from src.gen_algo_framework.genetic_algorithm import T, Population
 
 
-def cumulative_fitness(population: List[Tuple[float, T]],
+def cumulative_fitness(population: Population[T],
                        extra_fitness: float = 0) -> List[float]:
     '''
     Calculate the cumulative fitness list for a given population.

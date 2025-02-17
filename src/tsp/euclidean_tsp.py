@@ -99,7 +99,7 @@ def build_weight_dict(fst_city: EucCity,
     return weights
 
 
-def simple_euc_tsp_options_handler(population: Population,
+def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
                                    options: dict,
                                    init: bool = False,
                                    offspring_s: int = 100,

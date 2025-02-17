@@ -6,7 +6,7 @@ population.
 from math import log
 from itertools import islice
 from typing import List, Callable
-from src.gen_algo_framework.genetic_algorithm import Population
+from src.gen_algo_framework.genetic_algorithm import Population, T
 
 
 def hamming_distance(bit_seq1: List[int],
@@ -67,7 +67,7 @@ def jaccard_distance(bit_seq1: List[int],
     return (len(a_union_b) - len(a_intersect_b)) / len(a_union_b)
 
 
-def diversity_avg_distance_bit_seq(population: Population,
+def diversity_avg_distance_bit_seq(population: Population[T],
                                    distance: Callable) -> float:
     '''
     Computes the diversity by calculating the average distance
@@ -98,7 +98,7 @@ def diversity_avg_distance_bit_seq(population: Population,
     return total_distance
 
 
-def entropy_bit_seq_population(population: Population) -> float:
+def entropy_bit_seq_population(population: Population[T]) -> float:
     '''
     Calculate the average entropy of each gene in a population
     of binary sequences.

@@ -108,8 +108,8 @@ all_funcs = {"rastrigin": rastrigin, "rosenbrock": rosenbrock,
              "griewank": griewank}
 
 
-def compute_vectors_fitness(population: List[List[int]],
-                             options: dict) -> List[Tuple[float, List[int]]]:
+def compute_vectors_fitness(population: Population[List[int]],
+                             options: dict) -> Population[List[int]]:
 
     f = options['f']
     v_n_bits = options['v_n_bits']
@@ -136,7 +136,7 @@ def compute_vectors_fitness(population: List[List[int]],
     return population # pyright: ignore
 
 
-def simple_c_f_options_handler(population: Population,
+def simple_c_f_options_handler(population: Population[List[int]],
                                options: dict,
                                init: bool = False,
                                offspring_s: int = 100,
@@ -170,7 +170,7 @@ def simple_c_f_options_handler(population: Population,
         if calc_generational_entropy:
             options['pop_entropy'] = []
         else:
-            options['pop_entropy'] = None 
+            options['pop_entropy'] = None
 
         if distance_measure is not None:
             options['pop_diversity'] = []
@@ -178,7 +178,7 @@ def simple_c_f_options_handler(population: Population,
         else:
             options['pop_diversity'] = None
 
-    
+
     if options['pop_diversity'] is not None:
         options['pop_diversity'].append(
             diversity_avg_distance_bit_seq(population,
@@ -186,7 +186,7 @@ def simple_c_f_options_handler(population: Population,
 
     if options['pop_entropy'] is not None:
         options['pop_entropy'].append(entropy_bit_seq_population(population))
-         
+
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values)
     options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore

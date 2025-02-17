@@ -7,17 +7,17 @@ from src.gen_algo_framework.genetic_algorithm import T, Population
 from src.gen_algo_framework.selection import roulette_wheel_toss, remove_from_fitness_list
 from src.gen_algo_framework.selection import cumulative_fitness
 
-def full_generational_replacement(_: Population,
-                                  offspring: Population,
+def full_generational_replacement(_: Population[T],
+                                  offspring: Population[T],
                                   __: int,
-                                  ___: dict) -> Population:
+                                  ___: dict) -> Population[T]:
     return offspring
 
 
-def full_gen_replacement_elitist(_: List[Tuple[float, T]],
-                                 offspring: List[Tuple[float, T]],
+def full_gen_replacement_elitist(_: Population[T],
+                                 offspring: Population[T],
                                  __: int,
-                                 options: dict) -> List[Tuple[float, T]]:
+                                 options: dict) -> Population[T]:
 
     # ensure best is in the population
     if options['current_best'][0] < options['gen_fittest_fitness'][-1]:
@@ -29,10 +29,10 @@ def full_gen_replacement_elitist(_: List[Tuple[float, T]],
     return offspring
 
 
-def replacement_of_the_worst(current_pop: List[Tuple[float, T]],
-                             offspring: List[Tuple[float, T]],
+def replacement_of_the_worst(current_pop: Population[T],
+                             offspring: Population[T],
                              new_pop_size: int,
-                             options: dict) -> List[Tuple[float, T]]:
+                             options: dict) -> Population[T]:
 
     assert new_pop_size < len(current_pop) + len(offspring)
 
@@ -51,10 +51,10 @@ def replacement_of_the_worst(current_pop: List[Tuple[float, T]],
     return next_gen
 
 
-def roulette_gen_replacement(current_population: List[Tuple[float, T]],
-                                offspring: List[Tuple[float, T]],
-                                next_gen_size: int,
-                                options: dict) -> List[Tuple[float, T]]:
+def roulette_gen_replacement(current_population: Population[T],
+                             offspring: Population[T],
+                             next_gen_size: int,
+                             options: dict) -> Population[T]:
     '''
     Performs the next generation selection using a roulette wheel mechanism.
     This functions modifies the current_population and the options argument.

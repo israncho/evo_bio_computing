@@ -4,25 +4,25 @@ for the genetic algorithm.'''
 from typing import Any, List, Tuple
 from random import randint
 from collections import deque
-from src.gen_algo_framework.genetic_algorithm import GeneType
+from src.gen_algo_framework.genetic_algorithm import Population
 from src.gen_algo_framework.selection import roulette_wheel_toss
 
 
-def parents_crossover_ox1(parent1: Tuple[float, List[GeneType]],
-                          parent2: Tuple[float, List[GeneType]]) -> List[GeneType]:
+def parents_crossover_ox1(parent1: Tuple[float, List],
+                          parent2: Tuple[float, List]) -> List:
     '''
     Performs Order Crossover 1 (OX1) between two parents to produce a child.
     This function is intended for maximization problems.
     Args:
 
-        parent1 (Tuple[float, List[GeneType]]):
+        parent1 (Tuple[float, List]):
             First parent, represented by its fitness and chromosome.
 
-        parent2 (Tuple[float, List[GeneType]]):
+        parent2 (Tuple[float, List]):
             Second parent, represented by its fitness and chromosome.
 
     Returns:
-        List[GeneType]: The resulting child (individual).
+        List: The resulting child (individual).
     '''
 
     assert len(parent1[1]) == len(parent2[1])
@@ -66,14 +66,14 @@ def parents_crossover_ox1(parent1: Tuple[float, List[GeneType]],
     return child
 
 
-def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[GeneType]]],
+def pop_crossover_ox1_roulettew_s(population: Population[List],
                                   new_gen_size: int,
-                                  options: dict) -> List[List[GeneType]]:
+                                  options: dict) -> Population[List]:
     '''
     Creates a new generation of offspring using the Order Crossover 1 (OX1) method.
     This function is intended for maximization problems.
     Args:
-        population (List[Tuple[float, List[GeneType]]]):
+        population (List[Tuple[float, List]]):
             The current population, where each element is a tuple containing
             the fitness value and the chromosome.
 
@@ -85,7 +85,7 @@ def pop_crossover_ox1_roulettew_s(population: List[Tuple[float, List[GeneType]]]
             key \'c_fitness_l\' .
 
     Returns:
-        List[List[GeneType]]: A list of new individuals representing the offspring.
+        List[List]: A list of new individuals representing the offspring.
     '''
     cumulative_fitness_list = options['c_fitness_l']
     new_gen = []
@@ -239,16 +239,16 @@ def n_points_crossover_parents(parent1: Tuple[float, List],
     return child1, child2
 
 
-def population_n_points_crossover_roulettew_s(population: List[Tuple[float, List[GeneType]]],
+def population_n_points_crossover_roulettew_s(population: Population[List],
                                   new_gen_size: int,
-                                  options: dict) -> List[List[GeneType]]:
+                                  options: dict) -> Population[List]:
     '''
     Applies n-point crossover to generate a new population using roulette
     wheel selection.
     Args:
-        population (List[Tuple[float, List[GeneType]]]): The current
+        population (List[Tuple[float, List]]): The current
             population, where each individual is represented as a tuple
-            containing its fitness (float) and a list of genes (List[GeneType]).
+            containing its fitness (float) and a list of genes (List).
         new_gen_size (int): The desired size of the new generation.
         options (dict): A dictionary containing options for the crossover:
             - 'c_fitness_l' (List[float]): A cumulative fitness list used
@@ -256,7 +256,7 @@ def population_n_points_crossover_roulettew_s(population: List[Tuple[float, List
             - 'n_points' (int): The number of crossover points to generate
                 during the n-point crossover.
     Returns:
-        List[List[GeneType]]: A list representing the new generation, where
+        List[List]: A list representing the new generation, where
         each individual is represented by a list of genes resulting from
         the crossover operation.
     '''

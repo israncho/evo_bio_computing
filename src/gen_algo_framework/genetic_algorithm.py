@@ -6,19 +6,18 @@ from typing import TypeVar, List
 
 
 T = TypeVar('T', MutableSequence, MutableSet)   # type of the Genotype
-GeneType = TypeVar('GeneType')      # pyright: ignore
-Population = MutableSequence[Tuple[float, T]] | MutableSequence[T]
+Population = List[Tuple[float, T]] | List[T]
 
 
-def genetic_algorithm(population: Population,
-                      crossover: Callable[[Population, int, dict], Population],
-                      mutation: Callable[[Population, dict], Population],
-                      get_fitness: Callable[[Population, dict], Population],
-                      replacement: Callable[[Population, Population, int, dict], Population],
-                      term_cond: Callable[[int, Population], bool],
-                      options_handler: Callable[[Population, dict], dict],
+def genetic_algorithm(population: Population[T],
+                      crossover: Callable[[Population[T], int, dict], Population[T]],
+                      mutation: Callable[[Population[T], dict], Population[T]],
+                      get_fitness: Callable[[Population[T], dict], Population[T]],
+                      replacement: Callable[[Population[T], Population[T], int, dict], Population[T]],
+                      term_cond: Callable[[int, Population[T]], bool],
+                      options_handler: Callable[[Population[T], dict], dict],
                       options: dict
-                      ) -> List[Population]:
+                      ) -> List[Population[T]]:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
     Very likely to add or change items of the options dictionary.
@@ -27,7 +26,7 @@ def genetic_algorithm(population: Population,
     '''
 
     current_population = population
-    best_solutions: Population = []
+    best_solutions: Population[T] = []
     generation = 0
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)

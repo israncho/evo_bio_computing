@@ -5,10 +5,10 @@ from math import inf
 from random import sample
 from typing import Set, List, Tuple
 from src.continuous.binary_representation import generate_random_bit_vector
-from src.gen_algo_framework.genetic_algorithm import GeneType, T
+from src.gen_algo_framework.genetic_algorithm import T, Population
 
 def generate_population_of_permutations(size: int,
-                                        genes: Set[GeneType]) -> List[List[GeneType]]:
+                                        genes: Set) -> List[List]:
     '''
     Generates a population of individuals, where each individual
     is a listrepresenting a chromosome composed of randomly
@@ -16,10 +16,10 @@ def generate_population_of_permutations(size: int,
     Args:
         size (int):
             The number of individuals (chromosomes) in the population.
-        genes (Set[GeneType]):
+        genes (Set):
             The set of genes to sample from for each individual.
     Returns:
-        List[List[GeneType]]:
+        List[List]:
             A list of lists, where each inner list represents an
             individual (chromosome) in the population. Each
             individual's chromosome contains genes sampled randomly
@@ -39,7 +39,7 @@ def generate_population_of_bit_vectors(size: int,
     return [generate_random_bit_vector(v_n_bits) for _ in range(size)]
 
 
-def transform_to_max(population: List[Tuple[float, T]]) -> List[Tuple[float, T]]:
+def transform_to_max(population: Population[T]) -> Population[T]:
     '''
     Transforms a population's fitness values from a minimization
     problem to a maximization problem. This transformation ensures that
