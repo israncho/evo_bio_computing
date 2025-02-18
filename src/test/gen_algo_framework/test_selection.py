@@ -1,7 +1,7 @@
 from math import isclose
 from random import randint
 from typing import List, Optional, Tuple
-from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_toss
+from src.gen_algo_framework.selection import cumulative_fitness, remove_from_fitness_list, roulette_wheel_toss, roulette_wheel_selection
 
 
 def __random_c_list():
@@ -67,6 +67,23 @@ def test_roulette_wheel_toss():
     assert isclose(e_rate_2, .125, rel_tol=0.03)
     e_rate_3 = index_tosses[3] / tosses
     assert isclose(e_rate_3, .125, rel_tol=0.03)
+
+
+def test_roulette_wheel_selection():
+    for _ in range(500):
+        c_list, _, _popu = __random_c_list()
+        popu_size = len(_popu)
+        offspring_size = randint(2, popu_size)
+        selected_parents = roulette_wheel_selection(_popu, offspring_size, {'c_fitness_l': c_list})
+        for i, j in selected_parents:
+            indices = range(popu_size)
+            assert i in indices
+            assert j in indices
+
+        selected_parents_size = len(selected_parents)
+        assert selected_parents_size * 2 >= offspring_size
+        if selected_parents_size * 2 != offspring_size:
+            assert selected_parents_size * 2 == offspring_size + 1
 
 
 def test_remove_from_fitness_list():

@@ -26,7 +26,7 @@ def genetic_algorithm(population: Population[T],
     '''
 
     current_population = population
-    best_solutions: Population[T] = []
+    best_solutions: List[T] = []
     generation = 0
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)
@@ -34,6 +34,7 @@ def genetic_algorithm(population: Population[T],
         best_solutions.append(options['current_best'])
 
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
+        #indexes_selected_parents = selection(current_population, offspring_size, options)
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
