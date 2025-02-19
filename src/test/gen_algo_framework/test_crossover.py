@@ -1,6 +1,8 @@
 from random import randint, sample
 from typing import Set, Tuple, List
-from src.gen_algo_framework.crossover import gen_n_points, n_points_crossover_parents, parents_crossover_ox1, pop_crossover_ox1_roulettew_s, population_n_points_crossover_roulettew_s
+from src.gen_algo_framework.crossover import gen_n_points, n_points_crossover_parents, population_n_points_crossover_roulettew_s
+from src.gen_algo_framework.crossover import __full_random_subintervals, order_crossover_ox1
+from src.gen_algo_framework.genetic_algorithm import population_crossover
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.selection import cumulative_fitness
 
@@ -16,33 +18,50 @@ def different_random_parents(size: int, range_gene_size: int) -> Tuple[Set[int],
     return set(genes), parent1, parent2
 
 
-def test_parents_crossover_ox1():
+def test___full_random_subintervals():
+    for _ in range(1000):
+        size = randint(100, 101)
+        half = size // 2
+        target_set = set(range(size)) # [0, 99] or [0, 100]
+        intervals = __full_random_subintervals(size - 1, half)
+        curr_elems_found = []
+        true_count = 0
+        for i, j, bool_val in intervals:
+            if bool_val:
+                true_count += 1
+            curr_elems_found.extend(list(range(i, j + 1)))
+
+        assert true_count == 2
+        assert set(curr_elems_found) == target_set
+
+
+def test_order_crossover_ox1():
     for _ in range(2000):
         genes, p1, p2 = different_random_parents(41, 200)
-        child = parents_crossover_ox1((2, p1), (1, p2))
-        assert set(child) == genes, 'Child genes do not match parent genes.'
-        assert child != p1 or child != p2, 'Child should not be identical to both parents'
+        child1, child2 = order_crossover_ox1((0, p1), (0, p2), None)
+        assert set(child1) == genes
+        assert set(child2) == genes
+        assert child1 != p1 or child1 != p2
+        assert child2 != p1 or child2 != p2
 
-        # testing similarity with the fittest parent
-        matches = 0
-        for i in range(41):
-            if child[i] == p1[i]: matches += 1
+        for gen_p1, gen_c1, gen_c2 in zip(p1, child1, child2):
+            assert gen_p1 == gen_c1 or gen_p1 == gen_c2
 
-        assert matches >= 21, 'Child is not similar enough to the fittest parent'
-
-        clone = parents_crossover_ox1((2, p1), (2, p1))
-        assert clone == p1
+        for gen_p2 in p2:
+            assert gen_p2 in child1 or gen_p2 in child2
 
 
-def test_pop_crossover_ox1_roulettew_s():
+def test_population_crossover():
     for _ in range(1000):
-        genes = set(sample(range(100), 10))
-        _population = generate_population_of_permutations(50, genes)
-        _population = list(map(lambda x: (float(randint(0,100)), x), _population))
-        options = {'c_fitness_l': cumulative_fitness(_population)}
-        new_gen = pop_crossover_ox1_roulettew_s(_population, 50, options)
-        for individual in new_gen:
-            assert set(individual) == genes, 'Individual has not the same genes'
+        genes = set(sample(range(100), 50))
+        population = generate_population_of_permutations(11, genes)
+        population = list(map(lambda x : (0, x), population))
+        indexes_selected_parents = list(zip(sample(range(11), 6), sample(range(11), 6)))
+        new_gen = population_crossover(population, indexes_selected_parents, 11, order_crossover_ox1, {})
+        for child in new_gen:
+            assert set(child) == genes
+            for adult in population:
+                assert child != adult
 
 
 def test_gen_n_points():

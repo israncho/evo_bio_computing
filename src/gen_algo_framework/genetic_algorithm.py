@@ -35,6 +35,7 @@ def genetic_algorithm(population: Population[T],
 
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
         #indexes_selected_parents = selection(current_population, offspring_size, options)
+        #offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
@@ -87,3 +88,37 @@ def standard_fitness_computing(population: Population[T],
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
     options['gen_fittest_fitness'].append(gen_best_fitness)
     return population
+
+
+def population_crossover(population: Population[T],
+                         indexes_selected_parents: List[Tuple[int, int]],
+                         offspring_size: int,
+                         crossover: Callable[[T, T, dict], Tuple[T, T]],
+                         options: dict) -> Population[T]:
+    '''
+    Creates a new generation of offspring using the given crossover operator.
+    Args:
+        population (Population[T]):
+            The current population, where each element is a tuple containing
+            the fitness value and the chromosome.
+        indexes_selected_parents (List[Tuple[int, int]]): indexes of the selected
+            parents.
+        crossover (Callable[[T, T, dict], Tuple[T, T]]): crossover operator as
+            a function.
+        offspring_size (int):
+            The desired size of the new generation.
+        options (dict): A dictionary with aditional arguments that
+            the crossover operator may use.
+    Returns:
+        List[List]: A list of new individuals representing the offspring.
+    '''
+    new_gen = []
+    for i, j in indexes_selected_parents:
+        parent1 = population[i]
+        parent2 = population[j]
+        child1, child2 = crossover(parent1, parent2, options)
+        new_gen.append(child1)
+        if len(new_gen) < offspring_size:
+            new_gen.append(child2)
+    #assert len(new_gen) == offspring_size
+    return new_gen
