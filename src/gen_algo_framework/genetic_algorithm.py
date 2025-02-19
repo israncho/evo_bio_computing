@@ -14,7 +14,7 @@ def genetic_algorithm(population: Population[T],
                       selection: Callable[[Population[T], int, dict], List[Tuple[int, int]]],
                       crossover: Callable[[T, T, dict], Tuple[T, T]],
                       mutation: Callable[[T], T],
-                      get_fitness: Callable[[Population[T], dict], Population[T]],
+                      fitness_f: Callable[[T, dict], float],
                       replacement: Callable[[Population[T], Population[T], int, dict], Population[T]],
                       term_cond: Callable[[int, Population[T]], bool],
                       options_handler: Callable[[Population[T], dict], dict],
@@ -27,7 +27,7 @@ def genetic_algorithm(population: Population[T],
         List[Population]: List of best solutions found in each generation.
     '''
 
-    current_population = population
+    current_population = population_fitness_computing(fitness_f, population, options)
     best_solutions: List[T] = []
     generation = 0
     while term_cond(generation, best_solutions):
@@ -39,6 +39,7 @@ def genetic_algorithm(population: Population[T],
         #indexes_selected_parents = selection(current_population, offspring_size, options)
         #offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
         #offspring = mutate_population(mutation, offspring, options)
+        #offspring = population_fitness_computing(fitness_f, offspring, options)
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
@@ -56,8 +57,9 @@ def genetic_algorithm(population: Population[T],
     return best_solutions
 
 
-def population_fitness_computing(population: Population[T],
-                               options: dict) -> Population[T]:
+def population_fitness_computing(fitness_f: Callable[[T, dict], float],
+                                 population: Population[T],
+                                 options: dict) -> Population[T]:
     '''
     Computes the fitness of each individual in the population.
     Args:
@@ -77,11 +79,10 @@ def population_fitness_computing(population: Population[T],
     '''
 
     population_fitness_sum = 0
-    f: Callable[[T, dict], float] = options['f']
     gen_best_fitness = inf
 
     for i, individual in enumerate(population):
-        individuals_fitness = f(individual, options) # pyright: ignore
+        individuals_fitness = fitness_f(individual, options) # pyright: ignore
         population_fitness_sum += individuals_fitness
         population[i] = individuals_fitness, individual # pyright: ignore
 

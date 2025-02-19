@@ -117,13 +117,11 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
         options['best_fitness_found_history'] = []
         options['minimization'] = True
         options['f'] = tour_distance
-        population = population_fitness_computing(population, options) # pyright: ignore
 
         if local_s_iters > 0:
             options['f'] = local_search_2_opt
             options['target_f'] = tour_distance
             options['local_s_iters'] = local_s_iters
-
 
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore
