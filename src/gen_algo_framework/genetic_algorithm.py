@@ -1,6 +1,7 @@
 '''Module with functions for the genetic algorithm.'''
 
 from math import inf
+from random import random
 from typing import Callable, MutableSequence, MutableSet, Tuple
 from typing import TypeVar, List
 
@@ -10,8 +11,9 @@ Population = List[Tuple[float, T]] | List[T]
 
 
 def genetic_algorithm(population: Population[T],
-                      crossover: Callable[[Population[T], int, dict], Population[T]],
-                      mutation: Callable[[Population[T], dict], Population[T]],
+                      selection: Callable[[Population[T], int, dict], List[Tuple[int, int]]],
+                      crossover: Callable[[T, T, dict], Tuple[T, T]],
+                      mutation: Callable[[T], T],
                       get_fitness: Callable[[Population[T], dict], Population[T]],
                       replacement: Callable[[Population[T], Population[T], int, dict], Population[T]],
                       term_cond: Callable[[int, Population[T]], bool],
@@ -36,6 +38,7 @@ def genetic_algorithm(population: Population[T],
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
         #indexes_selected_parents = selection(current_population, offspring_size, options)
         #offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
+        #offspring = mutate_population(mutation, offspring, options)
         offspring = crossover(current_population, offspring_size, options)
         offspring = mutation(offspring, options)   # Apply mutation to the next generation
         offspring = get_fitness(offspring, options)
@@ -53,7 +56,7 @@ def genetic_algorithm(population: Population[T],
     return best_solutions
 
 
-def standard_fitness_computing(population: Population[T],
+def population_fitness_computing(population: Population[T],
                                options: dict) -> Population[T]:
     '''
     Computes the fitness of each individual in the population.
@@ -122,3 +125,28 @@ def population_crossover(population: Population[T],
             new_gen.append(child2)
     #assert len(new_gen) == offspring_size
     return new_gen
+
+
+def mutate_population(mutation_func: Callable[[T], T],
+                      population: Population[T],
+                      options: dict) -> Population[T]:
+    '''
+    Applies mutation to the population using the given mutation function.
+    Args:
+        mutation_func (Callable[[T], T]):
+            The mutation function that takes an individual and returns a mutated version of it.
+        population (Population[T]):
+            The current population, where each element is an individual.
+        options (dict):
+            A dictionary containing additional arguments for the mutation process.
+            Expected to contain the key 'mutation_proba' which specifies the probability
+            of mutation for each individual.
+    Returns:
+        Population[T]:
+            The population after applying the mutation operator.
+    '''
+    mutation_proba = options['mutation_proba']
+    for i, individual in enumerate(population):
+        if random() < mutation_proba:
+            population[i] = mutation_func(individual)
+    return population

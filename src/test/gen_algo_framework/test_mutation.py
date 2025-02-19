@@ -2,7 +2,8 @@
 
 from random import randint, sample
 from src.gen_algo_framework.population_utils import generate_population_of_bit_vectors, generate_population_of_permutations
-from src.gen_algo_framework.mutation import bit_flip_mutation, bit_flip_mutation_population, swap_mutation, swap_mutation_population
+from src.gen_algo_framework.mutation import bit_flip_mutation, swap_mutation
+from src.gen_algo_framework.genetic_algorithm import mutate_population
 from copy import deepcopy
 
 
@@ -21,7 +22,7 @@ def test_swap_mutation_population():
         _population_copy = deepcopy(_population)
 
         options = {'mutation_proba': 0.1}
-        _population = swap_mutation_population(_population, options)
+        _population = mutate_population(swap_mutation ,_population, options)
 
         changed_count = 0
         for i in range(len(_population)):
@@ -47,7 +48,7 @@ def test_bit_flip_mutation_population():
         population_copy = deepcopy(population)
 
         options = {'mutation_proba': 0.1}
-        population = bit_flip_mutation_population(population, options)
+        population = mutate_population(bit_flip_mutation, population, options)
         changed_count = 0
         for possibly_changed, unchanged in zip(population, population_copy):
             if possibly_changed != unchanged:

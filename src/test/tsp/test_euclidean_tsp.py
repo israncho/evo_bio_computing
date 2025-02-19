@@ -1,7 +1,7 @@
 
 from math import inf, sqrt, isclose
 from random import randint, uniform
-from src.gen_algo_framework.genetic_algorithm import standard_fitness_computing
+from src.gen_algo_framework.genetic_algorithm import population_fitness_computing
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.tsp.euclidean_tsp import build_weight_dict, euclidean_distance, tour_distance, simple_euc_tsp_options_handler
 from src.utils.input_output import parse_tsp_data, read_file
@@ -53,7 +53,7 @@ def test_standard_fitness_computing_for_euc_tsp():
 
     for _ in range(100):
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
-        population = standard_fitness_computing(population, berlin52) # pyright: ignore
+        population = population_fitness_computing(population, berlin52) # pyright: ignore
 
         pop_untransformed_f_sum = 0
         for fitness, tour in population:

@@ -7,7 +7,7 @@ from sys import argv
 from ast import literal_eval
 from time import time
 from src.gen_algo_framework.crossover import pop_crossover_ox1_roulettew_s
-from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, standard_fitness_computing
+from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, population_fitness_computing
 from src.gen_algo_framework.population_utils import generate_population_of_permutations
 from src.gen_algo_framework.mutation import swap_mutation_population
 from src.gen_algo_framework.replacement import all_replacement_funcs
@@ -65,7 +65,7 @@ def ga_exec_for_euctsp(file_path: str, # pyright: ignore
     best_sols_per_gen = genetic_algorithm(initial_population,
                                           pop_crossover_ox1_roulettew_s, # pyright: ignore
                                           swap_mutation_population, # pyright: ignore
-                                          standard_fitness_computing, # pyright: ignore
+                                          population_fitness_computing, # pyright: ignore
                                           replacement_f, # pyright: ignore
                                           lambda gen_count, _ : gen_count < generations,
                                           simple_euc_tsp_options_handler,

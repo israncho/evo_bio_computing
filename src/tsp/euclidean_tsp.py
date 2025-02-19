@@ -4,7 +4,7 @@ to be used in the genetic algorithm.'''
 from typing import List, Tuple
 from math import sqrt, inf
 
-from src.gen_algo_framework.genetic_algorithm import Population, standard_fitness_computing
+from src.gen_algo_framework.genetic_algorithm import Population, population_fitness_computing
 from src.gen_algo_framework.population_utils import transform_to_max
 from src.gen_algo_framework.selection import cumulative_fitness
 from src.local_search.permutation import local_search_2_opt
@@ -117,7 +117,7 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
         options['best_fitness_found_history'] = []
         options['minimization'] = True
         options['f'] = tour_distance
-        population = standard_fitness_computing(population, options) # pyright: ignore
+        population = population_fitness_computing(population, options) # pyright: ignore
 
         if local_s_iters > 0:
             options['f'] = local_search_2_opt
