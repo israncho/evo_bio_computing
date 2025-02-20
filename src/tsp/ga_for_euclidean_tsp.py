@@ -1,4 +1,5 @@
 from sys import argv
+from time import time
 from ast import literal_eval
 from src.utils.input_output import parse_tsp_data, read_file, write_file, write_line_to_csv_file, tsp_solution_to_lines
 from src.utils.others import seed_in_use, sampling_fitness_history
@@ -64,8 +65,12 @@ if __name__ == "__main__":
     print('output path:', OUTPUT_FILE_PATH)
     PARAMS = literal_eval(argv[3])
 
+    start = time()
     result, data = genetic_algorithm_for_euctsp(INSTANCE_FILE_PATH,
                                                 OUTPUT_FILE_PATH,
                                                 PARAMS)
+    end = time()
+    print('runtime in seconds:', end - start)
     print('best fitness found:', result[0])
+    print('target fuction evals:', data['f_execs'])
     __write_results(result, data, OUTPUT_FILE_PATH)

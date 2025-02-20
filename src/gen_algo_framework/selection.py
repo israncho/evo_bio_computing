@@ -74,12 +74,7 @@ def roulette_wheel_selection(population: Population[T],
 
     cumulative_fitness_list = options['c_fitness_l']
     number_couples = ceil(offspring_size / 2)
-    indexes_selected_parents = []
-    for _ in range(number_couples):
-        couple = (roulette_wheel_toss(cumulative_fitness_list),
-                  roulette_wheel_toss(cumulative_fitness_list))
-        indexes_selected_parents.append(couple)
-    return indexes_selected_parents
+    return [(roulette_wheel_toss(cumulative_fitness_list), roulette_wheel_toss(cumulative_fitness_list)) for _ in range(number_couples)]
 
 
 def remove_from_fitness_list(index: int,

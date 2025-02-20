@@ -48,10 +48,11 @@ def compute_generational_avgs(multiple_ga_execs_data: List[List[Tuple]]) -> List
     return measures
 
 
-def sampling_fitness_history(fitness_history: List[float], target_size_sample: int) -> List[int]:
+def sampling_fitness_history(fitness_history: List[float], target_size_sample: int, decimal_digits: int = 3) -> List[int]:
+    assert target_size_sample < len(fitness_history) * 0.15
     sample = []
     step = ceil(len(fitness_history) / target_size_sample)
     for fitness in fitness_history[::step]:
-        sample.append(fitness)
+        sample.append(round(fitness, decimal_digits))
     sample.append(fitness_history[-1])
     return sample

@@ -115,7 +115,7 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
             options['target_f'] = tour_distance
         return options
 
-    pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
+    pop_only_fitness_values = [(x[0], None) for x in population]
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore
     options['c_fitness_l'] = cumulative_fitness(pop_only_fitness_values) # pyright: ignore
     return options
