@@ -101,27 +101,19 @@ def build_weight_dict(fst_city: EucCity,
 
 def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
                                    options: dict,
-                                   init: bool = False,
-                                   offspring_s: int = 100,
-                                   next_gen_pop_s: int = 100,
-                                   mutation_proba: float = 0.1,
-                                   local_s_iters = 0) -> dict:
+                                   init: bool = False) -> dict:
     if init:
         options['population_fit_avgs'] = []
-        options['offspring_s'] = offspring_s
-        options['next_gen_pop_s'] = next_gen_pop_s
-        options['mutation_proba'] = mutation_proba
         options['current_best'] = inf, None
         options['f_execs'] = 0
-        options['gen_fittest_fitness'] = []
+        options['gen_fittest_fitness'] = None
         options['best_fitness_found_history'] = []
-        options['minimization'] = True
-        options['f'] = tour_distance
+        options['offspring_s'] = options['pop_size']
+        options['next_gen_pop_s'] = options['pop_size']
 
-        if local_s_iters > 0:
-            options['f'] = local_search_2_opt
+        if options['local_s_iters'] > 0:
             options['target_f'] = tour_distance
-            options['local_s_iters'] = local_s_iters
+        return options
 
     pop_only_fitness_values = list(map(lambda x: (x[0], None), population))
     pop_only_fitness_values = transform_to_max(pop_only_fitness_values) # pyright: ignore

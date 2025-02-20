@@ -29,7 +29,7 @@ def genetic_algorithm(population: Population[T],
 
     current_population = population_fitness_computing(fitness_f, population, options)
     generation = 0
-    while term_cond(generation, best_solutions):
+    while term_cond(generation, current_population):
         options = options_handler(current_population, options)
 
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']

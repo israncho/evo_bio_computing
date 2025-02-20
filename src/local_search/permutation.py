@@ -50,7 +50,8 @@ def generate_2_opt_cut_points(sequence_len: int):
 def local_search_2_opt(initial_solution: MutableSequence,
                        options: dict) -> float:
     '''
-    Performs local search using the 2-opt neighborhood for TSP.
+    Performs local search to the given solution using the 2-opt neighborhood for TSP.
+    Modifies the given solution.
     Args:
         initial_solution (MutableSequence): The initial solution or tour
             (sequence of cities) to improve using the local search.
