@@ -130,8 +130,7 @@ def compute_vectors_fitness(population: Population[List[int]],
         if individual_fitness < options['current_best'][0]:
             options['current_best'] = individual_fitness, individual
 
-    options['population_fit_avgs'].append(population_fitness_sum / len(population))
-    options['gen_fittest_fitness'].append(gen_best_fitness)
+    options['gen_fittest_fitness'] = gen_best_fitness
 
     return population # pyright: ignore
 

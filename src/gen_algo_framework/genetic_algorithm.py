@@ -28,21 +28,15 @@ def genetic_algorithm(population: Population[T],
     '''
 
     current_population = population_fitness_computing(fitness_f, population, options)
-    best_solutions: List[T] = []
     generation = 0
     while term_cond(generation, best_solutions):
         options = options_handler(current_population, options)
 
-        best_solutions.append(options['current_best'])
-
         offspring_size, next_gen_pop_size = options['offspring_s'], options['next_gen_pop_s']
-        #indexes_selected_parents = selection(current_population, offspring_size, options)
-        #offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
-        #offspring = mutate_population(mutation, offspring, options)
-        #offspring = population_fitness_computing(fitness_f, offspring, options)
-        offspring = crossover(current_population, offspring_size, options)
-        offspring = mutation(offspring, options)   # Apply mutation to the next generation
-        offspring = get_fitness(offspring, options)
+        indexes_selected_parents = selection(current_population, offspring_size, options)
+        offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
+        offspring = mutate_population(mutation, offspring, options)
+        offspring = population_fitness_computing(fitness_f, offspring, options)
         next_gen_population = replacement(current_population,
                                         offspring,
                                         next_gen_pop_size,
@@ -52,9 +46,7 @@ def genetic_algorithm(population: Population[T],
         generation += 1
         current_population = next_gen_population
 
-    best_solutions.append(options['current_best'])
-
-    return best_solutions
+    return options['current_best']
 
 
 def population_fitness_computing(fitness_f: Callable[[T, dict], float],
@@ -65,14 +57,10 @@ def population_fitness_computing(fitness_f: Callable[[T, dict], float],
     Args:
         population (Population[T]): The current population.
         options (dict): A dictionary containing the following keys:
-            - 'f' (Callable[[T, dict], float]): The fitness function
-                to evaluate each individual in the population.
-            - 'current_best' (Tuple[float, T]): A tuple representing
-                the best fitness and individual seen so far.
             - 'population_fit_avgs' (list[float]): A list that will store
                 the average population fitness for each generation.
-            - 'gen_fittest_fitness' (list[float]): A list that will store
-                the best fitness in each generation.
+            - 'gen_fittest_fitness' (list[float]): Variable that stores
+                the best fitness of the new generation.
     Returns:
         Population[T]: The population where each individual is now
         paired with its corresponding fitness value.
@@ -90,7 +78,7 @@ def population_fitness_computing(fitness_f: Callable[[T, dict], float],
             gen_best_fitness = individuals_fitness
 
     options['population_fit_avgs'].append(population_fitness_sum / len(population))
-    options['gen_fittest_fitness'].append(gen_best_fitness)
+    options['gen_fittest_fitness'] = gen_best_fitness
     return population
 
 

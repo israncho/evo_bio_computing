@@ -52,7 +52,7 @@ def test_standard_fitness_computing_for_euc_tsp():
     berlin52 = parse_tsp_data(read_file('instances/euc_TSP/berlin52.tsp'))
     berlin52['f_execs'] = 0
     berlin52['current_best'] = inf, None
-    berlin52['gen_fittest_fitness'] = []
+    berlin52['gen_fittest_fitness'] = None
     berlin52['best_fitness_found_history'] = []
     berlin52['population_fit_avgs'] = []
 
@@ -61,11 +61,14 @@ def test_standard_fitness_computing_for_euc_tsp():
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
         population = population_fitness_computing(tour_distance, population, berlin52) # pyright: ignore
 
+        assert berlin52['gen_fittest_fitness'] is not None
+
         pop_untransformed_f_sum = 0
         for fitness, tour in population:
             recalc_f = tour_distance(tour, berlin52) # pyright: ignore
             pop_untransformed_f_sum += recalc_f
             assert fitness == recalc_f
+            assert berlin52['gen_fittest_fitness'] <= recalc_f
 
         assert berlin52['population_fit_avgs'][-1] == pop_untransformed_f_sum / len(population)
 
