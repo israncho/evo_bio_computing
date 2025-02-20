@@ -128,7 +128,7 @@ def tsp_solution_to_lines(fst_city: EucCity,
     a line in a file.'''
     vertex_id = instance['ids']
 
-    list_of_lines = ['SOLUTION\n']
+    list_of_lines = []
     list_of_lines.append(f"NAME: {instance['NAME']}\n")
     list_of_lines.append(f"TYPE: {instance['TYPE']}\n")
     list_of_lines.append(f"COMMENT: {instance['COMMENT']}\n")

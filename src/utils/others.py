@@ -3,6 +3,7 @@ Module for various auxiliar and utils functions.
 '''
 
 from os import urandom
+from math import ceil
 from random import seed
 from typing import List, Tuple
 
@@ -45,3 +46,12 @@ def compute_generational_avgs(multiple_ga_execs_data: List[List[Tuple]]) -> List
             measures[i][j] /= n_executions
 
     return measures
+
+
+def sampling_fitness_history(fitness_history: List[float], target_size_sample: int) -> List[int]:
+    sample = []
+    step = ceil(len(fitness_history) / target_size_sample)
+    for fitness in fitness_history[::step]:
+        sample.append(fitness)
+    sample.append(fitness_history[-1])
+    return sample
