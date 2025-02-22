@@ -27,8 +27,8 @@ def genetic_algorithm(population: Population[T],
         List[Population]: List of best solutions found in each generation.
     '''
 
-    current_population = population_fitness_computing(fitness_f, population, options)
     generation = 0
+    current_population = population
     while term_cond(generation, current_population):
         options = options_handler(current_population, options)
 

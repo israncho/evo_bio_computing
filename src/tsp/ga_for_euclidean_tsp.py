@@ -4,7 +4,7 @@ from ast import literal_eval
 from src.utils.input_output import parse_tsp_data, read_file, write_file, write_line_to_csv_file, tsp_solution_to_lines
 from src.utils.others import seed_in_use, sampling_fitness_history
 from src.gen_algo_framework.replacement import all_replacement_funcs
-from src.gen_algo_framework.genetic_algorithm import genetic_algorithm
+from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, population_fitness_computing
 from src.gen_algo_framework.selection import roulette_wheel_selection
 from src.gen_algo_framework.crossover import order_crossover_ox1
 from src.gen_algo_framework.mutation import swap_mutation
@@ -30,8 +30,9 @@ def genetic_algorithm_for_euctsp(instance_file_path: str,
     replacement_function: callable = all_replacement_funcs[instance['replacement']]
 
     initial_population = generate_population_of_permutations(instance['pop_size'], set(instance['rest_of_cities']))
-
     instance = simple_euc_tsp_options_handler(initial_population, instance, True)
+    initial_population = population_fitness_computing(tour_distance, initial_population, instance)
+
 
     best_found = genetic_algorithm(population=initial_population,
                                    selection=roulette_wheel_selection,
