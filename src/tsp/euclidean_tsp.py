@@ -64,7 +64,8 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
     if distance < options['current_best'][0]:
         options['current_best'] = distance, seq_of_cities
 
-    options['best_fitness_found_history'].append(options['current_best'][0])
+    if options['f_execs'] % options['record_interval'] == 0:
+        options['best_fitness_found_history'].append(round(options['current_best'][0], 4))
 
     return distance
 
@@ -103,16 +104,23 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
                                    options: dict,
                                    init: bool = False) -> dict:
     if init:
+        population_size = options['pop_size']
         options['population_fit_avgs'] = []
         options['current_best'] = inf, None
-        options['f_execs'] = 0
+        options['f_execs'] = - population_size
         options['gen_fittest_fitness'] = None
         options['best_fitness_found_history'] = []
-        options['offspring_s'] = options['pop_size']
-        options['next_gen_pop_s'] = options['pop_size']
+        options['offspring_s'] = population_size
+        options['next_gen_pop_s'] = population_size
+        options['total_f_execs'] = population_size * options['gens']
 
-        if options['local_s_iters'] > 0:
+        local_s_iters = options['local_s_iters']
+        if local_s_iters > 0:
             options['target_f'] = tour_distance
+            gene_set_size = len(population[0]) + 1
+            options['total_f_execs'] *= ((gene_set_size - 2) * (gene_set_size - 3) * local_s_iters) // 2 + 1
+
+        options['record_interval'] = max(options['total_f_execs'] // options['max_records'], 1)
         return options
 
     pop_only_fitness_values = [(x[0], None) for x in population]

@@ -2,7 +2,7 @@ from sys import argv
 from time import time
 from ast import literal_eval
 from src.utils.input_output import parse_tsp_data, read_file, write_file, write_line_to_csv_file, tsp_solution_to_lines
-from src.utils.others import seed_in_use, sampling_fitness_history
+from src.utils.others import seed_in_use
 from src.gen_algo_framework.replacement import all_replacement_funcs
 from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, population_fitness_computing
 from src.gen_algo_framework.selection import roulette_wheel_selection
@@ -46,15 +46,14 @@ def genetic_algorithm_for_euctsp(instance_file_path: str,
     return best_found, instance
 
 
-def __write_results(best_found, exec_data, output_file_path) -> None:
+def __write_results(best_found, exec_data, output_file_path, write_mode='w') -> None:
 
     solution_file_path = output_file_path + f'_solution_{exec_data['NAME']}.txt'
     str_lines_to_write = tsp_solution_to_lines(exec_data['fst_city'], best_found[1], exec_data)
     write_file(solution_file_path, str_lines_to_write)
 
     csv_file_path = output_file_path + f'_{exec_data['NAME']}_data.csv'
-    sample_fitness = sampling_fitness_history(exec_data['best_fitness_found_history'], 1000)
-    write_line_to_csv_file(csv_file_path, sample_fitness, mode='w')
+    write_line_to_csv_file(csv_file_path, exec_data['best_fitness_found_history'], mode=write_mode)
     print(f"Written execution data in: '{csv_file_path}'")
 
 
