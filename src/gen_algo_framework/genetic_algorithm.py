@@ -19,7 +19,7 @@ def genetic_algorithm(population: Population[T],
                       term_cond: Callable[[int, Population[T]], bool],
                       options_handler: Callable[[Population[T], dict], dict],
                       options: dict
-                      ) -> List[Population[T]]:
+                      ) -> T:
     '''
     Applies a genetic algorithm to evolve a population of genotypes.
     Very likely to add or change items of the options dictionary.

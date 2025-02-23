@@ -1,10 +1,12 @@
 from sys import argv
 from time import time
+from typing import Tuple
 from ast import literal_eval
+from collections.abc import Collection
 from src.utils.input_output import parse_tsp_data, read_file, write_file, write_line_to_csv_file, tsp_solution_to_lines
 from src.utils.others import seed_in_use
 from src.gen_algo_framework.replacement import all_replacement_funcs
-from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, population_fitness_computing
+from src.gen_algo_framework.genetic_algorithm import genetic_algorithm, population_fitness_computing, T
 from src.gen_algo_framework.selection import roulette_wheel_selection
 from src.gen_algo_framework.crossover import order_crossover_ox1
 from src.gen_algo_framework.mutation import swap_mutation
@@ -15,7 +17,7 @@ from src.tsp.euclidean_tsp import tour_distance, simple_euc_tsp_options_handler
 
 def genetic_algorithm_for_euctsp(instance_file_path: str,
                                  output_file_path: str,
-                                 params: dict) -> None:
+                                 params: dict) -> Tuple[T, dict]:
 
     instance: dict = parse_tsp_data(read_file(instance_file_path))
     for key, value in params.items():
@@ -69,8 +71,12 @@ if __name__ == "__main__":
     result, data = genetic_algorithm_for_euctsp(INSTANCE_FILE_PATH,
                                                 OUTPUT_FILE_PATH,
                                                 PARAMS)
+    for key, val in data.items():
+        if isinstance(val, Collection) or key in ['SOLUTION', 'f_execs']:
+            continue
+        print(key, ': ', val)
+
     end = time()
     print('runtime in seconds:', end - start)
     print('best fitness found:', result[0])
-    print('target fuction evals:', data['f_execs'])
     __write_results(result, data, OUTPUT_FILE_PATH)
