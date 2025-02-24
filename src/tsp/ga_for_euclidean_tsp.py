@@ -72,7 +72,7 @@ if __name__ == "__main__":
                                                 OUTPUT_FILE_PATH,
                                                 PARAMS)
     for key, val in data.items():
-        if isinstance(val, Collection) or key in ['SOLUTION', 'f_execs']:
+        if isinstance(val, Collection) or key in ['SOLUTION']:
             continue
         print(key, ': ', val)
 

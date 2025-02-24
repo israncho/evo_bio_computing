@@ -36,7 +36,8 @@ def euclidean_distance(u: EucCity, v: EucCity) -> float:
 
 
 def tour_distance(seq_of_cities: EucTSPPermutation,
-                  options: dict) -> float:
+                  options: dict,
+                  inside_ga_execution: bool = False) -> float:
     '''
     Calculate the total distance of a TSP tour.
     Args:
@@ -47,11 +48,14 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
             - 'weights' (dict): A dictionary where keys are tuples of
                 city pairs (u, v) and values are the Euclidean
                 distances between those cities.
+        inside_ga_execution (bool): Flag to indicate that the function is being used
+            inside a genetic algorithm execution.
     Returns:
         float: The total distance of the tour, including the return to
         the starting city.
     '''
-    options['f_execs'] += 1
+    if inside_ga_execution:
+        options['f_execs'] += 1
     fst_city = options['fst_city']
     weights = options['weights']
 
@@ -61,10 +65,10 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
     for i in range(1, len(seq_of_cities)):
         distance += weights[(seq_of_cities[i - 1], seq_of_cities[i])]
 
-    if distance < options['current_best'][0]:
+    if inside_ga_execution and distance < options['current_best'][0]:
         options['current_best'] = distance, seq_of_cities
 
-    if options['f_execs'] % options['record_interval'] == 0:
+    if inside_ga_execution and options['f_execs'] % options['record_interval'] == 0:
         options['best_fitness_found_history'].append(round(options['current_best'][0], 4))
 
     return distance
@@ -107,7 +111,7 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
         population_size = options['pop_size']
         options['population_fit_avgs'] = []
         options['current_best'] = inf, None
-        options['f_execs'] = - population_size
+        options['f_execs'] = 0
         options['gen_fittest_fitness'] = None
         options['best_fitness_found_history'] = []
         options['offspring_s'] = population_size

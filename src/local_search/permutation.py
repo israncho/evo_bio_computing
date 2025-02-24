@@ -48,7 +48,8 @@ def generate_2_opt_cut_points(sequence_len: int):
 
 
 def local_search_2_opt(initial_solution: MutableSequence,
-                       options: dict) -> float:
+                       options: dict,
+                       inside_ga_execution: bool = False) -> float:
     '''
     Performs local search to the given solution using the 2-opt neighborhood for TSP.
     Modifies the given solution.
@@ -60,7 +61,8 @@ def local_search_2_opt(initial_solution: MutableSequence,
               function that computes the quality (distance) of a tour.
             - 'local_s_iters' (int): The maximum number of iterations to perform
               in the local search.
-
+        inside_ga_execution (bool): Flag to indicate that the function is being used
+            inside a genetic algorithm execution.
     Returns:
         float: The fitness of the best tour found during the local search.
     '''
@@ -68,7 +70,7 @@ def local_search_2_opt(initial_solution: MutableSequence,
     iterations = options['local_s_iters']
 
     x = initial_solution
-    best_f_x = f(x, options)
+    best_f_x = f(x, options, inside_ga_execution)
     cut_points = generate_2_opt_cut_points(len(x))
 
     for _ in range(iterations):
@@ -77,7 +79,7 @@ def local_search_2_opt(initial_solution: MutableSequence,
         for i, j in cut_points: # iterating through neighborhood
 
             in_place_reverse_segment(x, i, j) # compute neighbor using x
-            f_neighbor_x = f(x, options)
+            f_neighbor_x = f(x, options, inside_ga_execution)
 
             if f_neighbor_x < best_f_x:
                 best_f_x = f_neighbor_x

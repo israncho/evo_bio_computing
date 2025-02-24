@@ -14,7 +14,7 @@ def genetic_algorithm(population: Population[T],
                       selection: Callable[[Population[T], int, dict], List[Tuple[int, int]]],
                       crossover: Callable[[T, T, dict], Tuple[T, T]],
                       mutation: Callable[[T], T],
-                      fitness_f: Callable[[T, dict], float],
+                      fitness_f: Callable[[T, dict, bool], float],
                       replacement: Callable[[Population[T], Population[T], int, dict], Population[T]],
                       term_cond: Callable[[int, Population[T]], bool],
                       options_handler: Callable[[Population[T], dict], dict],
@@ -36,7 +36,7 @@ def genetic_algorithm(population: Population[T],
         indexes_selected_parents = selection(current_population, offspring_size, options)
         offspring = population_crossover(current_population, indexes_selected_parents, offspring_size, crossover, options)
         offspring = mutate_population(mutation, offspring, options)
-        offspring = population_fitness_computing(fitness_f, offspring, options)
+        offspring = population_fitness_computing(fitness_f, offspring, options, inside_ga_execution=True)
         next_gen_population = replacement(current_population,
                                         offspring,
                                         next_gen_pop_size,
@@ -49,12 +49,14 @@ def genetic_algorithm(population: Population[T],
     return options['current_best']
 
 
-def population_fitness_computing(fitness_f: Callable[[T, dict], float],
+def population_fitness_computing(fitness_f: Callable[[T, dict, bool], float],
                                  population: Population[T],
-                                 options: dict) -> Population[T]:
+                                 options: dict,
+                                 inside_ga_execution: bool = False) -> Population[T]:
     '''
     Computes the fitness of each individual in the population.
     Args:
+        fitnes_f (Callable[[T, dict, bool], float]): fitness target function
         population (Population[T]): The current population.
         options (dict): A dictionary containing the following keys:
             - 'population_fit_avgs' (list[float]): A list that will store
@@ -70,15 +72,16 @@ def population_fitness_computing(fitness_f: Callable[[T, dict], float],
     gen_best_fitness = inf
 
     for i, individual in enumerate(population):
-        individuals_fitness = fitness_f(individual, options) # pyright: ignore
+        individuals_fitness = fitness_f(individual, options, inside_ga_execution) # pyright: ignore
         population_fitness_sum += individuals_fitness
         population[i] = individuals_fitness, individual # pyright: ignore
 
         if individuals_fitness < gen_best_fitness:
             gen_best_fitness = individuals_fitness
 
-    options['population_fit_avgs'].append(population_fitness_sum / len(population))
-    options['gen_fittest_fitness'] = gen_best_fitness
+    if inside_ga_execution:
+        options['population_fit_avgs'].append(population_fitness_sum / len(population))
+        options['gen_fittest_fitness'] = gen_best_fitness
     return population
 
 

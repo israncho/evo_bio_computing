@@ -40,9 +40,7 @@ def test_tour_distance():
         fst_city = tour.pop(0)
 
         weights = build_weight_dict(fst_city, tour)
-        options = {'fst_city': fst_city, 'weights': weights, 'f_execs': 0, 'current_best': (inf, None)}
-        options['gen_fittest_fitness'] = []
-        options['best_fitness_found_history'] = []
+        options = {'fst_city': fst_city, 'weights': weights}
         tour_distance_f = tour_distance(tour, options)
         rectangular_tour_perimeter = 2 * height + 2 * base
         assert isclose(tour_distance_f, rectangular_tour_perimeter, rel_tol=1e-7)
@@ -55,11 +53,12 @@ def test_standard_fitness_computing_for_euc_tsp():
     berlin52['gen_fittest_fitness'] = None
     berlin52['best_fitness_found_history'] = []
     berlin52['population_fit_avgs'] = []
+    berlin52['record_interval'] = 1
 
 
     for _ in range(100):
         population = generate_population_of_permutations(20, berlin52['rest_of_cities'])
-        population = population_fitness_computing(tour_distance, population, berlin52) # pyright: ignore
+        population = population_fitness_computing(tour_distance, population, berlin52, inside_ga_execution=True) # pyright: ignore
 
         assert berlin52['gen_fittest_fitness'] is not None
 

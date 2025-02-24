@@ -9,7 +9,4 @@ if __name__ == "__main__":
     OUTPUT_PATH = argv[2]
 
     solution_instance: dict = parse_tsp_data(read_file(SOLUTION_PATH))
-    solution_instance['f_execs'] = 0
-    solution_instance['current_best'] = inf, None
-    solution_instance['best_fitness_found_history'] = []
     plot_tsp_solution(solution_instance, solution_instance['rest_of_cities'], OUTPUT_PATH) # pyright: ignore
