@@ -16,7 +16,6 @@ from src.tsp.euclidean_tsp import tour_distance, simple_euc_tsp_options_handler
 
 
 def genetic_algorithm_for_euctsp(instance_file_path: str,
-                                 output_file_path: str,
                                  params: dict) -> Tuple[T, dict]:
 
     instance: dict = parse_tsp_data(read_file(instance_file_path))
@@ -45,14 +44,15 @@ def genetic_algorithm_for_euctsp(instance_file_path: str,
                                    term_cond=lambda gen_count, _ : gen_count < instance['gens'],
                                    options_handler=simple_euc_tsp_options_handler,
                                    options=instance)
+    instance['best_fitness_found_history'].append(best_found[0])
     return best_found, instance
 
 
-def __write_results(best_found, exec_data, output_file_path, write_mode='w') -> None:
-
-    solution_file_path = output_file_path + f'_solution_{exec_data['NAME']}.txt'
-    str_lines_to_write = tsp_solution_to_lines(exec_data['fst_city'], best_found[1], exec_data)
-    write_file(solution_file_path, str_lines_to_write)
+def __write_results(best_found, exec_data, output_file_path, write_mode='w', write_solution: bool = True) -> None:
+    if write_solution:
+        solution_file_path = output_file_path + f'_solution_{exec_data['NAME']}.txt'
+        str_lines_to_write = tsp_solution_to_lines(exec_data['fst_city'], best_found[1], exec_data)
+        write_file(solution_file_path, str_lines_to_write)
 
     csv_file_path = output_file_path + f'_{exec_data['NAME']}_data.csv'
     write_line_to_csv_file(csv_file_path, exec_data['best_fitness_found_history'], mode=write_mode)
@@ -69,7 +69,6 @@ if __name__ == "__main__":
 
     start = time()
     result, data = genetic_algorithm_for_euctsp(INSTANCE_FILE_PATH,
-                                                OUTPUT_FILE_PATH,
                                                 PARAMS)
     for key, val in data.items():
         if isinstance(val, Collection) or key in ['SOLUTION']:

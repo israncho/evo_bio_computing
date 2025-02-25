@@ -1,5 +1,7 @@
 '''Module with functions for reading and writing files'''
 
+from os.path import dirname
+from os import makedirs
 from ast import literal_eval
 from itertools import islice
 from typing import Callable, List, Tuple, Generator
@@ -37,6 +39,8 @@ def write_file(file_path: str, lines_of_the_file: List[str], mode: str = 'w') ->
     '''Writes a list of lines to a file.'''
 
     try:
+        dirpath = dirname(file_path)
+        makedirs(dirpath, exist_ok=True)
         with open(file_path, mode, encoding='utf-8') as file:
             for line in lines_of_the_file:
                 file.write(line)
@@ -214,6 +218,8 @@ def write_line_to_csv_file(file_path: str, line: List, mode: str = 'a') -> None:
         mode (str): The mode in which to open the file (default 'a' for append).
     '''
     try:
+        dirpath = dirname(file_path)
+        makedirs(dirpath, exist_ok=True)
         with open(file_path, mode, encoding='utf-8', newline='') as file:
             file_writer = writer(file)
             file_writer.writerow(line)

@@ -4,8 +4,8 @@ the performance of a GA execution'''
 from typing import List, Tuple
 import matplotlib.pyplot as plt
 
-def generate_line_from_data(data: List) -> Tuple[List, List]:
-    x_values = list(range(len(data)))
+def generate_line_from_data(data: List, step: int = 1) -> Tuple[List, List]:
+    x_values = list(map(lambda x : x * step, range(len(data))))
     y_values = data
     return x_values, y_values
 
@@ -29,10 +29,10 @@ def plot_evolution(lines: List[Tuple[List, List]],
     # Etiquetas y título del gráfico
     plt.xlabel(x_label)
     plt.ylabel(y_label)
-    plt.title(f"GA - '{instance['NAME']}' - {instance['replacement']} - population size: {instance['pop_size']}")
+    plt.title(f"GA - '{instance['NAME']}'")
 
-    plt.figtext(0.5, 0.008, f"\n\n{str(instance)}", wrap=True, 
-            horizontalalignment='center', fontsize=6)
+    #plt.figtext(0.5, 0.008, f"\n\n{str(instance)}", wrap=True,
+    #        horizontalalignment='center', fontsize=6)
 
     # Mostrar la leyenda
     plt.legend()
