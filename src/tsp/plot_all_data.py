@@ -41,7 +41,7 @@ default_params = {'replacement': None,
 general_data_path = 'results/tsp/'
 
 
-all_algorithms = ['memetic', 'standard', 'standard_gr', 'standard_rw']
+all_algorithms = ['memetic', 'full_gen_replacement_elitist', 'full_generational_replacement', 'replacement_of_the_worst']
 
 box_plot_labels = ['memetic', 'GA-gre', 'GA-gr', 'GA-rw']
 
@@ -63,15 +63,11 @@ for instance in all_instances:
         print(f'statistics - {instance}-{algo}:', calculate_statistics(results))
         best_f_iter_num, best_f = min(enumerate(results), key=lambda x: x[1])
         print(f'best found - {algo}:', best_f_iter_num, best_f)
-        for line in read_lines_from_csv_file(general_data_path + instance + f'/{algo}_seeds.csv'):
+        for line in read_lines_from_csv_file(general_data_path + instance + f'/seeds.csv'):
             print('seed:', int(line[best_f_iter_num]), '\n')
 
-        times = []
-        for time_exec in read_lines_from_csv_file(general_data_path + instance + f'/{algo}_{instance}_execution_time.csv'):
-            times.append(time_exec[0])
-
-        print(f'TIME statistics - {instance}-{algo}:', calculate_statistics(times))
-        all_times.append(times)
+    for time_exec in read_lines_from_csv_file(general_data_path + instance + f'/times.csv'):
+        all_times.append(time_exec)
 
 
     plot_evolution(lines,
@@ -82,7 +78,8 @@ for instance in all_instances:
                     'avg_best_GA_gen_replacement',
                     'avg_best_GA_replacement_worst'],
                    x_label='target_function_executions',
-                   x_logscale=True)
+                   x_logscale=True,
+                   y_logscale=True)
 
     box_plot(all_results, box_plot_labels, general_data_path + instance +'/boxplot.png', True)
     box_plot(all_times, box_plot_labels, general_data_path + instance +'/boxplot_times.png', y_logscale=False, y_label='Time(seconds)')
