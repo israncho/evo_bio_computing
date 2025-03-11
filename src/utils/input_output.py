@@ -140,9 +140,20 @@ def tsp_solution_to_lines(fst_city: EucCity,
     list_of_lines.append(f"EDGE_WEIGHT_TYPE: {instance['EDGE_WEIGHT_TYPE']}\n")
     list_of_lines.append('NODE_COORD_SECTION\n')
 
-    list_of_lines.append(f'{vertex_id[fst_city]} {fst_city[0]} {fst_city[1]}\n')
-    for u, v in rest_of_cities:
-        list_of_lines.append(f'{vertex_id[(u, v)]} {u} {v}\n')
+    line_as_list = [str(vertex_id[fst_city])]
+    for entry in fst_city:
+        line_as_list.append(' ')
+        line_as_list.append(str(entry))
+    line_as_list.append('\n')
+    list_of_lines.append(''.join(line_as_list))
+
+    for vertex in rest_of_cities:
+        line_as_list = [str(vertex_id[vertex])]
+        for entry in vertex:
+            line_as_list.append(' ')
+            line_as_list.append(str(entry))
+        line_as_list.append('\n')
+        list_of_lines.append(''.join(line_as_list))
 
     return list_of_lines
 
