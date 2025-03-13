@@ -1,6 +1,7 @@
 '''Module to model the euclidean TSP and its functions
 to be used in the genetic algorithm.'''
 
+from time import time
 from typing import List, Tuple
 from math import sqrt, inf
 
@@ -54,6 +55,11 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
         float: The total distance of the tour, including the return to
         the starting city.
     '''
+    measuring_time = len(options['execs_times_f']) < options['sample_size_for_time_estimation']
+
+    if measuring_time:
+        start = time()
+
     if inside_ga_execution:
         options['f_execs'] += 1
     fst_city = options['fst_city']
@@ -70,6 +76,15 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
 
     if inside_ga_execution and options['f_execs'] % options['record_interval'] == 0:
         options['best_fitness_found_history'].append(round(options['current_best'][0], 4))
+
+    if measuring_time:
+        end = time()
+        options['execs_times_f'].append(end - start)
+        if len(options['execs_times_f']) == options['sample_size_for_time_estimation']:
+            avg_exec_time = sum(options['execs_times_f']) / len(options['execs_times_f'])
+            print('avg target func execution time in secs:', avg_exec_time, flush=True)
+            minimum_estimated_exec_time = avg_exec_time * options['total_f_execs']
+            print('minimum estimated exec time in secs:', minimum_estimated_exec_time, flush=True)
 
     return distance
 
@@ -117,6 +132,7 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
         options['offspring_s'] = population_size
         options['next_gen_pop_s'] = population_size
         options['total_f_execs'] = population_size * options['gens']
+        options['execs_times_f'] = []
 
         local_s_iters = options['local_s_iters']
         if local_s_iters > 0:
@@ -124,6 +140,8 @@ def simple_euc_tsp_options_handler(population: Population[EucTSPPermutation],
             gene_set_size = len(population[0]) + 1
             options['total_f_execs'] *= ((gene_set_size - 2) * (gene_set_size - 3) * local_s_iters) // 2 + 1
 
+        options['sample_size_for_time_estimation'] = int(options['total_f_execs'] * 0.02)
+        print('target f executions to get estimation:', options['sample_size_for_time_estimation'])
         options['record_interval'] = max(options['total_f_execs'] // options['max_records'], 1)
         return options
 
