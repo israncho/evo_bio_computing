@@ -54,6 +54,8 @@ def test_standard_fitness_computing_for_euc_tsp():
     berlin52['best_fitness_found_history'] = []
     berlin52['population_fit_avgs'] = []
     berlin52['record_interval'] = 1
+    berlin52['execs_times_f'] = []
+    berlin52['sample_size_for_time_estimation'] = 0
 
 
     for _ in range(100):
