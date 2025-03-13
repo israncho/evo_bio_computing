@@ -55,9 +55,10 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
         float: The total distance of the tour, including the return to
         the starting city.
     '''
-    measuring_time = len(options['execs_times_f']) < options['sample_size_for_time_estimation']
+    if inside_ga_execution:
+        measuring_time = len(options['execs_times_f']) < options['sample_size_for_time_estimation']
 
-    if measuring_time:
+    if inside_ga_execution and measuring_time:
         start = time()
 
     if inside_ga_execution:
@@ -77,7 +78,7 @@ def tour_distance(seq_of_cities: EucTSPPermutation,
     if inside_ga_execution and options['f_execs'] % options['record_interval'] == 0:
         options['best_fitness_found_history'].append(round(options['current_best'][0], 4))
 
-    if measuring_time:
+    if inside_ga_execution and measuring_time:
         end = time()
         options['execs_times_f'].append(end - start)
         if len(options['execs_times_f']) == options['sample_size_for_time_estimation']:
