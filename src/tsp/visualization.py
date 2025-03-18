@@ -82,7 +82,7 @@ def plot_tsp_solution(instance: dict,
     x_coords = [city[0] for city in rest_of_cities] + [fst_c[0]]
     y_coords = [city[1] for city in rest_of_cities] + [fst_c[1]]
 
-    ax.scatter(x_coords, y_coords, color='red', s=10) # pyright: ignore
+    ax.scatter(x_coords, y_coords, color='red', s=4) # pyright: ignore
 
     x_solution = [city[0] for city in solution] + [fst_c[0], solution[0][0]]
     y_solution = [city[1] for city in solution] + [fst_c[1], solution[0][1]]
