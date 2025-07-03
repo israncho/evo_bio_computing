@@ -138,7 +138,7 @@ def __full_random_subintervals(_range: int,
     curr = 0
     all_intervals = []
     for i, j in intervals_for_one:
-        if curr < i and j <= _range:
+        if curr < i:
             all_intervals.append((curr, i - 1, False))
         curr = j + 1
         all_intervals.append((i, j, True))
